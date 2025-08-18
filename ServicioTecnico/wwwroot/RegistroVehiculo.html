@@ -1,0 +1,351 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REVTEC - Registrar Vehículo</title>
+    <link rel="stylesheet" href="Login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+    <header>
+        <div class="header-logo">
+            <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC" style="height: 45px; width: 45px; border-radius: 50%; object-fit: cover;">
+            <h1 style="font-size: 1.4rem; margin: 0 0 0 0.75rem;">REVTEC</h1>
+        </div>
+        <div style="font-size: 0.9rem; color: #64748b; font-weight: 500;">
+            Registro de Vehículo
+        </div>
+    </header>
+
+    <ul>
+        <li><a href="PanelPrincipal.html">🏠 Panel Principal</a></li>
+    </ul>
+
+    <main class="form-container">
+        <div class="form-card">
+            <h2>🚗 Registrar Vehículo</h2>
+
+            <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #3b82f6;">
+                <p style="margin: 0; color: #1e293b; font-size: 0.9rem;">
+                    <strong>📋 Importante:</strong> Complete todos los datos de su vehículo para poder agendar citas de inspección.
+                </p>
+            </div>
+
+            <form id="vehiculoForm">
+                <div class="form-group">
+                    <label>🆔 Número de Placa</label>
+                    <input type="text" id="numeroPlaca" required placeholder="ABC123" maxlength="10" style="text-transform: uppercase;">
+                    <small style="color: #64748b; font-size: 0.8rem;">
+                        ℹ️ Formato: ABC123 (letras y números, sin espacios ni guiones)
+                    </small>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>🏭 Marca</label>
+                        <select id="marca" required onchange="cargarModelos()">
+                            <option value="">Seleccione marca...</option>
+                            <option value="Toyota">Toyota</option>
+                            <option value="Nissan">Nissan</option>
+                            <option value="Honda">Honda</option>
+                            <option value="Hyundai">Hyundai</option>
+                            <option value="Kia">Kia</option>
+                            <option value="Mazda">Mazda</option>
+                            <option value="Mitsubishi">Mitsubishi</option>
+                            <option value="Suzuki">Suzuki</option>
+                            <option value="Chevrolet">Chevrolet</option>
+                            <option value="Ford">Ford</option>
+                            <option value="Volkswagen">Volkswagen</option>
+                            <option value="BMW">BMW</option>
+                            <option value="Mercedes-Benz">Mercedes-Benz</option>
+                            <option value="Audi">Audi</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🚙 Modelo</label>
+                        <input type="text" id="modelo" required placeholder="Ej: Corolla, Sentra">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>📅 Año</label>
+                        <select id="año" required>
+                            <option value="">Seleccione año...</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🎨 Color</label>
+                        <select id="color">
+                            <option value="">Seleccione color...</option>
+                            <option value="Blanco">Blanco</option>
+                            <option value="Negro">Negro</option>
+                            <option value="Gris">Gris</option>
+                            <option value="Plata">Plata</option>
+                            <option value="Azul">Azul</option>
+                            <option value="Rojo">Rojo</option>
+                            <option value="Verde">Verde</option>
+                            <option value="Amarillo">Amarillo</option>
+                            <option value="Dorado">Dorado</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>🔧 Número de Chasis</label>
+                    <input type="text" id="numeroChasis" placeholder="Opcional - Ej: 1HGBH41JXMN109186" maxlength="50" style="text-transform: uppercase;">
+                    <small style="color: #64748b; font-size: 0.8rem;">
+                        ℹ️ Número de identificación único del vehículo (VIN)
+                    </small>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>⛽ Tipo de Combustible</label>
+                        <select id="tipoCombustible">
+                            <option value="">Seleccione...</option>
+                            <option value="Gasolina">⛽ Gasolina</option>
+                            <option value="Diesel">🛢️ Diesel</option>
+                            <option value="Híbrido">🔋 Híbrido</option>
+                            <option value="Eléctrico">⚡ Eléctrico</option>
+                            <option value="GLP">🏺 GLP (Gas)</option>
+                            <option value="GNC">💨 GNC (Gas Natural)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🏎️ Cilindrada</label>
+                        <select id="cilindrada">
+                            <option value="">Seleccione...</option>
+                            <option value="1.0L">1.0L</option>
+                            <option value="1.2L">1.2L</option>
+                            <option value="1.4L">1.4L</option>
+                            <option value="1.6L">1.6L</option>
+                            <option value="1.8L">1.8L</option>
+                            <option value="2.0L">2.0L</option>
+                            <option value="2.4L">2.4L</option>
+                            <option value="2.8L">2.8L</option>
+                            <option value="3.0L">3.0L</option>
+                            <option value="3.5L">3.5L</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit">
+                    💾 Guardar Vehículo
+                </button>
+            </form>
+
+            <div id="mensaje" style="margin-top: 1rem; text-align: center;"></div>
+
+            <!-- Mis vehículos registrados -->
+            <div id="misVehiculos" style="margin-top: 2rem; display: none;">
+                <h3 style="margin: 0 0 1rem 0; color: #1e293b; font-size: 1.1rem;">🚗 Mis Vehículos Registrados</h3>
+                <div id="listaVehiculos">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE = '/api';
+        let usuario = null;
+
+        // Verificar sesión
+        function verificarSesion() {
+            const usuarioActual = localStorage.getItem('usuarioActual');
+            if (!usuarioActual) {
+                window.location.href = 'Login.html';
+                return null;
+            }
+            return JSON.parse(usuarioActual);
+        }
+
+        // Generar años (desde 1980 hasta año actual)
+        function generarAños() {
+            const añoActual = new Date().getFullYear();
+            const selectAño = document.getElementById('año');
+
+            for (let año = añoActual; año >= 1980; año--) {
+                const option = document.createElement('option');
+                option.value = año;
+                option.textContent = año;
+                selectAño.appendChild(option);
+            }
+        }
+
+        // Cargar modelos según la marca (función básica)
+        function cargarModelos() {
+            const marca = document.getElementById('marca').value;
+            const modeloInput = document.getElementById('modelo');
+
+            if (marca) {
+                modeloInput.placeholder = `Ingrese modelo de ${marca}`;
+                modeloInput.focus();
+            } else {
+                modeloInput.placeholder = "Ej: Corolla, Sentra";
+            }
+        }
+
+        // Cargar vehículos del usuario
+        async function cargarMisVehiculos() {
+            try {
+                const response = await fetch(`${API_BASE}/Vehiculo/porPropietario/${usuario.id}`);
+                const vehiculos = await response.json();
+
+                if (vehiculos.length > 0) {
+                    document.getElementById('misVehiculos').style.display = 'block';
+
+                    const lista = document.getElementById('listaVehiculos');
+                    lista.innerHTML = vehiculos.map(vehiculo => `
+                            <div style="background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 0.75rem; border-left: 4px solid #3b82f6;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <div style="font-weight: 600; color: #1e293b; margin-bottom: 0.25rem;">
+                                            🚗 ${vehiculo.numeroPlaca} - ${vehiculo.marca} ${vehiculo.modelo}
+                                        </div>
+                                        <div style="font-size: 0.85rem; color: #64748b;">
+                                            📅 ${vehiculo.año} | 🎨 ${vehiculo.color || 'N/A'} | ⛽ ${vehiculo.tipoCombustible || 'N/A'}
+                                        </div>
+                                    </div>
+                                    <button onclick="eliminarVehiculo(${vehiculo.idVehiculo})"
+                                            style="background: #ef4444; color: white; border: none; padding: 0.5rem; border-radius: 6px; cursor: pointer;"
+                                            title="Eliminar vehículo">
+                                        🗑️
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('');
+                }
+            } catch (error) {
+                console.error('Error al cargar vehículos:', error);
+            }
+        }
+
+        // Eliminar vehículo
+        async function eliminarVehiculo(idVehiculo) {
+            if (!confirm('¿Está seguro de que desea eliminar este vehículo?')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/Vehiculo/${idVehiculo}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    document.getElementById('mensaje').innerHTML =
+                        '<div class="message success">✅ Vehículo eliminado exitosamente</div>';
+                    await cargarMisVehiculos();
+                } else {
+                    document.getElementById('mensaje').innerHTML =
+                        '<div class="message error">❌ Error al eliminar vehículo</div>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('mensaje').innerHTML =
+                    '<div class="message error">⚠️ Error al conectar con el servidor</div>';
+            }
+        }
+
+        document.getElementById('vehiculoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const numeroPlaca = document.getElementById('numeroPlaca').value.toUpperCase().trim();
+            const mensaje = document.getElementById('mensaje');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+
+            // Validar formato de placa (básico)
+            if (!/^[A-Z0-9]{5,8}$/.test(numeroPlaca)) {
+                mensaje.innerHTML = '<div class="message error">❌ Formato de placa inválido. Use solo letras y números</div>';
+                return;
+            }
+
+            const formData = {
+                numeroPlaca: numeroPlaca,
+                idPropietario: usuario.id,
+                marca: document.getElementById('marca').value,
+                modelo: document.getElementById('modelo').value.trim(),
+                año: parseInt(document.getElementById('año').value),
+                numeroChasis: document.getElementById('numeroChasis').value.toUpperCase().trim() || null,
+                color: document.getElementById('color').value || null,
+                tipoCombustible: document.getElementById('tipoCombustible').value || null,
+                cilindrada: document.getElementById('cilindrada').value || null
+            };
+
+            // Mostrar loading
+            submitBtn.innerHTML = '<span class="loading-spinner"></span>Guardando...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE}/Vehiculo`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    mensaje.innerHTML = `
+                            <div class="message success">
+                                ✅ ¡Vehículo registrado exitosamente!
+                                <br><small>Ya puede agendar citas para este vehículo</small>
+                            </div>
+                        `;
+                    document.getElementById('vehiculoForm').reset();
+                    await cargarMisVehiculos();
+                } else {
+                    const errorText = await response.text();
+                    let errorMessage = '❌ Error al registrar vehículo';
+
+                    if (errorText.includes('placa') || errorText.includes('Unique')) {
+                        errorMessage = '❌ Ya existe un vehículo con esa placa';
+                    }
+
+                    mensaje.innerHTML = `<div class="message error">${errorMessage}</div>`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mensaje.innerHTML = '<div class="message error">⚠️ Error al conectar con el servidor</div>';
+            } finally {
+                // Restaurar botón
+                submitBtn.innerHTML = '💾 Guardar Vehículo';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Formatear placa en tiempo real
+        document.getElementById('numeroPlaca').addEventListener('input', function () {
+            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        });
+
+        // Formatear chasis en tiempo real
+        document.getElementById('numeroChasis').addEventListener('input', function () {
+            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        });
+
+        // Capitalizar modelo
+        document.getElementById('modelo').addEventListener('input', function () {
+            this.value = this.value.replace(/\b\w/g, l => l.toUpperCase());
+        });
+
+        // Inicializar página
+        async function inicializar() {
+            usuario = verificarSesion();
+            if (!usuario) return;
+
+            generarAños();
+            await cargarMisVehiculos();
+        }
+
+        inicializar();
+    </script>
+</body>
+</html>

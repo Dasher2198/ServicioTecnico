@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REVTEC - Registro</title>
+    <link rel="stylesheet" href="Login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+    <header>
+        <div class="header-logo">
+            <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC" style="height: 45px; width: 45px; border-radius: 50%; object-fit: cover;">
+            <h1 style="font-size: 1.4rem; margin: 0 0 0 0.75rem;">REVTEC</h1>
+        </div>
+        <div style="font-size: 0.9rem; color: #64748b; font-weight: 500;">
+            Registro de Usuario
+        </div>
+    </header>
+
+    <ul>
+        <li><a href="Login.html">🔐 Iniciar Sesión</a></li>
+    </ul>
+
+    <main class="form-container">
+        <div class="form-card">
+            <h2>📝 Crear Cuenta</h2>
+            <form id="registroForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>👤 Nombre</label>
+                        <input type="text" id="nombre" required placeholder="Tu nombre">
+                    </div>
+
+                    <div class="form-group">
+                        <label>👥 Apellidos</label>
+                        <input type="text" id="apellidos" required placeholder="Tus apellidos">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>🆔 Cédula</label>
+                    <input type="text" id="cedula" required placeholder="123456789" maxlength="20">
+                </div>
+
+                <div class="form-group">
+                    <label>📧 Correo Electrónico</label>
+                    <input type="email" id="email" required placeholder="ejemplo@correo.com">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>📞 Teléfono</label>
+                        <input type="tel" id="telefono" placeholder="8888-9999">
+                    </div>
+
+                    <div class="form-group">
+                        <label>🏢 Tipo de Usuario</label>
+                        <select id="tipoUsuario" required>
+                            <option value="">Seleccione...</option>
+                            <option value="cliente">👤 Cliente</option>
+                            <option value="tecnico">🔧 Técnico</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>🏠 Dirección</label>
+                    <input type="text" id="direccion" placeholder="Su dirección completa">
+                </div>
+
+                <div class="form-group">
+                    <label>🔒 Contraseña</label>
+                    <input type="password" id="password" required placeholder="Mínimo 6 caracteres" minlength="6">
+                </div>
+
+                <div class="form-group">
+                    <label>🔒 Confirmar Contraseña</label>
+                    <input type="password" id="confirmPassword" required placeholder="Repita su contraseña" minlength="6">
+                </div>
+
+                <div style="margin: 1rem 0; padding: 1rem; background: #f8fafc; border-radius: 8px; border-left: 4px solid #06b6d4;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; color: #1e293b; cursor: pointer;">
+                        <input type="checkbox" id="terminos" required style="width: auto;">
+                        Acepto los términos y condiciones de uso
+                    </label>
+                </div>
+
+                <button type="submit">
+                    🚀 Crear Cuenta
+                </button>
+            </form>
+
+            <div id="mensaje" style="margin-top: 1rem; text-align: center;"></div>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE = '/api';
+
+        document.getElementById('registroForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const mensaje = document.getElementById('mensaje');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+
+            // Validar contraseñas
+            if (password !== confirmPassword) {
+                mensaje.innerHTML = '<div class="message error">❌ Las contraseñas no coinciden</div>';
+                return;
+            }
+
+            // Validar cédula (solo números)
+            const cedula = document.getElementById('cedula').value;
+            if (!/^\d+$/.test(cedula)) {
+                mensaje.innerHTML = '<div class="message error">❌ La cédula debe contener solo números</div>';
+                return;
+            }
+
+            const formData = {
+                nombre: document.getElementById('nombre').value.trim(),
+                apellidos: document.getElementById('apellidos').value.trim(),
+                cedula: cedula,
+                email: document.getElementById('email').value.toLowerCase().trim(),
+                telefono: document.getElementById('telefono').value.trim() || null,
+                direccion: document.getElementById('direccion').value.trim() || null,
+                tipoUsuario: document.getElementById('tipoUsuario').value,
+                password: password,
+                estado: 'activo'
+            };
+
+            // Mostrar loading
+            submitBtn.innerHTML = '<span class="loading-spinner"></span>Creando cuenta...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE}/Usuario`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    mensaje.innerHTML = '<div class="message success">✅ ¡Usuario registrado exitosamente! Redirigiendo al login...</div>';
+
+                    // Limpiar formulario
+                    document.getElementById('registroForm').reset();
+
+                    setTimeout(() => {
+                        window.location.href = 'Login.html';
+                    }, 2000);
+                } else {
+                    const errorText = await response.text();
+                    let errorMessage = '❌ Error al registrar usuario';
+
+                    if (errorText.includes('cedula') || errorText.includes('email')) {
+                        errorMessage = '❌ Ya existe un usuario con esa cédula o email';
+                    }
+
+                    mensaje.innerHTML = `<div class="message error">${errorMessage}</div>`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mensaje.innerHTML = '<div class="message error">⚠️ Error al conectar con el servidor</div>';
+            } finally {
+                // Restaurar botón
+                submitBtn.innerHTML = '🚀 Crear Cuenta';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Validación en tiempo real de contraseñas
+        document.getElementById('confirmPassword').addEventListener('input', function () {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+
+            if (confirmPassword && password !== confirmPassword) {
+                this.style.borderColor = '#ef4444';
+                this.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
+            } else {
+                this.style.borderColor = '';
+                this.style.boxShadow = '';
+            }
+        });
+
+        // Formatear cédula (solo números)
+        document.getElementById('cedula').addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
+        // Formatear teléfono
+        document.getElementById('telefono').addEventListener('input', function () {
+            let value = this.value.replace(/\D/g, '');
+            if (value.length >= 4) {
+                value = value.slice(0, 4) + '-' + value.slice(4, 8);
+            }
+            this.value = value;
+        });
+
+        // Capitalizar nombres
+        ['nombre', 'apellidos'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function () {
+                this.value = this.value.replace(/\b\w/g, l => l.toUpperCase());
+            });
+        });
+    </script>
+</body>
+</html>

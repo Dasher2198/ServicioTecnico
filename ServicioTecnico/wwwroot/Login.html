@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REVTEC - Iniciar Sesión</title>
+    <link rel="stylesheet" href="Login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+    <header>
+        <div class="header-logo">
+            <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC" style="height: 45px; width: 45px; border-radius: 50%; object-fit: cover;">
+            <h1 style="font-size: 1.4rem; margin: 0 0 0 0.75rem;">REVTEC</h1>
+        </div>
+        <div style="font-size: 0.9rem; color: #64748b; font-weight: 500;">
+            Sistema de Revisión Vehicular
+        </div>
+    </header>
+
+    <main class="form-container">
+        <div class="form-card">
+            <h2>🔐 Iniciar Sesión</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>📧 Correo Electrónico</label>
+                    <input type="email" id="email" required placeholder="ejemplo@correo.com">
+                </div>
+
+                <div class="form-group">
+                    <label>🔒 Contraseña</label>
+                    <input type="password" id="password" required placeholder="Ingrese su contraseña">
+                </div>
+
+                <button type="submit">
+                    ✨ Iniciar Sesión
+                </button>
+            </form>
+
+            <div id="mensaje" style="margin-top: 1rem; text-align: center;"></div>
+
+            <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
+                <p style="color: #64748b; margin-bottom: 0.5rem;">¿No tienes una cuenta?</p>
+                <a href="registro.html" style="color: #3b82f6; font-weight: 600; text-decoration: none;">
+                    🚀 Regístrate aquí
+                </a>
+            </div>
+
+            <!-- Usuarios de prueba -->
+            <div style="margin-top: 2rem; padding: 1rem; background: #f8fafc; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b; font-size: 0.875rem;">👥 Usuarios de Prueba:</h4>
+                <div style="font-size: 0.8rem; color: #64748b; line-height: 1.4;">
+                    <strong>Cliente:</strong> cliente@test.cr / cliente123<br>
+                    <strong>Técnico:</strong> tecnico@revtec.cr / tecnico123
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE = '/api';
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const mensaje = document.getElementById('mensaje');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+
+            // Mostrar loading
+            submitBtn.innerHTML = '<span class="loading-spinner"></span>Verificando...';
+            submitBtn.disabled = true;
+
+            try {
+                // Obtener todos los usuarios para validar login (simplificado)
+                const response = await fetch(`${API_BASE}/Usuario`);
+                const usuarios = await response.json();
+
+                const usuario = usuarios.find(u =>
+                    u.email === email && u.password === password && u.estado === 'activo'
+                );
+
+                if (usuario) {
+                    // Guardar datos del usuario en localStorage
+                    localStorage.setItem('usuarioActual', JSON.stringify({
+                        id: usuario.idUsuario,
+                        nombre: usuario.nombre,
+                        apellidos: usuario.apellidos,
+                        email: usuario.email,
+                        tipoUsuario: usuario.tipoUsuario
+                    }));
+
+                    mensaje.innerHTML = '<div class="message success">✅ ¡Bienvenido! Redirigiendo...</div>';
+                    setTimeout(() => {
+                        window.location.href = 'PanelPrincipal.html';
+                    }, 1000);
+                } else {
+                    mensaje.innerHTML = '<div class="message error">❌ Credenciales incorrectas</div>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mensaje.innerHTML = '<div class="message error">⚠️ Error al conectar con el servidor</div>';
+            } finally {
+                // Restaurar botón
+                submitBtn.innerHTML = '✨ Iniciar Sesión';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Efecto de partículas en el fondo
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                    position: fixed;
+                    width: 4px;
+                    height: 4px;
+                    background: rgba(255, 255, 255, 0.6);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: -1;
+                    left: ${Math.random() * 100}vw;
+                    top: 100vh;
+                    animation: float ${3 + Math.random() * 4}s linear forwards;
+                `;
+
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 7000);
+        }
+
+        // Crear partículas flotantes
+        setInterval(createParticle, 300);
+
+        // Añadir animación CSS para las partículas
+        const style = document.createElement('style');
+        style.textContent = `
+                @keyframes float {
+                    to {
+                        transform: translateY(-100vh) rotate(360deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
