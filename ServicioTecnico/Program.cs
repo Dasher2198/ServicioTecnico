@@ -1,36 +1,20 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+Ôªøusing Microsoft.EntityFrameworkCore;
 using ServicioTecnico.Data;
 using ServicioTecnico.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
+// Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
 
-// Configurar Swagger correctamente
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "REVTEC API",
-        Version = "v1",
-        Description = "API para Sistema de RevisiÛn TÈcnica Vehicular"
-    });
-
-    // Configurar esquemas para evitar conflictos
-    c.CustomSchemaIds(type => type.FullName);
-});
-
-// Configurar Entity Framework
+// Configure Entity Framework with SQL Server
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configurar CORS para permitir el frontend
+// Configure CORS - M√ÅS PERMISIVO para desarrollo
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
         policy.AllowAnyOrigin()
               .AllowAnyMethod()
@@ -38,89 +22,61 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Add Swagger/OpenAPI para documentaci√≥n de API
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
-// Seed inicial de datos
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    try
-    {
-        await context.Database.EnsureCreatedAsync();
-        await DataSeeder.SeedAsync(context);
-    }
-    catch (Exception ex)
-    {
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Error occurred seeding the DB.");
-    }
-}
-
-// Configure the HTTP request pipeline
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(c =>
-    {
-        c.RouteTemplate = "api/swagger/{documentName}/swagger.json";
-    });
-
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "REVTEC API v1");
-        c.RoutePrefix = "api/swagger";
-        c.DocumentTitle = "REVTEC API Documentation";
-    });
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
 
-app.UseHttpsRedirection();
+// Solo usar HTTPS en producci√≥n
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
-// Servir archivos est·ticos ANTES de routing
+// Servir archivos est√°ticos (HTML, CSS, JS)
 app.UseStaticFiles();
 
-// Habilitar CORS
-app.UseCors("AllowFrontend");
-
-app.UseRouting();
+// IMPORTANTE: CORS debe ir ANTES de Authorization
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 
-// Mapear controladores API con configuraciÛn especÌfica
 app.MapControllers();
 
-// Configurar rutas especÌficas
-app.MapGet("/", async context =>
-{
-    context.Response.Redirect("/Login.html");
-});
+// Configurar ruta por defecto para servir Login.html
+app.MapFallbackToFile("Login.html");
 
-// Ruta especÌfica para acceder a Swagger desde la raÌz (opcional)
-app.MapGet("/swagger", async context =>
+// Asegurar que la base de datos existe y sembrar datos iniciales
+using (var scope = app.Services.CreateScope())
 {
-    context.Response.Redirect("/api/swagger");
-});
-
-// Fallback inteligente
-app.MapFallback(async context =>
-{
-    var path = context.Request.Path.Value?.ToLower();
-
-    // Si es una ruta de API que no existe, devolver 404
-    if (path?.StartsWith("/api/") == true)
+    var services = scope.ServiceProvider;
+    try
     {
-        context.Response.StatusCode = 404;
-        await context.Response.WriteAsync("API endpoint not found");
-        return;
-    }
+        var context = services.GetRequiredService<AppDbContext>();
 
-    // Si es una ruta de Swagger, redirigir
-    if (path?.Contains("swagger") == true)
+        // Asegurar que la base de datos existe
+        await context.Database.EnsureCreatedAsync();
+
+        // Sembrar datos iniciales
+        await DataSeeder.SeedAsync(context);
+
+        Console.WriteLine("‚úÖ Base de datos configurada correctamente");
+        Console.WriteLine($"üåê Aplicaci√≥n disponible en: https://localhost:{app.Urls.FirstOrDefault()?.Split(':').LastOrDefault() ?? "7252"}");
+    }
+    catch (Exception ex)
     {
-        context.Response.Redirect("/api/swagger");
-        return;
+        Console.WriteLine($"‚ùå Error al configurar la base de datos: {ex.Message}");
+        Console.WriteLine($"Detalles: {ex.InnerException?.Message}");
     }
-
-    // Para cualquier otra ruta, servir el login
-    context.Response.Redirect("/Login.html");
-});
+}
 
 app.Run();

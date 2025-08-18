@@ -14,6 +14,5 @@ namespace ServicioTecnico.Data
         public DbSet<Inspeccion> Inspecciones { get; set; }
         public DbSet<DetalleInspeccion> DetalleInspecciones { get; set; }
         public DbSet<Certificado> Certificados { get; set; }
-
     }
 }

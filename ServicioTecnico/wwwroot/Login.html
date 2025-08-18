@@ -55,11 +55,47 @@
                     <strong>Técnico:</strong> tecnico@revtec.cr / tecnico123
                 </div>
             </div>
+
+            <!-- Estado de conexión -->
+            <div id="connectionStatus" style="margin-top: 1rem; padding: 0.5rem; border-radius: 6px; text-align: center; font-size: 0.8rem; display: none;">
+            </div>
         </div>
     </main>
 
     <script>
-        const API_BASE = '/api';
+        // ✅ URL CORREGIDA - Se adapta automáticamente al puerto actual
+        const API_BASE = window.location.protocol + '//' + window.location.host + '/api';
+
+        console.log('🔗 API Base URL:', API_BASE);
+
+        // Verificar conexión al cargar la página
+        async function verificarConexion() {
+            const statusDiv = document.getElementById('connectionStatus');
+            statusDiv.style.display = 'block';
+            statusDiv.innerHTML = '🔄 Verificando conexión...';
+            statusDiv.style.background = '#f3f4f6';
+            statusDiv.style.color = '#6b7280';
+
+            try {
+                const response = await fetch(`${API_BASE}/Usuario/test-connection`);
+                const data = await response.json();
+
+                if (data.connected) {
+                    statusDiv.innerHTML = `✅ Conectado (${data.usuariosCount} usuarios)`;
+                    statusDiv.style.background = '#dcfce7';
+                    statusDiv.style.color = '#166534';
+                } else {
+                    statusDiv.innerHTML = '❌ Sin conexión a BD';
+                    statusDiv.style.background = '#fef2f2';
+                    statusDiv.style.color = '#dc2626';
+                }
+            } catch (error) {
+                console.error('Error de conexión:', error);
+                statusDiv.innerHTML = '⚠️ Error de conexión al servidor';
+                statusDiv.style.background = '#fef2f2';
+                statusDiv.style.color = '#dc2626';
+            }
+        }
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -74,9 +110,17 @@
             submitBtn.disabled = true;
 
             try {
+                console.log('🔄 Intentando login para:', email);
+
                 // Obtener todos los usuarios para validar login (simplificado)
                 const response = await fetch(`${API_BASE}/Usuario`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
                 const usuarios = await response.json();
+                console.log('📋 Usuarios obtenidos:', usuarios.length);
 
                 const usuario = usuarios.find(u =>
                     u.email === email && u.password === password && u.estado === 'activo'
@@ -84,24 +128,28 @@
 
                 if (usuario) {
                     // Guardar datos del usuario en localStorage
-                    localStorage.setItem('usuarioActual', JSON.stringify({
+                    const usuarioData = {
                         id: usuario.idUsuario,
                         nombre: usuario.nombre,
                         apellidos: usuario.apellidos,
                         email: usuario.email,
                         tipoUsuario: usuario.tipoUsuario
-                    }));
+                    };
+
+                    localStorage.setItem('usuarioActual', JSON.stringify(usuarioData));
+                    console.log('✅ Login exitoso para:', usuario.email, 'Tipo:', usuario.tipoUsuario);
 
                     mensaje.innerHTML = '<div class="message success">✅ ¡Bienvenido! Redirigiendo...</div>';
                     setTimeout(() => {
                         window.location.href = 'PanelPrincipal.html';
                     }, 1000);
                 } else {
+                    console.log('❌ Credenciales incorrectas para:', email);
                     mensaje.innerHTML = '<div class="message error">❌ Credenciales incorrectas</div>';
                 }
             } catch (error) {
-                console.error('Error:', error);
-                mensaje.innerHTML = '<div class="message error">⚠️ Error al conectar con el servidor</div>';
+                console.error('💥 Error en login:', error);
+                mensaje.innerHTML = `<div class="message error">⚠️ Error: ${error.message}</div>`;
             } finally {
                 // Restaurar botón
                 submitBtn.innerHTML = '✨ Iniciar Sesión';
@@ -109,7 +157,10 @@
             }
         });
 
-        // Efecto de partículas en el fondo
+        // Verificar conexión al cargar la página
+        window.addEventListener('load', verificarConexion);
+
+        // Efectos visuales (mantener los existentes)
         function createParticle() {
             const particle = document.createElement('div');
             particle.style.cssText = `
@@ -132,10 +183,8 @@
             }, 7000);
         }
 
-        // Crear partículas flotantes
         setInterval(createParticle, 300);
 
-        // Añadir animación CSS para las partículas
         const style = document.createElement('style');
         style.textContent = `
                 @keyframes float {
@@ -143,6 +192,35 @@
                         transform: translateY(-100vh) rotate(360deg);
                         opacity: 0;
                     }
+                }
+                .loading-spinner {
+                    display: inline-block;
+                    width: 12px;
+                    height: 12px;
+                    border: 2px solid #ffffff;
+                    border-radius: 50%;
+                    border-top-color: transparent;
+                    animation: spin 1s ease-in-out infinite;
+                    margin-right: 0.5rem;
+                }
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+                .message {
+                    padding: 0.75rem;
+                    border-radius: 8px;
+                    margin: 0.5rem 0;
+                    font-weight: 500;
+                }
+                .message.success {
+                    background: #dcfce7;
+                    color: #166534;
+                    border: 1px solid #bbf7d0;
+                }
+                .message.error {
+                    background: #fef2f2;
+                    color: #dc2626;
+                    border: 1px solid #fecaca;
                 }
             `;
         document.head.appendChild(style);
