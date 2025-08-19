@@ -2,12 +2,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-
+using System.Text.Json.Serialization;
 
 namespace ServicioTecnico.Models
 {
-    // son las clases que estan en los proyectos//
     public class Usuario
     {
         [Key]
@@ -26,10 +24,10 @@ namespace ServicioTecnico.Models
         public string Email { get; set; }
 
         [StringLength(15)]
-        public string Telefono { get; set; }
+        public string? Telefono { get; set; }
 
         [StringLength(200)]
-        public string Direccion { get; set; }
+        public string? Direccion { get; set; }
 
         public DateTime FechaRegistro { get; set; } = DateTime.Now;
 
@@ -37,13 +35,17 @@ namespace ServicioTecnico.Models
         public string TipoUsuario { get; set; } // cliente / tecnico
 
         [Required, StringLength(255)]
+        [JsonIgnore] // Nunca devolver la contraseña en JSON
         public string Password { get; set; }
 
         [StringLength(10)]
         public string Estado { get; set; } = "activo";
 
-        // Relaciones
-        public ICollection<Vehiculo> Vehiculos { get; set; }
-        public ICollection<Inspeccion> InspeccionesTecnico { get; set; }
+        // Relaciones - Ignorar en JSON para evitar referencias circulares
+        [JsonIgnore]
+        public ICollection<Vehiculo>? Vehiculos { get; set; }
+
+        [JsonIgnore]
+        public ICollection<Inspeccion>? InspeccionesTecnico { get; set; }
     }
 }

@@ -4,69 +4,459 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>REVTEC - Iniciar Sesión</title>
-    <link rel="stylesheet" href="Login.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+            .header-logo h1 {
+                font-size: 1.5rem;
+                color: #1e293b;
+                font-weight: 700;
+            }
+
+            .header-logo img {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+        .header-subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+            .nav-menu a {
+                text-decoration: none;
+                color: #475569;
+                font-weight: 500;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                transition: all 0.2s;
+            }
+
+                .nav-menu a:hover {
+                    background: #3b82f6;
+                    color: white;
+                }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            padding: 3rem;
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .login-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #1e293b;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+            .form-input:focus {
+                outline: none;
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                background: white;
+            }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #6b7280;
+            padding: 0;
+            width: auto;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+        }
+
+            .login-button:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            }
+
+            .login-button:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+        .message-area {
+            margin-top: 1rem;
+            text-align: center;
+            min-height: 40px;
+        }
+
+        .message {
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            font-weight: 500;
+        }
+
+            .message.success {
+                background: #dcfce7;
+                color: #166534;
+                border: 1px solid #bbf7d0;
+            }
+
+            .message.error {
+                background: #fef2f2;
+                color: #dc2626;
+                border: 1px solid #fecaca;
+            }
+
+        .register-section {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .register-text {
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .register-link {
+            color: #3b82f6;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+            .register-link:hover {
+                text-decoration: underline;
+            }
+
+        .test-users {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+
+            .test-users h4 {
+                margin: 0 0 0.5rem 0;
+                color: #1e293b;
+                font-size: 0.875rem;
+            }
+
+        .test-user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+            .test-user-item:last-child {
+                margin-bottom: 0;
+            }
+
+        .use-button {
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+            .use-button:hover {
+                background: #047857;
+            }
+
+            .use-button.tecnico {
+                background: #7c3aed;
+            }
+
+                .use-button.tecnico:hover {
+                    background: #6d28d9;
+                }
+
+        .connection-status {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.8rem;
+            display: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .debug-section {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: #f0f9ff;
+            border-radius: 6px;
+            border-left: 4px solid #0ea5e9;
+            font-size: 0.8rem;
+            display: none;
+        }
+
+        .debug-title {
+            font-weight: 600;
+            color: #0c4a6e;
+            margin-bottom: 0.5rem;
+        }
+
+        .debug-content {
+            font-family: monospace;
+            color: #075985;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-menu {
+                margin: 0.5rem 1rem;
+                justify-content: center;
+            }
+
+            .main-container {
+                padding: 1rem;
+            }
+
+            .login-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .login-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .test-user-item {
+                flex-direction: column;
+                gap: 0.25rem;
+                align-items: flex-start;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
+    <header class="header">
         <div class="header-logo">
-            <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC" style="height: 45px; width: 45px; border-radius: 50%; object-fit: cover;">
-            <h1 style="font-size: 1.4rem; margin: 0 0 0 0.75rem;">REVTEC</h1>
+            <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC">
+            <h1>REVTEC</h1>
         </div>
-        <div style="font-size: 0.9rem; color: #64748b; font-weight: 500;">
+        <div class="header-subtitle">
             Sistema de Revisión Vehicular
         </div>
     </header>
 
-    <main class="form-container">
-        <div class="form-card">
-            <h2>🔐 Iniciar Sesión</h2>
+    <ul class="nav-menu">
+        <li><a href="registro.html">📝 Registro</a></li>
+    </ul>
+
+    <main class="main-container">
+        <div class="login-card">
+            <h2 class="login-title">🔐 Iniciar Sesión</h2>
+
             <form id="loginForm">
                 <div class="form-group">
-                    <label>📧 Correo Electrónico</label>
-                    <input type="email" id="email" required placeholder="ejemplo@correo.com">
+                    <label class="form-label">📧 Correo Electrónico</label>
+                    <input type="email" id="email" class="form-input" required placeholder="ejemplo@correo.com" autocomplete="email">
                 </div>
 
                 <div class="form-group">
-                    <label>🔒 Contraseña</label>
-                    <input type="password" id="password" required placeholder="Ingrese su contraseña">
+                    <label class="form-label">🔒 Contraseña</label>
+                    <div class="password-container">
+                        <input type="password" id="password" class="form-input" required placeholder="Ingrese su contraseña" autocomplete="current-password">
+                        <button type="button" id="togglePassword" class="toggle-password">👁️</button>
+                    </div>
                 </div>
 
-                <button type="submit">
+                <button type="submit" id="loginBtn" class="login-button">
                     ✨ Iniciar Sesión
                 </button>
             </form>
 
-            <div id="mensaje" style="margin-top: 1rem; text-align: center;"></div>
+            <div id="mensaje" class="message-area"></div>
 
-            <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
-                <p style="color: #64748b; margin-bottom: 0.5rem;">¿No tienes una cuenta?</p>
-                <a href="registro.html" style="color: #3b82f6; font-weight: 600; text-decoration: none;">
-                    🚀 Regístrate aquí
-                </a>
+            <div class="register-section">
+                <p class="register-text">¿No tienes una cuenta?</p>
+                <a href="registro.html" class="register-link">🚀 Regístrate aquí</a>
             </div>
 
-            <!-- Usuarios de prueba -->
-            <div style="margin-top: 2rem; padding: 1rem; background: #f8fafc; border-radius: 8px; border-left: 4px solid #3b82f6;">
-                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b; font-size: 0.875rem;">👥 Usuarios de Prueba:</h4>
-                <div style="font-size: 0.8rem; color: #64748b; line-height: 1.4;">
-                    <strong>Cliente:</strong> cliente@test.cr / cliente123<br>
-                    <strong>Técnico:</strong> tecnico@revtec.cr / tecnico123
+            <div class="test-users">
+                <h4>👥 Usuarios de Prueba:</h4>
+                <div class="test-user-item">
+                    <span><strong style="color: #059669;">Cliente:</strong> cliente@test.cr / cliente123</span>
+                    <button onclick="fillLogin('cliente@test.cr', 'cliente123')" class="use-button">Usar</button>
+                </div>
+                <div class="test-user-item">
+                    <span><strong style="color: #7c3aed;">Técnico:</strong> tecnico@revtec.cr / tecnico123</span>
+                    <button onclick="fillLogin('tecnico@revtec.cr', 'tecnico123')" class="use-button tecnico">Usar</button>
                 </div>
             </div>
 
-            <!-- Estado de conexión -->
-            <div id="connectionStatus" style="margin-top: 1rem; padding: 0.5rem; border-radius: 6px; text-align: center; font-size: 0.8rem; display: none;">
+            <div id="connectionStatus" class="connection-status"></div>
+
+            <!-- Sección de Debug -->
+            <div id="debugSection" class="debug-section">
+                <div class="debug-title">🔧 Información de Debug:</div>
+                <div id="debugContent" class="debug-content"></div>
             </div>
         </div>
     </main>
 
     <script>
-        // ✅ URL CORREGIDA - Se adapta automáticamente al puerto actual
         const API_BASE = window.location.protocol + '//' + window.location.host + '/api';
-
         console.log('🔗 API Base URL:', API_BASE);
+
+        // Función para mostrar debug
+        function mostrarDebug(mensaje) {
+            const debugSection = document.getElementById('debugSection');
+            const debugContent = document.getElementById('debugContent');
+            debugContent.textContent = mensaje;
+            debugSection.style.display = 'block';
+            console.log('🔧 DEBUG:', mensaje);
+        }
+
+        // Función para completar login automáticamente
+        function fillLogin(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            document.getElementById('email').focus();
+            mostrarDebug(`Datos prellenados: ${email}`);
+        }
+
+        // Toggle mostrar/ocultar contraseña
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordField = document.getElementById('password');
+            const type = passwordField.type === 'password' ? 'text' : 'password';
+            passwordField.type = type;
+            this.textContent = type === 'password' ? '👁️' : '🙈';
+        });
 
         // Verificar conexión al cargar la página
         async function verificarConexion() {
@@ -77,79 +467,181 @@
             statusDiv.style.color = '#6b7280';
 
             try {
-                const response = await fetch(`${API_BASE}/Usuario/test-connection`);
-                const data = await response.json();
+                const response = await fetch(`${API_BASE}/Usuario/test-connection`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
 
-                if (data.connected) {
-                    statusDiv.innerHTML = `✅ Conectado (${data.usuariosCount} usuarios)`;
-                    statusDiv.style.background = '#dcfce7';
-                    statusDiv.style.color = '#166534';
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.connected) {
+                        statusDiv.innerHTML = `✅ Conectado (${data.usuariosCount} usuarios registrados)`;
+                        statusDiv.style.background = '#dcfce7';
+                        statusDiv.style.color = '#166534';
+                        mostrarDebug(`API conectada: ${data.usuariosCount} usuarios`);
+
+                        setTimeout(() => {
+                            statusDiv.style.display = 'none';
+                        }, 3000);
+                    } else {
+                        statusDiv.innerHTML = '❌ Sin conexión a base de datos';
+                        statusDiv.style.background = '#fef2f2';
+                        statusDiv.style.color = '#dc2626';
+                        mostrarDebug('API sin conexión a BD');
+                    }
                 } else {
-                    statusDiv.innerHTML = '❌ Sin conexión a BD';
-                    statusDiv.style.background = '#fef2f2';
-                    statusDiv.style.color = '#dc2626';
+                    throw new Error(`HTTP ${response.status}`);
                 }
             } catch (error) {
                 console.error('Error de conexión:', error);
                 statusDiv.innerHTML = '⚠️ Error de conexión al servidor';
                 statusDiv.style.background = '#fef2f2';
                 statusDiv.style.color = '#dc2626';
+                mostrarDebug(`Error de conexión: ${error.message}`);
             }
         }
 
+        // Función de login mejorada y corregida
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const mensaje = document.getElementById('mensaje');
-            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const submitBtn = document.getElementById('loginBtn');
+
+            // Limpiar debug y localStorage anterior
+            localStorage.removeItem('usuarioActual');
+            mostrarDebug('Iniciando proceso de login...');
+
+            // Validaciones básicas
+            if (!email || !password) {
+                mensaje.innerHTML = '<div class="message error">❌ Por favor complete todos los campos</div>';
+                mostrarDebug('Faltan campos requeridos');
+                return;
+            }
 
             // Mostrar loading
             submitBtn.innerHTML = '<span class="loading-spinner"></span>Verificando...';
             submitBtn.disabled = true;
 
             try {
-                console.log('🔄 Intentando login para:', email);
+                mostrarDebug(`Intentando login para: ${email}`);
 
-                // Obtener todos los usuarios para validar login (simplificado)
-                const response = await fetch(`${API_BASE}/Usuario`);
+                // Intentar método principal primero
+                let usuario = null;
+                let metodoUsado = '';
 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                // Método 1: Endpoint de login específico
+                try {
+                    const loginResponse = await fetch(`${API_BASE}/Usuario/login`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: email.toLowerCase(),
+                            password: password
+                        })
+                    });
+
+                    if (loginResponse.ok) {
+                        usuario = await loginResponse.json();
+                        metodoUsado = 'Endpoint específico';
+                        mostrarDebug('Login exitoso con endpoint específico');
+                    } else if (loginResponse.status === 401) {
+                        throw new Error('Credenciales incorrectas');
+                    } else {
+                        throw new Error('Endpoint no disponible');
+                    }
+                } catch (endpointError) {
+                    mostrarDebug(`Endpoint específico falló: ${endpointError.message}`);
+
+                    // Método 2: Fallback - obtener todos los usuarios
+                    try {
+                        const usuariosResponse = await fetch(`${API_BASE}/Usuario`);
+                        if (!usuariosResponse.ok) {
+                            throw new Error(`HTTP ${usuariosResponse.status}: ${usuariosResponse.statusText}`);
+                        }
+
+                        const usuarios = await usuariosResponse.json();
+                        mostrarDebug(`Fallback: ${usuarios.length} usuarios obtenidos`);
+
+                        usuario = usuarios.find(u =>
+                            u.email === email.toLowerCase() &&
+                            u.password === password &&
+                            u.estado === 'activo'
+                        );
+
+                        if (usuario) {
+                            metodoUsado = 'Método fallback';
+                            mostrarDebug('Login exitoso con método fallback');
+                        } else {
+                            throw new Error('Credenciales incorrectas');
+                        }
+                    } catch (fallbackError) {
+                        mostrarDebug(`Fallback falló: ${fallbackError.message}`);
+                        throw new Error('No se pudo conectar con el servidor');
+                    }
                 }
-
-                const usuarios = await response.json();
-                console.log('📋 Usuarios obtenidos:', usuarios.length);
-
-                const usuario = usuarios.find(u =>
-                    u.email === email && u.password === password && u.estado === 'activo'
-                );
 
                 if (usuario) {
-                    // Guardar datos del usuario en localStorage
+                    // Crear objeto de usuario con TODAS las propiedades necesarias
                     const usuarioData = {
-                        id: usuario.idUsuario,
-                        nombre: usuario.nombre,
-                        apellidos: usuario.apellidos,
-                        email: usuario.email,
-                        tipoUsuario: usuario.tipoUsuario
+                        id: usuario.idUsuario || usuario.id,
+                        nombre: usuario.nombre || '',
+                        apellidos: usuario.apellidos || '',
+                        email: usuario.email || email,
+                        tipoUsuario: usuario.tipoUsuario || 'cliente',
+                        loginTime: new Date().toISOString(),
+                        metodo: metodoUsado
                     };
 
-                    localStorage.setItem('usuarioActual', JSON.stringify(usuarioData));
-                    console.log('✅ Login exitoso para:', usuario.email, 'Tipo:', usuario.tipoUsuario);
+                    // Verificar que todos los campos estén presentes
+                    const camposFaltantes = [];
+                    if (!usuarioData.id) camposFaltantes.push('id');
+                    if (!usuarioData.nombre) camposFaltantes.push('nombre');
+                    if (!usuarioData.apellidos) camposFaltantes.push('apellidos');
+                    if (!usuarioData.tipoUsuario) camposFaltantes.push('tipoUsuario');
 
-                    mensaje.innerHTML = '<div class="message success">✅ ¡Bienvenido! Redirigiendo...</div>';
+                    if (camposFaltantes.length > 0) {
+                        mostrarDebug(`Campos faltantes: ${camposFaltantes.join(', ')}`);
+                        mostrarDebug(`Datos recibidos: ${JSON.stringify(usuario)}`);
+                        mensaje.innerHTML = '<div class="message error">❌ Datos de usuario incompletos</div>';
+                        return;
+                    }
+
+                    // Guardar en localStorage
+                    localStorage.setItem('usuarioActual', JSON.stringify(usuarioData));
+
+                    // Verificar que se guardó correctamente
+                    const verificacion = localStorage.getItem('usuarioActual');
+                    if (!verificacion) {
+                        mostrarDebug('Error: No se pudo guardar en localStorage');
+                        mensaje.innerHTML = '<div class="message error">❌ Error al guardar sesión</div>';
+                        return;
+                    }
+
+                    mostrarDebug(`Usuario guardado: ${usuarioData.nombre} ${usuarioData.apellidos} (${usuarioData.tipoUsuario})`);
+                    mostrarDebug(`LocalStorage verificado: ${verificacion.length} caracteres`);
+
+                    mensaje.innerHTML = `<div class="message success">✅ ¡Bienvenido ${usuarioData.nombre}! Redirigiendo...</div>`;
+
                     setTimeout(() => {
                         window.location.href = 'PanelPrincipal.html';
-                    }, 1000);
+                    }, 1500);
+
                 } else {
-                    console.log('❌ Credenciales incorrectas para:', email);
+                    mostrarDebug('Usuario no encontrado o credenciales incorrectas');
                     mensaje.innerHTML = '<div class="message error">❌ Credenciales incorrectas</div>';
                 }
+
             } catch (error) {
                 console.error('💥 Error en login:', error);
-                mensaje.innerHTML = `<div class="message error">⚠️ Error: ${error.message}</div>`;
+                mostrarDebug(`Error final: ${error.message}`);
+                mensaje.innerHTML = `<div class="message error">⚠️ ${error.message}</div>`;
             } finally {
                 // Restaurar botón
                 submitBtn.innerHTML = '✨ Iniciar Sesión';
@@ -157,73 +649,48 @@
             }
         });
 
-        // Verificar conexión al cargar la página
-        window.addEventListener('load', verificarConexion);
+        // Limpiar mensajes al escribir
+        ['email', 'password'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                document.getElementById('mensaje').innerHTML = '';
+                document.getElementById('debugSection').style.display = 'none';
+            });
+        });
 
-        // Efectos visuales (mantener los existentes)
-        function createParticle() {
-            const particle = document.createElement('div');
-            particle.style.cssText = `
-                    position: fixed;
-                    width: 4px;
-                    height: 4px;
-                    background: rgba(255, 255, 255, 0.6);
-                    border-radius: 50%;
-                    pointer-events: none;
-                    z-index: -1;
-                    left: ${Math.random() * 100}vw;
-                    top: 100vh;
-                    animation: float ${3 + Math.random() * 4}s linear forwards;
-                `;
+        // Verificar si ya hay una sesión activa
+        function verificarSesionExistente() {
+            const usuarioActual = localStorage.getItem('usuarioActual');
+            if (usuarioActual) {
+                try {
+                    const usuario = JSON.parse(usuarioActual);
+                    mostrarDebug(`Sesión existente: ${usuario.nombre} ${usuario.apellidos}`);
 
-            document.body.appendChild(particle);
+                    const loginTime = new Date(usuario.loginTime);
+                    const ahora = new Date();
+                    const horasTranscurridas = (ahora - loginTime) / (1000 * 60 * 60);
 
-            setTimeout(() => {
-                particle.remove();
-            }, 7000);
+                    if (horasTranscurridas < 24) {
+                        console.log('✅ Sesión activa encontrada, redirigiendo...');
+                        window.location.href = 'PanelPrincipal.html';
+                        return;
+                    } else {
+                        localStorage.removeItem('usuarioActual');
+                        mostrarDebug('Sesión expirada, eliminada');
+                    }
+                } catch (error) {
+                    localStorage.removeItem('usuarioActual');
+                    mostrarDebug('Datos de sesión corruptos, eliminados');
+                }
+            } else {
+                mostrarDebug('No hay sesión previa');
+            }
         }
 
-        setInterval(createParticle, 300);
-
-        const style = document.createElement('style');
-        style.textContent = `
-                @keyframes float {
-                    to {
-                        transform: translateY(-100vh) rotate(360deg);
-                        opacity: 0;
-                    }
-                }
-                .loading-spinner {
-                    display: inline-block;
-                    width: 12px;
-                    height: 12px;
-                    border: 2px solid #ffffff;
-                    border-radius: 50%;
-                    border-top-color: transparent;
-                    animation: spin 1s ease-in-out infinite;
-                    margin-right: 0.5rem;
-                }
-                @keyframes spin {
-                    to { transform: rotate(360deg); }
-                }
-                .message {
-                    padding: 0.75rem;
-                    border-radius: 8px;
-                    margin: 0.5rem 0;
-                    font-weight: 500;
-                }
-                .message.success {
-                    background: #dcfce7;
-                    color: #166534;
-                    border: 1px solid #bbf7d0;
-                }
-                .message.error {
-                    background: #fef2f2;
-                    color: #dc2626;
-                    border: 1px solid #fecaca;
-                }
-            `;
-        document.head.appendChild(style);
+        // Inicializar página
+        window.addEventListener('load', () => {
+            verificarSesionExistente();
+            verificarConexion();
+        });
     </script>
 </body>
 </html>

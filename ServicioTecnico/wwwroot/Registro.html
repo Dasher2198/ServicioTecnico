@@ -4,60 +4,353 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>REVTEC - Registro</title>
-    <link rel="stylesheet" href="Login.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+            .header-logo h1 {
+                font-size: 1.5rem;
+                color: #1e293b;
+                font-weight: 700;
+            }
+
+            .header-logo img {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+        .header-subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+            .nav-menu a {
+                text-decoration: none;
+                color: #475569;
+                font-weight: 500;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                transition: all 0.2s;
+            }
+
+                .nav-menu a:hover {
+                    background: #3b82f6;
+                    color: white;
+                }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            padding: 3rem;
+            width: 100%;
+            max-width: 550px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #1e293b;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-grid-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+            .form-input:focus, .form-select:focus {
+                outline: none;
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                background: white;
+            }
+
+            .form-input:invalid {
+                border-color: #ef4444;
+            }
+
+        .form-textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.9);
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+            .form-textarea:focus {
+                outline: none;
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                background: white;
+            }
+
+        .checkbox-container {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #06b6d4;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: #1e293b;
+            cursor: pointer;
+        }
+
+        .checkbox-input {
+            width: auto !important;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+        }
+
+            .submit-button:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            }
+
+            .submit-button:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+        .message-area {
+            margin-top: 1rem;
+            text-align: center;
+            min-height: 40px;
+        }
+
+        .message {
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            font-weight: 500;
+        }
+
+            .message.success {
+                background: #dcfce7;
+                color: #166534;
+                border: 1px solid #bbf7d0;
+            }
+
+            .message.error {
+                background: #fef2f2;
+                color: #dc2626;
+                border: 1px solid #fecaca;
+            }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .form-help {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-menu {
+                margin: 0.5rem 1rem;
+                justify-content: center;
+            }
+
+            .main-container {
+                padding: 1rem;
+            }
+
+            .form-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
+    <header class="header">
         <div class="header-logo">
-            <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC" style="height: 45px; width: 45px; border-radius: 50%; object-fit: cover;">
-            <h1 style="font-size: 1.4rem; margin: 0 0 0 0.75rem;">REVTEC</h1>
+            <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC">
+            <h1>REVTEC</h1>
         </div>
-        <div style="font-size: 0.9rem; color: #64748b; font-weight: 500;">
+        <div class="header-subtitle">
             Registro de Usuario
         </div>
     </header>
 
-    <ul>
+    <ul class="nav-menu">
         <li><a href="Login.html">🔐 Iniciar Sesión</a></li>
     </ul>
 
-    <main class="form-container">
+    <main class="main-container">
         <div class="form-card">
-            <h2>📝 Crear Cuenta</h2>
+            <h2 class="form-title">📝 Crear Cuenta</h2>
+
             <form id="registroForm">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-grid">
                     <div class="form-group">
-                        <label>👤 Nombre</label>
-                        <input type="text" id="nombre" required placeholder="Tu nombre">
+                        <label class="form-label">👤 Nombre</label>
+                        <input type="text" id="nombre" class="form-input" required placeholder="Tu nombre">
                     </div>
 
                     <div class="form-group">
-                        <label>👥 Apellidos</label>
-                        <input type="text" id="apellidos" required placeholder="Tus apellidos">
+                        <label class="form-label">👥 Apellidos</label>
+                        <input type="text" id="apellidos" class="form-input" required placeholder="Tus apellidos">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>🆔 Cédula</label>
-                    <input type="text" id="cedula" required placeholder="123456789" maxlength="20">
+                    <label class="form-label">🆔 Cédula</label>
+                    <input type="text" id="cedula" class="form-input" required placeholder="123456789" maxlength="20">
                 </div>
 
                 <div class="form-group">
-                    <label>📧 Correo Electrónico</label>
-                    <input type="email" id="email" required placeholder="ejemplo@correo.com">
+                    <label class="form-label">📧 Correo Electrónico</label>
+                    <input type="email" id="email" class="form-input" required placeholder="ejemplo@correo.com">
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-grid">
                     <div class="form-group">
-                        <label>📞 Teléfono</label>
-                        <input type="tel" id="telefono" placeholder="8888-9999">
+                        <label class="form-label">📞 Teléfono</label>
+                        <input type="tel" id="telefono" class="form-input" placeholder="8888-9999">
                     </div>
 
                     <div class="form-group">
-                        <label>🏢 Tipo de Usuario</label>
-                        <select id="tipoUsuario" required>
+                        <label class="form-label">🏢 Tipo de Usuario</label>
+                        <select id="tipoUsuario" class="form-select" required>
                             <option value="">Seleccione...</option>
                             <option value="cliente">👤 Cliente</option>
                             <option value="tecnico">🔧 Técnico</option>
@@ -66,33 +359,34 @@
                 </div>
 
                 <div class="form-group">
-                    <label>🏠 Dirección</label>
-                    <input type="text" id="direccion" placeholder="Su dirección completa">
+                    <label class="form-label">🏠 Dirección</label>
+                    <input type="text" id="direccion" class="form-input" placeholder="Su dirección completa">
                 </div>
 
                 <div class="form-group">
-                    <label>🔒 Contraseña</label>
-                    <input type="password" id="password" required placeholder="Mínimo 6 caracteres" minlength="6">
+                    <label class="form-label">🔒 Contraseña</label>
+                    <input type="password" id="password" class="form-input" required placeholder="Mínimo 6 caracteres" minlength="6">
                 </div>
 
                 <div class="form-group">
-                    <label>🔒 Confirmar Contraseña</label>
-                    <input type="password" id="confirmPassword" required placeholder="Repita su contraseña" minlength="6">
+                    <label class="form-label">🔒 Confirmar Contraseña</label>
+                    <input type="password" id="confirmPassword" class="form-input" required placeholder="Repita su contraseña" minlength="6">
+                    <div class="form-help" id="passwordHelp"></div>
                 </div>
 
-                <div style="margin: 1rem 0; padding: 1rem; background: #f8fafc; border-radius: 8px; border-left: 4px solid #06b6d4;">
-                    <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 500; color: #1e293b; cursor: pointer;">
-                        <input type="checkbox" id="terminos" required style="width: auto;">
+                <div class="checkbox-container">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="terminos" class="checkbox-input" required>
                         Acepto los términos y condiciones de uso
                     </label>
                 </div>
 
-                <button type="submit">
+                <button type="submit" class="submit-button">
                     🚀 Crear Cuenta
                 </button>
             </form>
 
-            <div id="mensaje" style="margin-top: 1rem; text-align: center;"></div>
+            <div id="mensaje" class="message-area"></div>
         </div>
     </main>
 
@@ -178,13 +472,22 @@
         document.getElementById('confirmPassword').addEventListener('input', function () {
             const password = document.getElementById('password').value;
             const confirmPassword = this.value;
+            const helpText = document.getElementById('passwordHelp');
 
             if (confirmPassword && password !== confirmPassword) {
                 this.style.borderColor = '#ef4444';
                 this.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
+                helpText.textContent = '❌ Las contraseñas no coinciden';
+                helpText.style.color = '#ef4444';
+            } else if (confirmPassword && password === confirmPassword) {
+                this.style.borderColor = '#10b981';
+                this.style.boxShadow = '0 0 0 3px rgba(16, 185, 129, 0.1)';
+                helpText.textContent = '✅ Las contraseñas coinciden';
+                helpText.style.color = '#10b981';
             } else {
                 this.style.borderColor = '';
                 this.style.boxShadow = '';
+                helpText.textContent = '';
             }
         });
 
@@ -206,6 +509,13 @@
         ['nombre', 'apellidos'].forEach(id => {
             document.getElementById(id).addEventListener('input', function () {
                 this.value = this.value.replace(/\b\w/g, l => l.toUpperCase());
+            });
+        });
+
+        // Limpiar mensajes al escribir
+        ['nombre', 'apellidos', 'cedula', 'email', 'password', 'confirmPassword'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                document.getElementById('mensaje').innerHTML = '';
             });
         });
     </script>

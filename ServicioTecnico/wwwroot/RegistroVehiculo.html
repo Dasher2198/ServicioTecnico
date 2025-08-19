@@ -4,48 +4,373 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>REVTEC - Registrar Vehículo</title>
-    <link rel="stylesheet" href="Login.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+            .header-logo h1 {
+                font-size: 1.5rem;
+                color: #1e293b;
+                font-weight: 700;
+            }
+
+            .header-logo img {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+        .header-subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+            .nav-menu a {
+                text-decoration: none;
+                color: #475569;
+                font-weight: 500;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                transition: all 0.2s;
+            }
+
+                .nav-menu a:hover {
+                    background: #3b82f6;
+                    color: white;
+                }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            padding: 3rem;
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #1e293b;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .info-text {
+            margin: 0;
+            color: #1e293b;
+            font-size: 0.9rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+            .form-input:focus, .form-select:focus {
+                outline: none;
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                background: white;
+            }
+
+        .form-help {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+        }
+
+            .submit-button:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            }
+
+            .submit-button:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+        .message-area {
+            margin-top: 1rem;
+            text-align: center;
+            min-height: 40px;
+        }
+
+        .message {
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            font-weight: 500;
+        }
+
+            .message.success {
+                background: #dcfce7;
+                color: #166534;
+                border: 1px solid #bbf7d0;
+            }
+
+            .message.error {
+                background: #fef2f2;
+                color: #dc2626;
+                border: 1px solid #fecaca;
+            }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .vehicles-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 12px;
+            border-left: 4px solid #10b981;
+            display: none;
+        }
+
+        .vehicles-title {
+            margin: 0 0 1rem 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+
+        .vehicle-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 0.75rem;
+            border-left: 4px solid #3b82f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vehicle-info {
+            flex: 1;
+        }
+
+        .vehicle-main {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+
+        .vehicle-details {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .delete-button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+            .delete-button:hover {
+                background: #dc2626;
+                transform: scale(1.05);
+            }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-menu {
+                margin: 0.5rem 1rem;
+                justify-content: center;
+            }
+
+            .main-container {
+                padding: 1rem;
+            }
+
+            .form-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+            }
+
+            .vehicle-card {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .delete-button {
+                align-self: flex-end;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
+    <header class="header">
         <div class="header-logo">
-            <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC" style="height: 45px; width: 45px; border-radius: 50%; object-fit: cover;">
-            <h1 style="font-size: 1.4rem; margin: 0 0 0 0.75rem;">REVTEC</h1>
+            <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC">
+            <h1>REVTEC</h1>
         </div>
-        <div style="font-size: 0.9rem; color: #64748b; font-weight: 500;">
+        <div class="header-subtitle">
             Registro de Vehículo
         </div>
     </header>
 
-    <ul>
+    <ul class="nav-menu">
         <li><a href="PanelPrincipal.html">🏠 Panel Principal</a></li>
     </ul>
 
-    <main class="form-container">
+    <main class="main-container">
         <div class="form-card">
-            <h2>🚗 Registrar Vehículo</h2>
+            <h2 class="form-title">🚗 Registrar Vehículo</h2>
 
-            <div style="background: rgba(59, 130, 246, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; border-left: 4px solid #3b82f6;">
-                <p style="margin: 0; color: #1e293b; font-size: 0.9rem;">
+            <div class="info-box">
+                <p class="info-text">
                     <strong>📋 Importante:</strong> Complete todos los datos de su vehículo para poder agendar citas de inspección.
                 </p>
             </div>
 
             <form id="vehiculoForm">
                 <div class="form-group">
-                    <label>🆔 Número de Placa</label>
-                    <input type="text" id="numeroPlaca" required placeholder="ABC123" maxlength="10" style="text-transform: uppercase;">
-                    <small style="color: #64748b; font-size: 0.8rem;">
+                    <label class="form-label">🆔 Número de Placa</label>
+                    <input type="text" id="numeroPlaca" class="form-input" required placeholder="ABC123" maxlength="10" style="text-transform: uppercase;">
+                    <div class="form-help">
                         ℹ️ Formato: ABC123 (letras y números, sin espacios ni guiones)
-                    </small>
+                    </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-grid">
                     <div class="form-group">
-                        <label>🏭 Marca</label>
-                        <select id="marca" required onchange="cargarModelos()">
+                        <label class="form-label">🏭 Marca</label>
+                        <select id="marca" class="form-select" required onchange="cargarModelos()">
                             <option value="">Seleccione marca...</option>
                             <option value="Toyota">Toyota</option>
                             <option value="Nissan">Nissan</option>
@@ -66,22 +391,22 @@
                     </div>
 
                     <div class="form-group">
-                        <label>🚙 Modelo</label>
-                        <input type="text" id="modelo" required placeholder="Ej: Corolla, Sentra">
+                        <label class="form-label">🚙 Modelo</label>
+                        <input type="text" id="modelo" class="form-input" required placeholder="Ej: Corolla, Sentra">
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-grid">
                     <div class="form-group">
-                        <label>📅 Año</label>
-                        <select id="año" required>
+                        <label class="form-label">📅 Año</label>
+                        <select id="año" class="form-select" required>
                             <option value="">Seleccione año...</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label>🎨 Color</label>
-                        <select id="color">
+                        <label class="form-label">🎨 Color</label>
+                        <select id="color" class="form-select">
                             <option value="">Seleccione color...</option>
                             <option value="Blanco">Blanco</option>
                             <option value="Negro">Negro</option>
@@ -98,17 +423,17 @@
                 </div>
 
                 <div class="form-group">
-                    <label>🔧 Número de Chasis</label>
-                    <input type="text" id="numeroChasis" placeholder="Opcional - Ej: 1HGBH41JXMN109186" maxlength="50" style="text-transform: uppercase;">
-                    <small style="color: #64748b; font-size: 0.8rem;">
+                    <label class="form-label">🔧 Número de Chasis</label>
+                    <input type="text" id="numeroChasis" class="form-input" placeholder="Opcional - Ej: 1HGBH41JXMN109186" maxlength="50" style="text-transform: uppercase;">
+                    <div class="form-help">
                         ℹ️ Número de identificación único del vehículo (VIN)
-                    </small>
+                    </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-grid">
                     <div class="form-group">
-                        <label>⛽ Tipo de Combustible</label>
-                        <select id="tipoCombustible">
+                        <label class="form-label">⛽ Tipo de Combustible</label>
+                        <select id="tipoCombustible" class="form-select">
                             <option value="">Seleccione...</option>
                             <option value="Gasolina">⛽ Gasolina</option>
                             <option value="Diesel">🛢️ Diesel</option>
@@ -120,8 +445,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label>🏎️ Cilindrada</label>
-                        <select id="cilindrada">
+                        <label class="form-label">🏎️ Cilindrada</label>
+                        <select id="cilindrada" class="form-select">
                             <option value="">Seleccione...</option>
                             <option value="1.0L">1.0L</option>
                             <option value="1.2L">1.2L</option>
@@ -138,16 +463,16 @@
                     </div>
                 </div>
 
-                <button type="submit">
+                <button type="submit" class="submit-button">
                     💾 Guardar Vehículo
                 </button>
             </form>
 
-            <div id="mensaje" style="margin-top: 1rem; text-align: center;"></div>
+            <div id="mensaje" class="message-area"></div>
 
             <!-- Mis vehículos registrados -->
-            <div id="misVehiculos" style="margin-top: 2rem; display: none;">
-                <h3 style="margin: 0 0 1rem 0; color: #1e293b; font-size: 1.1rem;">🚗 Mis Vehículos Registrados</h3>
+            <div id="misVehiculos" class="vehicles-section">
+                <h3 class="vehicles-title">🚗 Mis Vehículos Registrados</h3>
                 <div id="listaVehiculos">
                     <!-- Se llenará dinámicamente -->
                 </div>
@@ -206,22 +531,20 @@
 
                     const lista = document.getElementById('listaVehiculos');
                     lista.innerHTML = vehiculos.map(vehiculo => `
-                            <div style="background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 0.75rem; border-left: 4px solid #3b82f6;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div>
-                                        <div style="font-weight: 600; color: #1e293b; margin-bottom: 0.25rem;">
-                                            🚗 ${vehiculo.numeroPlaca} - ${vehiculo.marca} ${vehiculo.modelo}
-                                        </div>
-                                        <div style="font-size: 0.85rem; color: #64748b;">
-                                            📅 ${vehiculo.año} | 🎨 ${vehiculo.color || 'N/A'} | ⛽ ${vehiculo.tipoCombustible || 'N/A'}
-                                        </div>
+                            <div class="vehicle-card">
+                                <div class="vehicle-info">
+                                    <div class="vehicle-main">
+                                        🚗 ${vehiculo.numeroPlaca} - ${vehiculo.marca} ${vehiculo.modelo}
                                     </div>
-                                    <button onclick="eliminarVehiculo(${vehiculo.idVehiculo})"
-                                            style="background: #ef4444; color: white; border: none; padding: 0.5rem; border-radius: 6px; cursor: pointer;"
-                                            title="Eliminar vehículo">
-                                        🗑️
-                                    </button>
+                                    <div class="vehicle-details">
+                                        📅 ${vehiculo.año} | 🎨 ${vehiculo.color || 'N/A'} | ⛽ ${vehiculo.tipoCombustible || 'N/A'}
+                                    </div>
                                 </div>
+                                <button onclick="eliminarVehiculo(${vehiculo.idVehiculo})"
+                                        class="delete-button"
+                                        title="Eliminar vehículo">
+                                    🗑️
+                                </button>
                             </div>
                         `).join('');
                 }
@@ -334,6 +657,13 @@
         // Capitalizar modelo
         document.getElementById('modelo').addEventListener('input', function () {
             this.value = this.value.replace(/\b\w/g, l => l.toUpperCase());
+        });
+
+        // Limpiar mensajes al escribir
+        ['numeroPlaca', 'marca', 'modelo', 'año'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                document.getElementById('mensaje').innerHTML = '';
+            });
         });
 
         // Inicializar página

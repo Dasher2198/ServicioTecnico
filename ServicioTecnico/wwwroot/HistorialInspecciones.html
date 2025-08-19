@@ -4,59 +4,634 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>REVTEC - Historial de Inspecciones</title>
-    <link rel="stylesheet" href="Login.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+            .header-logo h1 {
+                font-size: 1.5rem;
+                color: #1e293b;
+                font-weight: 700;
+            }
+
+            .header-logo img {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+        .header-subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+            .nav-menu a {
+                text-decoration: none;
+                color: #475569;
+                font-weight: 500;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                transition: all 0.2s;
+            }
+
+                .nav-menu a:hover {
+                    background: #3b82f6;
+                    color: white;
+                }
+
+        .main-container {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .page-title {
+            margin-bottom: 2rem;
+            color: #1e293b;
+            font-size: 1.75rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .filters-container {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .filters-title {
+            margin: 0 0 1rem 0;
+            color: #1e293b;
+            font-size: 1rem;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .form-group {
+            margin: 0;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            background: white;
+        }
+
+            .form-input:focus, .form-select:focus {
+                outline: none;
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            }
+
+        .filter-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+            .filter-button:hover {
+                background: #4b5563;
+            }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #3b82f6;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .loading-section {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid #e5e7eb;
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .no-data {
+            text-align: center;
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .no-data-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .no-data-text {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-data-help {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .table-container {
+            display: none;
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin: 0;
+        }
+
+            .table th {
+                background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+                color: #1e293b;
+                font-weight: 600;
+                padding: 1rem 0.75rem;
+                text-align: left;
+                font-size: 0.875rem;
+                border-bottom: 2px solid #e5e7eb;
+                white-space: nowrap;
+            }
+
+            .table td {
+                padding: 1rem 0.75rem;
+                border-bottom: 1px solid #f1f5f9;
+                color: #374151;
+                font-size: 0.875rem;
+                vertical-align: top;
+            }
+
+            .table tr:hover {
+                background: #f8fafc;
+            }
+
+            .table tr:last-child td {
+                border-bottom: none;
+            }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-aprobado {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .status-rechazado {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .status-vigente {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .status-vencido {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .action-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+            .action-button:hover {
+                background: #2563eb;
+            }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .pagination-button {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+            .pagination-button:hover:not(:disabled) {
+                background: #f3f4f6;
+            }
+
+            .pagination-button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            .pagination-button.active {
+                background: #3b82f6;
+                color: white;
+                border-color: #3b82f6;
+            }
+
+        .pagination-info {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-title {
+            margin: 0;
+            color: #1e293b;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+            .modal-close:hover {
+                background: #dc2626;
+            }
+
+        .detail-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-title {
+            margin: 0 0 1rem 0;
+            color: #1e293b;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .detail-item {
+            font-size: 0.9rem;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .detail-value {
+            color: #64748b;
+        }
+
+        .observation-box {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+            margin-bottom: 1.5rem;
+        }
+
+        .verification-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .verification-item {
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+        }
+
+            .verification-item.fallo {
+                border-left-color: #ef4444;
+            }
+
+        .verification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.25rem;
+        }
+
+        .verification-category {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .verification-result {
+            font-weight: 600;
+        }
+
+            .verification-result.ok {
+                color: #10b981;
+            }
+
+            .verification-result.fallo {
+                color: #ef4444;
+            }
+
+        .verification-observation {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-style: italic;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-menu {
+                margin: 0.5rem 1rem;
+                justify-content: center;
+            }
+
+            .main-container {
+                padding: 1rem;
+            }
+
+            .content-card {
+                padding: 1.5rem;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .table-container {
+                font-size: 0.8rem;
+            }
+
+            .table th,
+            .table td {
+                padding: 0.5rem 0.25rem;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pagination {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
+    <header class="header">
         <div class="header-logo">
-            <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC" style="height: 45px; width: 45px; border-radius: 50%; object-fit: cover;">
-            <h1 style="font-size: 1.4rem; margin: 0 0 0 0.75rem;">REVTEC</h1>
+            <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC">
+            <h1>REVTEC</h1>
         </div>
-        <div style="font-size: 0.9rem; color: #64748b; font-weight: 500;">
+        <div class="header-subtitle">
             Historial de Inspecciones
         </div>
     </header>
 
-    <ul>
+    <ul class="nav-menu">
         <li><a href="PanelPrincipal.html">🏠 Panel Principal</a></li>
     </ul>
 
-    <main class="form-container" style="max-width: 1200px;">
-        <div class="form-card">
-            <h2 id="tituloHistorial">📋 Historial de Inspecciones</h2>
+    <main class="main-container">
+        <div class="content-card">
+            <h2 id="tituloHistorial" class="page-title">📋 Historial de Inspecciones</h2>
 
-            <!-- Filtros mejorados -->
-            <div id="filtrosContainer" style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border-left: 4px solid #3b82f6;">
-                <h3 style="margin: 0 0 1rem 0; color: #1e293b; font-size: 1rem;">🔍 Filtros de Búsqueda</h3>
+            <!-- Filtros -->
+            <div class="filters-container">
+                <h3 class="filters-title">🔍 Filtros de Búsqueda</h3>
 
                 <div id="filtrosCliente" style="display: none;">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                    <div class="filters-grid">
                         <div class="form-group">
-                            <label>🚗 Filtrar por Vehículo</label>
-                            <select id="filtroVehiculo" onchange="filtrarInspecciones()">
+                            <label class="form-label">🚗 Filtrar por Vehículo</label>
+                            <select id="filtroVehiculo" class="form-select" onchange="filtrarInspecciones()">
                                 <option value="">Todos los vehículos</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label>📅 Desde</label>
-                            <input type="date" id="filtroFechaDesde" onchange="filtrarInspecciones()">
+                            <label class="form-label">📅 Desde</label>
+                            <input type="date" id="filtroFechaDesde" class="form-input" onchange="filtrarInspecciones()">
                         </div>
 
                         <div class="form-group">
-                            <label>📅 Hasta</label>
-                            <input type="date" id="filtroFechaHasta" onchange="filtrarInspecciones()">
+                            <label class="form-label">📅 Hasta</label>
+                            <input type="date" id="filtroFechaHasta" class="form-input" onchange="filtrarInspecciones()">
+                        </div>
+
+                        <div class="form-group">
+                            <button onclick="limpiarFiltros()" class="filter-button">🗑️ Limpiar</button>
                         </div>
                     </div>
                 </div>
 
                 <div id="filtrosTecnico" style="display: none;">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="filters-grid">
                         <div class="form-group">
-                            <label>🔍 Resultado</label>
-                            <select id="filtroResultado" onchange="filtrarInspecciones()">
+                            <label class="form-label">🔍 Resultado</label>
+                            <select id="filtroResultado" class="form-select" onchange="filtrarInspecciones()">
                                 <option value="">Todos los resultados</option>
                                 <option value="aprobado">✅ Aprobado</option>
                                 <option value="rechazado">❌ Rechazado</option>
@@ -64,60 +639,58 @@
                         </div>
 
                         <div class="form-group">
-                            <label>📅 Fecha</label>
-                            <input type="date" id="filtroFechaTecnico" onchange="filtrarInspecciones()">
+                            <label class="form-label">📅 Fecha</label>
+                            <input type="date" id="filtroFechaTecnico" class="form-input" onchange="filtrarInspecciones()">
                         </div>
 
                         <div class="form-group">
-                            <label>🚗 Placa</label>
-                            <input type="text" id="filtroPlaca" placeholder="ABC123" onchange="filtrarInspecciones()" style="text-transform: uppercase;">
+                            <label class="form-label">🚗 Placa</label>
+                            <input type="text" id="filtroPlaca" class="form-input" placeholder="ABC123" onchange="filtrarInspecciones()" style="text-transform: uppercase;">
+                        </div>
+
+                        <div class="form-group">
+                            <button onclick="limpiarFiltros()" class="filter-button">🗑️ Limpiar</button>
                         </div>
                     </div>
                 </div>
-
-                <button onclick="limpiarFiltros()" style="margin-top: 1rem; background: #6b7280; padding: 0.5rem 1rem; font-size: 0.9rem;">
-                    🗑️ Limpiar Filtros
-                </button>
             </div>
 
             <!-- Estadísticas rápidas -->
-            <div id="estadisticasRapidas" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+            <div id="estadisticasRapidas" class="stats-grid">
                 <!-- Se llenará dinámicamente -->
             </div>
 
-            <div id="cargando" style="text-align: center; margin: 2rem 0;">
-                <span class="loading-spinner"></span>
+            <div id="cargando" class="loading-section">
+                <div class="loading-spinner"></div>
                 <p style="color: #64748b;">Cargando inspecciones...</p>
             </div>
 
-            <div id="sinDatos" style="text-align: center; margin: 2rem 0; display: none;">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
-                <p style="color: #64748b; font-size: 1.1rem;">No se encontraron inspecciones</p>
-                <p style="color: #64748b; font-size: 0.9rem;">Intente ajustar los filtros de búsqueda</p>
+            <div id="sinDatos" class="no-data">
+                <div class="no-data-icon">📭</div>
+                <p class="no-data-text">No se encontraron inspecciones</p>
+                <p class="no-data-help">Intente ajustar los filtros de búsqueda</p>
             </div>
 
-            <div id="tablaContainer" style="display: none;">
-                <div style="overflow-x: auto; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                    <table id="tablaInspecciones" style="width: 100%; margin: 0;">
-                        <thead>
-                            <tr>
-                                <th style="min-width: 120px;">📅 Fecha</th>
-                                <th style="min-width: 140px;">🚗 Vehículo</th>
-                                <th style="min-width: 150px;">🏢 Estación</th>
-                                <th style="min-width: 120px;">👨‍🔧 Técnico</th>
-                                <th style="min-width: 100px;">✅ Resultado</th>
-                                <th style="min-width: 130px;">📄 Certificado</th>
-                                <th style="min-width: 120px;">📅 Vencimiento</th>
-                                <th style="min-width: 100px;">🔍 Estado</th>
-                                <th style="min-width: 80px;">🔧 Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="cuerpoTabla">
-                        </tbody>
-                    </table>
-                </div>
+            <div id="tablaContainer" class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>📅 Fecha</th>
+                            <th>🚗 Vehículo</th>
+                            <th>🏢 Estación</th>
+                            <th>👨‍🔧 Técnico</th>
+                            <th>✅ Resultado</th>
+                            <th>📄 Certificado</th>
+                            <th>📅 Vencimiento</th>
+                            <th>🔍 Estado</th>
+                            <th>🔧 Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoTabla">
+                    </tbody>
+                </table>
 
-                <div id="paginacion" style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1.5rem;">
+                <div id="paginacion" class="pagination">
                     <!-- Se llenará dinámicamente -->
                 </div>
             </div>
@@ -125,11 +698,11 @@
     </main>
 
     <!-- Modal para detalles de inspección -->
-    <div id="modalDetalles" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; backdrop-filter: blur(5px);">
-        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 16px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h3 style="margin: 0; color: #1e293b;">🔍 Detalles de Inspección</h3>
-                <button onclick="cerrarModal()" style="background: #ef4444; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">❌ Cerrar</button>
+    <div id="modalDetalles" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">🔍 Detalles de Inspección</h3>
+                <button onclick="cerrarModal()" class="modal-close">❌ Cerrar</button>
             </div>
             <div id="contenidoModal">
                 <!-- Se llenará dinámicamente -->
@@ -266,10 +839,10 @@
             ];
 
             document.getElementById('estadisticasRapidas').innerHTML = stats.map(stat => `
-                    <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                        <div style="font-size: 1.5rem; margin-bottom: 0.25rem;">${stat.icono}</div>
-                        <div style="font-size: 1.25rem; font-weight: 700; color: ${stat.color}; margin-bottom: 0.25rem;">${stat.valor}</div>
-                        <div style="font-size: 0.8rem; color: #64748b; font-weight: 500;">${stat.titulo}</div>
+                    <div class="stat-card">
+                        <div class="stat-icon">${stat.icono}</div>
+                        <div class="stat-value" style="color: ${stat.color};">${stat.valor}</div>
+                        <div class="stat-label">${stat.titulo}</div>
                     </div>
                 `).join('');
         }
@@ -311,29 +884,26 @@
 
                 fila.innerHTML = `
                         <td>${fechaInspeccion}</td>
-                        <td><strong>${inspeccion.vehiculo?.numeroPlaca || '---'}</strong><br>
-                            <small style="color: #64748b;">${inspeccion.vehiculo?.marca || ''} ${inspeccion.vehiculo?.modelo || ''}</small></td>
+                        <td>
+                            <strong>${inspeccion.vehiculo?.numeroPlaca || '---'}</strong><br>
+                            <small style="color: #64748b;">${inspeccion.vehiculo?.marca || ''} ${inspeccion.vehiculo?.modelo || ''}</small>
+                        </td>
                         <td>${inspeccion.estacion?.nombreEstacion || '---'}</td>
                         <td>${inspeccion.tecnico?.nombre || '---'} ${inspeccion.tecnico?.apellidos || ''}</td>
                         <td>
-                            <span class="status-${inspeccion.resultado}" style="padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600;
-                                  background: ${inspeccion.resultado === 'aprobado' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'};
-                                  color: ${inspeccion.resultado === 'aprobado' ? '#10b981' : '#ef4444'};">
+                            <span class="status-badge status-${inspeccion.resultado}">
                                 ${inspeccion.resultado === 'aprobado' ? '✅ Aprobado' : '❌ Rechazado'}
                             </span>
                         </td>
                         <td>${numeroCertificado}</td>
                         <td>${fechaVencimiento}</td>
                         <td>
-                            <span style="padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600;
-                                  background: ${estadoCertificado === 'Vigente' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)'};
-                                  color: ${estadoCertificado === 'Vigente' ? '#10b981' : '#ef4444'};">
+                            <span class="status-badge status-${estadoCertificado === 'Vigente' ? 'vigente' : 'vencido'}">
                                 ${estadoCertificado}
                             </span>
                         </td>
                         <td>
-                            <button onclick="verDetalles(${inspeccion.idInspeccion})"
-                                    style="background: #3b82f6; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.8rem; cursor: pointer;">
+                            <button onclick="verDetalles(${inspeccion.idInspeccion})" class="action-button">
                                 👁️ Ver
                             </button>
                         </td>
@@ -356,38 +926,32 @@
                 return;
             }
 
-            let html = '<div style="display: flex; gap: 0.5rem; align-items: center;">';
+            let html = '';
 
             // Botón anterior
             html += `<button onclick="cambiarPagina(${paginaActual - 1})"
-                                ${paginaActual === 1 ? 'disabled' : ''}
-                                style="padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; background: white; border-radius: 6px; cursor: pointer;">
+                                class="pagination-button"
+                                ${paginaActual === 1 ? 'disabled' : ''}>
                             ← Anterior
                          </button>`;
 
             // Números de página
             for (let i = 1; i <= totalPaginas; i++) {
                 if (i === paginaActual) {
-                    html += `<button style="padding: 0.5rem 0.75rem; background: #3b82f6; color: white; border: none; border-radius: 6px; font-weight: 600;">
-                                    ${i}
-                                 </button>`;
+                    html += `<button class="pagination-button active">${i}</button>`;
                 } else {
-                    html += `<button onclick="cambiarPagina(${i})"
-                                        style="padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; background: white; border-radius: 6px; cursor: pointer;">
-                                    ${i}
-                                 </button>`;
+                    html += `<button onclick="cambiarPagina(${i})" class="pagination-button">${i}</button>`;
                 }
             }
 
             // Botón siguiente
             html += `<button onclick="cambiarPagina(${paginaActual + 1})"
-                                ${paginaActual === totalPaginas ? 'disabled' : ''}
-                                style="padding: 0.5rem 0.75rem; border: 1px solid #d1d5db; background: white; border-radius: 6px; cursor: pointer;">
+                                class="pagination-button"
+                                ${paginaActual === totalPaginas ? 'disabled' : ''}>
                             Siguiente →
                          </button>`;
 
-            html += '</div>';
-            html += `<div style="color: #64748b; font-size: 0.9rem;">
+            html += `<div class="pagination-info">
                             Mostrando ${(paginaActual - 1) * itemsPorPagina + 1} - ${Math.min(paginaActual * itemsPorPagina, inspecciones.length)}
                             de ${inspecciones.length} inspecciones
                          </div>`;
@@ -487,28 +1051,46 @@
                 const detallesInspeccion = detalles.filter(d => d.idInspeccion === idInspeccion);
 
                 let contenido = `
-                        <div style="margin-bottom: 1.5rem;">
-                            <h4 style="margin: 0 0 1rem 0; color: #1e293b;">📋 Información General</h4>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; background: #f8fafc; padding: 1rem; border-radius: 8px;">
-                                <div><strong>🚗 Vehículo:</strong> ${inspeccion.vehiculo?.numeroPlaca} - ${inspeccion.vehiculo?.marca} ${inspeccion.vehiculo?.modelo}</div>
-                                <div><strong>📅 Fecha:</strong> ${new Date(inspeccion.fechaInspeccion).toLocaleDateString('es-ES')}</div>
-                                <div><strong>🏢 Estación:</strong> ${inspeccion.estacion?.nombreEstacion}</div>
-                                <div><strong>👨‍🔧 Técnico:</strong> ${inspeccion.tecnico?.nombre} ${inspeccion.tecnico?.apellidos}</div>
-                                <div><strong>✅ Resultado:</strong>
-                                    <span style="color: ${inspeccion.resultado === 'aprobado' ? '#10b981' : '#ef4444'}; font-weight: 600;">
-                                        ${inspeccion.resultado === 'aprobado' ? '✅ Aprobado' : '❌ Rechazado'}
-                                    </span>
+                        <div class="detail-section">
+                            <h4 class="detail-title">📋 Información General</h4>
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <div class="detail-label">🚗 Vehículo:</div>
+                                    <div class="detail-value">${inspeccion.vehiculo?.numeroPlaca} - ${inspeccion.vehiculo?.marca} ${inspeccion.vehiculo?.modelo}</div>
                                 </div>
-                                <div><strong>📄 Certificado:</strong> ${inspeccion.certificado?.numeroCertificado || 'N/A'}</div>
+                                <div class="detail-item">
+                                    <div class="detail-label">📅 Fecha:</div>
+                                    <div class="detail-value">${new Date(inspeccion.fechaInspeccion).toLocaleDateString('es-ES')}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">🏢 Estación:</div>
+                                    <div class="detail-value">${inspeccion.estacion?.nombreEstacion}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">👨‍🔧 Técnico:</div>
+                                    <div class="detail-value">${inspeccion.tecnico?.nombre} ${inspeccion.tecnico?.apellidos}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">✅ Resultado:</div>
+                                    <div class="detail-value">
+                                        <span style="color: ${inspeccion.resultado === 'aprobado' ? '#10b981' : '#ef4444'}; font-weight: 600;">
+                                            ${inspeccion.resultado === 'aprobado' ? '✅ Aprobado' : '❌ Rechazado'}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">📄 Certificado:</div>
+                                    <div class="detail-value">${inspeccion.certificado?.numeroCertificado || 'N/A'}</div>
+                                </div>
                             </div>
                         </div>
                     `;
 
                 if (inspeccion.observacionesTecnicas) {
                     contenido += `
-                            <div style="margin-bottom: 1.5rem;">
-                                <h4 style="margin: 0 0 0.5rem 0; color: #1e293b;">💬 Observaciones Técnicas</h4>
-                                <div style="background: #f8fafc; padding: 1rem; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                            <div class="detail-section">
+                                <h4 class="detail-title">💬 Observaciones Técnicas</h4>
+                                <div class="observation-box">
                                     ${inspeccion.observacionesTecnicas}
                                 </div>
                             </div>
@@ -517,22 +1099,22 @@
 
                 if (detallesInspeccion.length > 0) {
                     contenido += `
-                            <div>
-                                <h4 style="margin: 0 0 1rem 0; color: #1e293b;">🔍 Detalles de Verificación</h4>
-                                <div style="max-height: 300px; overflow-y: auto;">
+                            <div class="detail-section">
+                                <h4 class="detail-title">🔍 Detalles de Verificación</h4>
+                                <div class="verification-list">
                         `;
 
                     detallesInspeccion.forEach(detalle => {
-                        const colorResultado = detalle.resultadoItem === 'OK' ? '#10b981' : '#ef4444';
+                        const claseResultado = detalle.resultadoItem === 'OK' ? 'ok' : 'fallo';
                         const iconoResultado = detalle.resultadoItem === 'OK' ? '✅' : '❌';
 
                         contenido += `
-                                <div style="margin-bottom: 0.75rem; padding: 0.75rem; background: white; border-radius: 8px; border-left: 4px solid ${colorResultado};">
-                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
-                                        <strong style="color: #1e293b;">${detalle.categoriaRevision}</strong>
-                                        <span style="color: ${colorResultado}; font-weight: 600;">${iconoResultado} ${detalle.resultadoItem}</span>
+                                <div class="verification-item ${detalle.resultadoItem === 'FALLO' ? 'fallo' : ''}">
+                                    <div class="verification-header">
+                                        <div class="verification-category">${detalle.categoriaRevision}</div>
+                                        <div class="verification-result ${claseResultado}">${iconoResultado} ${detalle.resultadoItem}</div>
                                     </div>
-                                    ${detalle.observacionesItem ? `<div style="font-size: 0.9rem; color: #64748b; font-style: italic;">${detalle.observacionesItem}</div>` : ''}
+                                    ${detalle.observacionesItem ? `<div class="verification-observation">${detalle.observacionesItem}</div>` : ''}
                                 </div>
                             `;
                     });
@@ -541,7 +1123,7 @@
                 }
 
                 document.getElementById('contenidoModal').innerHTML = contenido;
-                document.getElementById('modalDetalles').style.display = 'block';
+                document.getElementById('modalDetalles').style.display = 'flex';
 
             } catch (error) {
                 console.error('Error al cargar detalles:', error);
