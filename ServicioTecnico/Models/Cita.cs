@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ServicioTecnico.Models
 {
@@ -10,13 +11,17 @@ namespace ServicioTecnico.Models
 
         [Required]
         public int IdVehiculo { get; set; }
+
         [ForeignKey(nameof(IdVehiculo))]
-        public Vehiculo Vehiculo { get; set; }
+        [JsonIgnore] // Evitar referencia circular en JSON
+        public Vehiculo? Vehiculo { get; set; }
 
         [Required]
         public int IdEstacion { get; set; }
+
         [ForeignKey(nameof(IdEstacion))]
-        public Estacion Estacion { get; set; }
+        [JsonIgnore] // Evitar referencia circular en JSON
+        public Estacion? Estacion { get; set; }
 
         [Required]
         public DateTime FechaCita { get; set; }
@@ -28,11 +33,12 @@ namespace ServicioTecnico.Models
         public string EstadoCita { get; set; } = "programada";
 
         [StringLength(500)]
-        public string Observaciones { get; set; }
+        public string? Observaciones { get; set; } // Hacer opcional
 
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
 
-        // Relaciones
-        public ICollection<Inspeccion> Inspecciones { get; set; }
+        // Relaciones - Ignorar en JSON para evitar referencias circulares
+        [JsonIgnore]
+        public ICollection<Inspeccion>? Inspecciones { get; set; }
     }
 }

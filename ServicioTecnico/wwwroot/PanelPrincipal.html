@@ -336,14 +336,11 @@
         <div class="header-logo">
             <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC">
             <h1>REVTEC</h1>
-        </div>
-        <div class="header-subtitle">
-            Panel de Control
-        </div>
+        
     </header>
 
     <ul class="nav-menu">
-        <li><a href="#" onclick="cerrarSesion()">🚪 Cerrar Sesión</a></li>
+        <li><a href="#" onclick="cerrarSesion()">Cerrar Sesión</a></li>
     </ul>
 
     <div id="bienvenida" class="welcome-section">
@@ -352,49 +349,43 @@
 
     <!-- Información de debug -->
     <div id="debugInfo" class="debug-info" style="display: none;">
-        <strong>🔧 Información de Debug:</strong><br>
+        <strong>Información de Debug:</strong><br>
         <span id="debugContent"></span>
     </div>
 
     <!-- Panel del Cliente -->
     <div class="panel-section" id="panelCliente">
-        <h2 class="panel-title">👤 Panel del Cliente</h2>
+        <h2 class="panel-title">Panel Principal</h2>
         <div class="panel-links">
             <a href="RegistroVehiculo.html" class="panel-link cliente">
-                🚗 Registrar Vehículo
+                 Registrar Vehículo
             </a>
             <a href="AgendarCita.html" class="panel-link cliente">
-                📅 Agendar Cita
+                 Agendar Cita
             </a>
             <a href="HistorialInspecciones.html" class="panel-link cliente">
-                📋 Ver Historial
+                 Ver Historial Inspecciones
             </a>
         </div>
 
         <!-- Resumen rápido para cliente -->
-        <div class="summary-section">
-            <h3 class="summary-title">📊 Resumen Rápido</h3>
-            <div id="estadisticasCliente" class="stats-grid">
-                <div class="loading-text">Cargando estadísticas...</div>
-            </div>
-        </div>
-    </div>
+        
 
     <!-- Panel del Técnico -->
     <div class="panel-section" id="panelTecnico">
-        <h2 class="panel-title">🔧 Panel del Técnico</h2>
+        <h2 class="panel-title"> Panel del Técnico</h2>
         <div class="panel-links">
             <a href="RegistrarInspeccion.html" class="panel-link tecnico">
-                ✅ Registrar Inspección
+                 Registrar Inspección
             </a>
             <a href="HistorialInspecciones.html" class="panel-link tecnico">
-                📈 Ver Inspecciones
+                 Ver Inspecciones
             </a>
         </div>
 
         <!-- Resumen rápido para técnico -->
         <div class="summary-section" style="background: rgba(139, 92, 246, 0.1); border-left: 4px solid #8b5cf6;">
-            <h3 class="summary-title">📊 Actividad del Día</h3>
+            <h3 class="summary-title"> Actividad del Día</h3>
             <div id="estadisticasTecnico" class="stats-grid">
                 <div class="loading-text">Cargando estadísticas...</div>
             </div>
@@ -402,7 +393,7 @@
 
         <!-- Citas de hoy -->
         <div id="citasHoy" class="citas-section">
-            <h3 class="citas-title">📅 Citas de Hoy</h3>
+            <h3 class="citas-title"> Citas de Hoy</h3>
             <div id="listaCitasHoy">
                 <div class="loading-text">Cargando citas...</div>
             </div>
@@ -415,21 +406,21 @@
 
         // Función mejorada para verificar sesión
         function verificarSesion() {
-            console.log('🔍 Verificando sesión...');
+            console.log(' Verificando sesión...');
 
             try {
                 const usuarioActual = localStorage.getItem('usuarioActual');
-                console.log('📦 LocalStorage data:', usuarioActual);
+                console.log(' LocalStorage data:', usuarioActual);
 
                 if (!usuarioActual) {
-                    console.log('❌ No hay datos de usuario en localStorage');
+                    console.log(' No hay datos de usuario en localStorage');
                     mostrarDebug('No hay datos de usuario en localStorage');
                     window.location.href = 'Login.html';
                     return null;
                 }
 
                 const usuarioData = JSON.parse(usuarioActual);
-                console.log('👤 Usuario parseado:', usuarioData);
+                console.log(' Usuario parseado:', usuarioData);
 
                 // Verificar que el objeto tiene las propiedades necesarias
                 if (!usuarioData.id || !usuarioData.nombre || !usuarioData.apellidos || !usuarioData.tipoUsuario) {
@@ -449,20 +440,20 @@
                     const horasTranscurridas = (ahora - loginTime) / (1000 * 60 * 60);
 
                     if (horasTranscurridas > 24) {
-                        console.log('⏰ Sesión expirada');
+                        console.log(' Sesión expirada');
                         localStorage.removeItem('usuarioActual');
                         window.location.href = 'Login.html';
                         return null;
                     }
                 }
 
-                console.log('✅ Sesión válida para:', usuarioData.nombre, usuarioData.apellidos);
+                console.log(' Sesión válida para:', usuarioData.nombre, usuarioData.apellidos);
                 mostrarDebug(`Usuario: ${usuarioData.nombre} ${usuarioData.apellidos} (${usuarioData.tipoUsuario})`);
 
                 return usuarioData;
 
             } catch (error) {
-                console.error('💥 Error al verificar sesión:', error);
+                console.error(' Error al verificar sesión:', error);
                 mostrarDebug(`Error: ${error.message}`);
 
                 // Limpiar localStorage corrupto
@@ -486,7 +477,7 @@
 
         function cerrarSesion() {
             if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-                console.log('🚪 Cerrando sesión...');
+                console.log(' Cerrando sesión...');
                 localStorage.removeItem('usuarioActual');
                 window.location.href = 'Login.html';
             }
@@ -495,7 +486,7 @@
         // Cargar estadísticas para cliente
         async function cargarEstadisticasCliente() {
             try {
-                console.log('📊 Cargando estadísticas del cliente...');
+                console.log(' Cargando estadísticas del cliente...');
 
                 const [vehiculosRes, citasRes, inspeccionesRes, certificadosRes] = await Promise.all([
                     fetch(`${API_BASE}/Vehiculo/porPropietario/${usuario.id}`),
@@ -534,10 +525,10 @@
                 const citasPendientes = citasUsuario.filter(c => c.estadoCita === 'programada');
 
                 const stats = [
-                    { titulo: 'Vehículos', valor: vehiculos.length, icono: '🚗', color: '#3b82f6' },
-                    { titulo: 'Citas Pendientes', valor: citasPendientes.length, icono: '📅', color: '#f59e0b' },
-                    { titulo: 'Inspecciones', valor: inspeccionesUsuario.length, icono: '🔍', color: '#8b5cf6' },
-                    { titulo: 'Certificados Válidos', valor: certificadosValidos.length, icono: '✅', color: '#10b981' }
+                    { titulo: 'Vehículos', valor: vehiculos.length, icono: '', color: '#3b82f6' },
+                    { titulo: 'Citas Pendientes', valor: citasPendientes.length, icono: '', color: '#f59e0b' },
+                    { titulo: 'Inspecciones', valor: inspeccionesUsuario.length, icono: '', color: '#8b5cf6' },
+                    { titulo: 'Certificados Válidos', valor: certificadosValidos.length, icono: '', color: '#10b981' }
                 ];
 
                 const contenedor = document.getElementById('estadisticasCliente');
@@ -549,7 +540,7 @@
                         </div>
                     `).join('');
 
-                console.log('✅ Estadísticas del cliente cargadas');
+                console.log(' Estadísticas del cliente cargadas');
 
             } catch (error) {
                 console.error('Error al cargar estadísticas:', error);
@@ -561,7 +552,7 @@
         // Cargar estadísticas para técnico
         async function cargarEstadisticasTecnico() {
             try {
-                console.log('📊 Cargando estadísticas del técnico...');
+                console.log(' Cargando estadísticas del técnico...');
 
                 const [citasRes, inspeccionesRes] = await Promise.all([
                     fetch(`${API_BASE}/Cita`),
@@ -590,10 +581,10 @@
                 const aprobadasHoy = inspeccionesHoy.filter(i => i.resultado === 'aprobado').length;
 
                 const stats = [
-                    { titulo: 'Citas Hoy', valor: citasHoy.length, icono: '📅', color: '#3b82f6' },
-                    { titulo: 'Inspecciones Hoy', valor: inspeccionesHoy.length, icono: '🔍', color: '#8b5cf6' },
-                    { titulo: 'Aprobadas Hoy', valor: aprobadasHoy, icono: '✅', color: '#10b981' },
-                    { titulo: 'Total Inspecciones', valor: inspeccionesTecnico.length, icono: '📊', color: '#f59e0b' }
+                    { titulo: 'Citas Hoy', valor: citasHoy.length, icono: '', color: '#3b82f6' },
+                    { titulo: 'Inspecciones Hoy', valor: inspeccionesHoy.length, icono: '', color: '#8b5cf6' },
+                    { titulo: 'Aprobadas Hoy', valor: aprobadasHoy, icono: '', color: '#10b981' },
+                    { titulo: 'Total Inspecciones', valor: inspeccionesTecnico.length, icono: '', color: '#f59e0b' }
                 ];
 
                 const contenedor = document.getElementById('estadisticasTecnico');
@@ -608,7 +599,7 @@
                 // Mostrar citas de hoy
                 await mostrarCitasHoy(citasHoy);
 
-                console.log('✅ Estadísticas del técnico cargadas');
+                console.log(' Estadísticas del técnico cargadas');
 
             } catch (error) {
                 console.error('Error al cargar estadísticas:', error);
@@ -666,21 +657,21 @@
 
         // Función principal de inicialización
         async function inicializar() {
-            console.log('🚀 Inicializando panel principal...');
+            console.log(' Inicializando panel principal...');
 
             // Verificar sesión primero
             usuario = verificarSesion();
             if (!usuario) {
-                console.log('❌ No se pudo verificar la sesión');
+                console.log(' No se pudo verificar la sesión');
                 return;
             }
 
             // Mostrar bienvenida personalizada
             const horaActual = new Date().getHours();
             let saludo = '';
-            if (horaActual < 12) saludo = '🌅 Buenos días';
-            else if (horaActual < 18) saludo = '☀️ Buenas tardes';
-            else saludo = '🌙 Buenas noches';
+            if (horaActual < 12) saludo = ' Buenos días';
+            else if (horaActual < 18) saludo = ' Buenas tardes';
+            else saludo = ' Buenas noches';
 
             const nombreCompleto = `${usuario.nombre || ''} ${usuario.apellidos || ''}`.trim();
 
@@ -693,19 +684,19 @@
 
             // Mostrar panel según tipo de usuario y cargar datos
             if (usuario.tipoUsuario === 'cliente') {
-                console.log('👤 Configurando panel de cliente');
+                console.log(' Configurando panel de cliente');
                 document.getElementById('panelCliente').style.display = 'block';
                 await cargarEstadisticasCliente();
             } else if (usuario.tipoUsuario === 'tecnico') {
-                console.log('🔧 Configurando panel de técnico');
+                console.log(' Configurando panel de técnico');
                 document.getElementById('panelTecnico').style.display = 'block';
                 await cargarEstadisticasTecnico();
             } else {
-                console.log('❌ Tipo de usuario desconocido:', usuario.tipoUsuario);
+                console.log(' Tipo de usuario desconocido:', usuario.tipoUsuario);
                 mostrarDebug(`Tipo de usuario desconocido: ${usuario.tipoUsuario}`);
             }
 
-            console.log('✅ Inicialización completada');
+            console.log(' Inicialización completada');
         }
 
         // Ejecutar al cargar la página

@@ -1,0 +1,361 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REVTEC - Cita Confirmada</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+            .header-logo h1 {
+                font-size: 1.5rem;
+                color: #1e293b;
+                font-weight: 700;
+            }
+
+            .header-logo img {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+        .header-subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+            .nav-menu a {
+                text-decoration: none;
+                color: #475569;
+                font-weight: 500;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                transition: all 0.2s;
+            }
+
+                .nav-menu a:hover {
+                    background: #3b82f6;
+                    color: white;
+                }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .confirmation-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            padding: 3rem;
+            width: 100%;
+            max-width: 600px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+
+        .confirmation-title {
+            color: #1e293b;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .confirmation-message {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .info-box {
+            background: rgba(16, 185, 129, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #10b981;
+            text-align: left;
+        }
+
+        .info-title {
+            color: #1e293b;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .info-item {
+            margin-bottom: 0.5rem;
+            color: #64748b;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .next-steps {
+            background: rgba(59, 130, 246, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #3b82f6;
+            text-align: left;
+        }
+
+        .steps-title {
+            color: #1e293b;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .steps-list {
+            list-style: none;
+            padding: 0;
+        }
+
+            .steps-list li {
+                margin-bottom: 0.75rem;
+                color: #64748b;
+                line-height: 1.5;
+                padding-left: 1.5rem;
+                position: relative;
+            }
+
+                .steps-list li:before {
+                    content: "✓";
+                    position: absolute;
+                    left: 0;
+                    color: #10b981;
+                    font-weight: bold;
+                }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .button-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+        }
+
+            .button-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            }
+
+        .button-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+            .button-secondary:hover {
+                background: #4b5563;
+            }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-menu {
+                margin: 0.5rem 1rem;
+                justify-content: center;
+            }
+
+            .main-container {
+                padding: 1rem;
+            }
+
+            .confirmation-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .confirmation-title {
+                font-size: 1.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .success-icon {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC">
+            <h1>REVTEC</h1>
+        </div>
+        <div class="header-subtitle">
+            Confirmación de Cita
+        </div>
+    </header>
+
+    <ul class="nav-menu">
+        <li><a href="PanelPrincipal.html">🏠 Panel Principal</a></li>
+        <li><a href="AgendarCita.html">📅 Agendar Nueva Cita</a></li>
+    </ul>
+
+    <main class="main-container">
+        <div class="confirmation-card">
+            <div class="success-icon">✅</div>
+
+            <h2 class="confirmation-title">¡Cita Agendada Exitosamente!</h2>
+
+            <p class="confirmation-message">
+                Su cita de inspección técnica vehicular ha sido registrada correctamente en nuestro sistema.
+                Recibirá los detalles por correo electrónico si proporcionó una dirección válida.
+            </p>
+
+            <div class="info-box">
+                <h3 class="info-title">📋 Detalles de su Cita</h3>
+                <div class="info-item">
+                    <span class="info-label">📅 Fecha:</span>
+                    <span id="fechaCita">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🕐 Hora:</span>
+                    <span id="horaCita">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🏢 Estación:</span>
+                    <span id="estacionCita">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">🚗 Vehículo:</span>
+                    <span id="vehiculoCita">ID: -</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">📝 Estado:</span>
+                    <span style="color: #10b981; font-weight: 600;">Programada</span>
+                </div>
+            </div>
+
+            <div class="next-steps">
+                <h3 class="steps-title">📋 Próximos Pasos</h3>
+                <ul class="steps-list">
+                    <li>Llegue 15 minutos antes de su cita programada</li>
+                    <li>Traiga todos los documentos requeridos (cédula, tarjeta de circulación, SOAT, marchamo)</li>
+                    <li>Asegúrese de que su vehículo esté en condiciones óptimas para la inspección</li>
+                    <li>Si necesita cancelar o reprogramar, contacte la estación con al menos 24 horas de anticipación</li>
+                    <li>Puede consultar el estado de su cita en el historial de inspecciones</li>
+                </ul>
+            </div>
+
+            <div class="action-buttons">
+                <a href="PanelPrincipal.html" class="button button-primary">
+                    🏠 Ir al Panel Principal
+                </a>
+                <a href="HistorialInspecciones.html" class="button button-secondary">
+                    📋 Ver Historial
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Obtener parámetros de la URL para mostrar detalles
+        const urlParams = new URLSearchParams(window.location.search);
+
+        if (urlParams.get('fecha')) {
+            document.getElementById('fechaCita').textContent = new Date(urlParams.get('fecha')).toLocaleDateString('es-ES');
+        }
+
+        if (urlParams.get('hora')) {
+            document.getElementById('horaCita').textContent = urlParams.get('hora');
+        }
+
+        if (urlParams.get('estacion')) {
+            document.getElementById('estacionCita').textContent = urlParams.get('estacion');
+        }
+
+        if (urlParams.get('vehiculo')) {
+            document.getElementById('vehiculoCita').textContent = 'ID: ' + urlParams.get('vehiculo');
+        }
+    </script>
+</body>
+</html>

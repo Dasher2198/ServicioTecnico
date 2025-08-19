@@ -185,105 +185,31 @@
                 transform: none;
             }
 
-        .message-area {
+        .success-message {
+            background: #dcfce7;
+            color: #166534;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #bbf7d0;
             margin-top: 1rem;
             text-align: center;
-            min-height: 40px;
-        }
-
-        .message {
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin: 0.5rem 0;
             font-weight: 500;
         }
 
-            .message.success {
-                background: #dcfce7;
-                color: #166534;
-                border: 1px solid #bbf7d0;
-            }
-
-            .message.error {
-                background: #fef2f2;
-                color: #dc2626;
-                border: 1px solid #fecaca;
-            }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s linear infinite;
-            margin-right: 0.5rem;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .vehicles-section {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: rgba(16, 185, 129, 0.1);
-            border-radius: 12px;
-            border-left: 4px solid #10b981;
-            display: none;
-        }
-
-        .vehicles-title {
-            margin: 0 0 1rem 0;
-            color: #1e293b;
-            font-size: 1.1rem;
-        }
-
-        .vehicle-card {
-            background: white;
+        .error-message {
+            background: #fef2f2;
+            color: #dc2626;
             padding: 1rem;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 0.75rem;
-            border-left: 4px solid #3b82f6;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border: 1px solid #fecaca;
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: 500;
         }
 
-        .vehicle-info {
-            flex: 1;
+        .hidden {
+            display: none;
         }
-
-        .vehicle-main {
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 0.25rem;
-        }
-
-        .vehicle-details {
-            font-size: 0.85rem;
-            color: #64748b;
-        }
-
-        .delete-button {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 0.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
-
-            .delete-button:hover {
-                background: #dc2626;
-                transform: scale(1.05);
-            }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -313,16 +239,6 @@
             .form-title {
                 font-size: 1.5rem;
             }
-
-            .vehicle-card {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
-            }
-
-            .delete-button {
-                align-self: flex-end;
-            }
         }
 
         @media (max-width: 480px) {
@@ -345,23 +261,27 @@
     </header>
 
     <ul class="nav-menu">
-        <li><a href="PanelPrincipal.html">🏠 Panel Principal</a></li>
+        <li><a href="PanelPrincipal.html">Página Principal</a></li>
+        <li><a href="MisVehiculos.html"> Mis Vehículos</a></li>
     </ul>
 
     <main class="main-container">
         <div class="form-card">
-            <h2 class="form-title">🚗 Registrar Vehículo</h2>
+            <h2 class="form-title"> Registrar Vehículo</h2>
 
             <div class="info-box">
                 <p class="info-text">
-                    <strong>📋 Importante:</strong> Complete todos los datos de su vehículo para poder agendar citas de inspección.
+                    <strong> Importante:</strong> Complete toda la información de su vehículo para poder agendar la cita de inspección técnica.
                 </p>
             </div>
 
             <form id="vehiculoForm">
+                <!-- Campo oculto para ID del propietario -->
+                <input type="hidden" id="idPropietario" name="IdPropietario" value="">
+
                 <div class="form-group">
-                    <label class="form-label">🆔 Número de Placa</label>
-                    <input type="text" id="numeroPlaca" class="form-input" required placeholder="ABC123" maxlength="10" style="text-transform: uppercase;">
+                    <label class="form-label">Número de Placa</label>
+                    <input type="text" name="NumeroPlaca" class="form-input" required placeholder="ABC123" maxlength="10" style="text-transform: uppercase;">
                     <div class="form-help">
                         ℹ️ Formato: ABC123 (letras y números, sin espacios ni guiones)
                     </div>
@@ -369,8 +289,8 @@
 
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">🏭 Marca</label>
-                        <select id="marca" class="form-select" required onchange="cargarModelos()">
+                        <label class="form-label">Marca</label>
+                        <select name="Marca" class="form-select" required>
                             <option value="">Seleccione marca...</option>
                             <option value="Toyota">Toyota</option>
                             <option value="Nissan">Nissan</option>
@@ -391,22 +311,20 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">🚙 Modelo</label>
-                        <input type="text" id="modelo" class="form-input" required placeholder="Ej: Corolla, Sentra">
+                        <label class="form-label"> Modelo</label>
+                        <input type="text" name="Modelo" class="form-input" required placeholder="Ej: Corolla, Sentra" maxlength="50">
                     </div>
                 </div>
 
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">📅 Año</label>
-                        <select id="año" class="form-select" required>
-                            <option value="">Seleccione año...</option>
-                        </select>
+                        <label class="form-label"> Año</label>
+                        <input type="number" name="Año" class="form-input" required min="1980" max="2030" placeholder="2020">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">🎨 Color</label>
-                        <select id="color" class="form-select">
+                        <label class="form-label">Color del vehiculo</label>
+                        <select name="Color" class="form-select">
                             <option value="">Seleccione color...</option>
                             <option value="Blanco">Blanco</option>
                             <option value="Negro">Negro</option>
@@ -421,32 +339,23 @@
                         </select>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label">🔧 Número de Chasis</label>
-                    <input type="text" id="numeroChasis" class="form-input" placeholder="Opcional - Ej: 1HGBH41JXMN109186" maxlength="50" style="text-transform: uppercase;">
-                    <div class="form-help">
-                        ℹ️ Número de identificación único del vehículo (VIN)
-                    </div>
-                </div>
-
+                                
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">⛽ Tipo de Combustible</label>
-                        <select id="tipoCombustible" class="form-select">
+                        <label class="form-label"> Tipo de Combustible</label>
+                        <select name="TipoCombustible" class="form-select">
                             <option value="">Seleccione...</option>
-                            <option value="Gasolina">⛽ Gasolina</option>
-                            <option value="Diesel">🛢️ Diesel</option>
-                            <option value="Híbrido">🔋 Híbrido</option>
-                            <option value="Eléctrico">⚡ Eléctrico</option>
-                            <option value="GLP">🏺 GLP (Gas)</option>
-                            <option value="GNC">💨 GNC (Gas Natural)</option>
-                        </select>
+                            <option value="Gasolina"> Gasolina</option>
+                            <option value="Diesel"> Diesel</option>
+                            <option value="Híbrido"> Híbrido</option>
+                            <option value="Eléctrico"> Eléctrico</option>
+                            <option value="GLP"> Gas GLP </option>
+                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">🏎️ Cilindrada</label>
-                        <select id="cilindrada" class="form-select">
+                        <label class="form-label">Cilindrada</label>
+                        <select name="Cilindrada" class="form-select">
                             <option value="">Seleccione...</option>
                             <option value="1.0L">1.0L</option>
                             <option value="1.2L">1.2L</option>
@@ -464,218 +373,144 @@
                 </div>
 
                 <button type="submit" class="submit-button">
-                    💾 Guardar Vehículo
+                     Registrar Vehículo
                 </button>
             </form>
 
-            <div id="mensaje" class="message-area"></div>
+            <div id="successMessage" class="success-message hidden">
+                ✅ ¡Vehículo registrado exitosamente! Ahora puede agendar citas para este vehículo.
+            </div>
 
-            <!-- Mis vehículos registrados -->
-            <div id="misVehiculos" class="vehicles-section">
-                <h3 class="vehicles-title">🚗 Mis Vehículos Registrados</h3>
-                <div id="listaVehiculos">
-                    <!-- Se llenará dinámicamente -->
-                </div>
+            <div id="errorMessage" class="error-message hidden">
+                ❌ Error al registrar el vehículo. Por favor, verifique los datos e intente nuevamente.
             </div>
         </div>
     </main>
 
     <script>
-        const API_BASE = window.location.protocol + '//' + window.location.host + '/api';
-        let usuario = null;
+        // Obtener usuario actual
+        const usuario = JSON.parse(localStorage.getItem('usuarioActual') || '{}');
 
-        // Verificar sesión
-        function verificarSesion() {
-            const usuarioActual = localStorage.getItem('usuarioActual');
-            if (!usuarioActual) {
-                window.location.href = 'Login.html';
-                return null;
-            }
-            return JSON.parse(usuarioActual);
+        // Verificar que el usuario esté logueado
+        if (!usuario || !usuario.id) {
+            window.location.href = 'Login.html';
+        } else {
+            // Establecer el ID del propietario
+            document.getElementById('idPropietario').value = usuario.id;
         }
 
-        // Generar años (desde 1980 hasta año actual)
-        function generarAños() {
-            const añoActual = new Date().getFullYear();
-            const selectAño = document.getElementById('año');
-
-            for (let año = añoActual; año >= 1980; año--) {
-                const option = document.createElement('option');
-                option.value = año;
-                option.textContent = año;
-                selectAño.appendChild(option);
-            }
-        }
-
-        // Cargar modelos según la marca (función básica)
-        function cargarModelos() {
-            const marca = document.getElementById('marca').value;
-            const modeloInput = document.getElementById('modelo');
-
-            if (marca) {
-                modeloInput.placeholder = `Ingrese modelo de ${marca}`;
-                modeloInput.focus();
-            } else {
-                modeloInput.placeholder = "Ej: Corolla, Sentra";
-            }
-        }
-
-        // Cargar vehículos del usuario
-        async function cargarMisVehiculos() {
-            try {
-                const response = await fetch(`${API_BASE}/Vehiculo/porPropietario/${usuario.id}`);
-                const vehiculos = await response.json();
-
-                if (vehiculos.length > 0) {
-                    document.getElementById('misVehiculos').style.display = 'block';
-
-                    const lista = document.getElementById('listaVehiculos');
-                    lista.innerHTML = vehiculos.map(vehiculo => `
-                            <div class="vehicle-card">
-                                <div class="vehicle-info">
-                                    <div class="vehicle-main">
-                                        🚗 ${vehiculo.numeroPlaca} - ${vehiculo.marca} ${vehiculo.modelo}
-                                    </div>
-                                    <div class="vehicle-details">
-                                        📅 ${vehiculo.año} | 🎨 ${vehiculo.color || 'N/A'} | ⛽ ${vehiculo.tipoCombustible || 'N/A'}
-                                    </div>
-                                </div>
-                                <button onclick="eliminarVehiculo(${vehiculo.idVehiculo})"
-                                        class="delete-button"
-                                        title="Eliminar vehículo">
-                                    🗑️
-                                </button>
-                            </div>
-                        `).join('');
-                }
-            } catch (error) {
-                console.error('Error al cargar vehículos:', error);
-            }
-        }
-
-        // Eliminar vehículo
-        async function eliminarVehiculo(idVehiculo) {
-            if (!confirm('¿Está seguro de que desea eliminar este vehículo?')) return;
-
-            try {
-                const response = await fetch(`${API_BASE}/Vehiculo/${idVehiculo}`, {
-                    method: 'DELETE'
-                });
-
-                if (response.ok) {
-                    document.getElementById('mensaje').innerHTML =
-                        '<div class="message success">✅ Vehículo eliminado exitosamente</div>';
-                    await cargarMisVehiculos();
-                } else {
-                    document.getElementById('mensaje').innerHTML =
-                        '<div class="message error">❌ Error al eliminar vehículo</div>';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('mensaje').innerHTML =
-                    '<div class="message error">⚠️ Error al conectar con el servidor</div>';
-            }
-        }
-
-        document.getElementById('vehiculoForm').addEventListener('submit', async (e) => {
+        // Manejar envío del formulario
+        document.getElementById('vehiculoForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
-            const numeroPlaca = document.getElementById('numeroPlaca').value.toUpperCase().trim();
-            const mensaje = document.getElementById('mensaje');
             const submitBtn = e.target.querySelector('button[type="submit"]');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
 
-            // Validar formato de placa (básico)
-            if (!/^[A-Z0-9]{5,8}$/.test(numeroPlaca)) {
-                mensaje.innerHTML = '<div class="message error">❌ Formato de placa inválido. Use solo letras y números</div>';
-                return;
-            }
-
-            const formData = {
-                numeroPlaca: numeroPlaca,
-                idPropietario: usuario.id,
-                marca: document.getElementById('marca').value,
-                modelo: document.getElementById('modelo').value.trim(),
-                año: parseInt(document.getElementById('año').value),
-                numeroChasis: document.getElementById('numeroChasis').value.toUpperCase().trim() || null,
-                color: document.getElementById('color').value || null,
-                tipoCombustible: document.getElementById('tipoCombustible').value || null,
-                cilindrada: document.getElementById('cilindrada').value || null
-            };
+            // Ocultar mensajes previos
+            successMsg.classList.add('hidden');
+            errorMsg.classList.add('hidden');
 
             // Mostrar loading
-            submitBtn.innerHTML = '<span class="loading-spinner"></span>Guardando...';
             submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Registrando...';
 
             try {
-                const response = await fetch(`${API_BASE}/Vehiculo`, {
+                // Recopilar datos del formulario
+                const formData = new FormData(e.target);
+                const vehiculoData = {
+                    numeroPlaca: formData.get('NumeroPlaca'),
+                    idPropietario: parseInt(formData.get('IdPropietario')),
+                    marca: formData.get('Marca'),
+                    modelo: formData.get('Modelo'),
+                    año: parseInt(formData.get('Año')),
+                    numeroChasis: formData.get('NumeroChasis') || null,
+                    color: formData.get('Color') || null,
+                    tipoCombustible: formData.get('TipoCombustible') || null,
+                    cilindrada: formData.get('Cilindrada') || null
+                };
+
+                console.log('Enviando datos del vehículo:', vehiculoData);
+
+                // Enviar datos al servidor
+                const response = await fetch('/api/Vehiculo', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify(vehiculoData)
                 });
 
                 if (response.ok) {
-                    mensaje.innerHTML = `
-                            <div class="message success">
-                                ✅ ¡Vehículo registrado exitosamente!
-                                <br><small>Ya puede agendar citas para este vehículo</small>
-                            </div>
-                        `;
-                    document.getElementById('vehiculoForm').reset();
-                    await cargarMisVehiculos();
-                } else {
-                    const errorText = await response.text();
-                    let errorMessage = '❌ Error al registrar vehículo';
+                    const vehiculoCreado = await response.json();
+                    console.log('Vehículo creado:', vehiculoCreado);
 
-                    if (errorText.includes('placa') || errorText.includes('Unique')) {
-                        errorMessage = '❌ Ya existe un vehículo con esa placa';
+                    // Mostrar mensaje de éxito
+                    successMsg.classList.remove('hidden');
+
+                    // Limpiar formulario
+                    e.target.reset();
+                    document.getElementById('idPropietario').value = usuario.id;
+
+                    // Opcional: redirigir después de un tiempo
+                    setTimeout(() => {
+                        window.location.href = 'MisVehiculos.html';
+                    }, 2000);
+
+                } else {
+                    const errorData = await response.json();
+                    console.error('Error del servidor:', errorData);
+
+                    let errorText = 'Error al registrar el vehículo.';
+
+                    if (response.status === 409) {
+                        errorText = 'Ya existe un vehículo registrado con esa placa.';
+                    } else if (response.status === 400) {
+                        if (errorData.errors) {
+                            const errores = Object.values(errorData.errors).flat();
+                            errorText = errores.join(' ');
+                        } else if (typeof errorData === 'string') {
+                            errorText = errorData;
+                        }
                     }
 
-                    mensaje.innerHTML = `<div class="message error">${errorMessage}</div>`;
+                    errorMsg.textContent = '❌ ' + errorText;
+                    errorMsg.classList.remove('hidden');
                 }
+
             } catch (error) {
-                console.error('Error:', error);
-                mensaje.innerHTML = '<div class="message error">⚠️ Error al conectar con el servidor</div>';
+                console.error('Error de red:', error);
+                errorMsg.textContent = '❌ Error de conexión. Verifique su conexión a internet.';
+                errorMsg.classList.remove('hidden');
             } finally {
                 // Restaurar botón
-                submitBtn.innerHTML = '💾 Guardar Vehículo';
                 submitBtn.disabled = false;
+                submitBtn.textContent = '💾 Registrar Vehículo';
             }
         });
 
         // Formatear placa en tiempo real
-        document.getElementById('numeroPlaca').addEventListener('input', function () {
+        const placaInput = document.querySelector('input[name="NumeroPlaca"]');
+        placaInput.addEventListener('input', function () {
             this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
         });
 
         // Formatear chasis en tiempo real
-        document.getElementById('numeroChasis').addEventListener('input', function () {
-            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-        });
-
-        // Capitalizar modelo
-        document.getElementById('modelo').addEventListener('input', function () {
-            this.value = this.value.replace(/\b\w/g, l => l.toUpperCase());
-        });
-
-        // Limpiar mensajes al escribir
-        ['numeroPlaca', 'marca', 'modelo', 'año'].forEach(id => {
-            document.getElementById(id).addEventListener('input', () => {
-                document.getElementById('mensaje').innerHTML = '';
+        const chasisInput = document.querySelector('input[name="NumeroChasis"]');
+        if (chasisInput) {
+            chasisInput.addEventListener('input', function () {
+                this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
             });
-        });
-
-        // Inicializar página
-        async function inicializar() {
-            usuario = verificarSesion();
-            if (!usuario) return;
-
-            generarAños();
-            await cargarMisVehiculos();
         }
 
-        inicializar();
+        // Limpiar mensajes al cambiar campos
+        const formInputs = document.querySelectorAll('.form-input, .form-select');
+        formInputs.forEach(input => {
+            input.addEventListener('input', () => {
+                document.getElementById('successMessage').classList.add('hidden');
+                document.getElementById('errorMessage').classList.add('hidden');
+            });
+        });
     </script>
 </body>
 </html>

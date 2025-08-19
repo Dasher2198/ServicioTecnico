@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ServicioTecnico.Data;
 using ServicioTecnico.Services;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,9 +14,15 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.JsonSerializerOptions.WriteIndented = true;
 
-        // Configuración adicional para mejor compatibilidad
-        options.JsonSerializerOptions.PropertyNamingPolicy = null; // Mantener nombres originales
+        // IMPORTANTE: Configurar naming policy para camelCase
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+
+        // Asegurar que las propiedades se serialicen en camelCase
+        options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+
+        // Configurar para ser case-insensitive en deserialización
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     });
 
 // Configure Entity Framework with SQL Server

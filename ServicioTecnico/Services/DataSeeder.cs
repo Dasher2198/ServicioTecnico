@@ -19,7 +19,7 @@ namespace ServicioTecnico.Services
                     {
                         new Estacion
                         {
-                            NombreEstacion = "RTV San José Centro",
+                            NombreEstacion = "REVTEC San José Centro",
                             Direccion = "Avenida Segunda, Calle 14, San José",
                             Telefono = "2221-5555",
                             Email = "sanjose@revtec.cr",
@@ -31,7 +31,7 @@ namespace ServicioTecnico.Services
                         },
                         new Estacion
                         {
-                            NombreEstacion = "RTV Cartago",
+                            NombreEstacion = "REVTEC Cartago",
                             Direccion = "Frente al Hospital Max Peralta, Cartago",
                             Telefono = "2550-8888",
                             Email = "cartago@revtec.cr",
@@ -43,7 +43,7 @@ namespace ServicioTecnico.Services
                         },
                         new Estacion
                         {
-                            NombreEstacion = "RTV Alajuela",
+                            NombreEstacion = "REVTEC Alajuela",
                             Direccion = "200m Sur del Aeropuerto Juan Santamaría",
                             Telefono = "2430-7777",
                             Email = "alajuela@revtec.cr",
@@ -55,7 +55,7 @@ namespace ServicioTecnico.Services
                         },
                         new Estacion
                         {
-                            NombreEstacion = "RTV Heredia",
+                            NombreEstacion = "REVTEC Heredia",
                             Direccion = "Costado Norte del Mercado Central, Heredia",
                             Telefono = "2260-9999",
                             Email = "heredia@revtec.cr",
@@ -67,7 +67,7 @@ namespace ServicioTecnico.Services
                         },
                         new Estacion
                         {
-                            NombreEstacion = "RTV Puntarenas",
+                            NombreEstacion = "REVTEC Puntarenas",
                             Direccion = "Avenida 3, Calle 1-3, Puntarenas Centro",
                             Telefono = "2661-3333",
                             Email = "puntarenas@revtec.cr",
@@ -79,7 +79,7 @@ namespace ServicioTecnico.Services
                         },
                         new Estacion
                         {
-                            NombreEstacion = "RTV Limón",
+                            NombreEstacion = "REVTEC Limón",
                             Direccion = "Av. 2 entre calles 3 y 4, Puerto Limón",
                             Telefono = "2758-4444",
                             Email = "limon@revtec.cr",
@@ -91,7 +91,7 @@ namespace ServicioTecnico.Services
                         },
                         new Estacion
                         {
-                            NombreEstacion = "RTV Guanacaste",
+                            NombreEstacion = "REVTEC Guanacaste",
                             Direccion = "100m Norte del Hospital de Liberia",
                             Telefono = "2666-2222",
                             Email = "guanacaste@revtec.cr",
@@ -170,7 +170,7 @@ namespace ServicioTecnico.Services
                 Console.WriteLine("✅ Usuarios técnicos creados");
             }
 
-            // Seed Usuarios Cliente de prueba
+            // Seed Usuarios Cliente de prueba - DATOS CONSISTENTES
             if (!await context.Usuarios.AnyAsync(u => u.TipoUsuario == "cliente"))
             {
                 var clientes = new List<Usuario>
@@ -179,7 +179,7 @@ namespace ServicioTecnico.Services
                     {
                         Nombre = "María",
                         Apellidos = "González López",
-                        Cedula = "111222333",
+                        Cedula = "987654321", // CEDULA CONSISTENTE CON TUS DATOS
                         Email = "cliente@test.cr",
                         Telefono = "8888-1234",
                         Direccion = "Cartago, Costa Rica",

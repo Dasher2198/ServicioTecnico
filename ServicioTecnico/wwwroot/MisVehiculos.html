@@ -1,0 +1,425 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REVTEC - Mis Vehículos</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+            .header-logo h1 {
+                font-size: 1.5rem;
+                color: #1e293b;
+                font-weight: 700;
+            }
+
+            .header-logo img {
+                width: 45px;
+                height: 45px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+
+        .header-subtitle {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+            .nav-menu a {
+                text-decoration: none;
+                color: #475569;
+                font-weight: 500;
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                transition: all 0.2s;
+            }
+
+                .nav-menu a:hover {
+                    background: #3b82f6;
+                    color: white;
+                }
+
+        .main-container {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #1e293b;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .info-text {
+            margin: 0;
+            color: #1e293b;
+            font-size: 0.9rem;
+        }
+
+        .vehicles-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+            .vehicles-table th {
+                background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+                color: #1e293b;
+                font-weight: 600;
+                padding: 1rem;
+                text-align: left;
+                font-size: 0.875rem;
+                border-bottom: 2px solid #e5e7eb;
+            }
+
+            .vehicles-table td {
+                padding: 1rem;
+                border-bottom: 1px solid #f1f5f9;
+                color: #374151;
+                font-size: 0.875rem;
+            }
+
+            .vehicles-table tr:hover {
+                background: #f8fafc;
+            }
+
+            .vehicles-table tr:last-child td {
+                border-bottom: none;
+            }
+
+        .id-badge {
+            background: #3b82f6;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .placa-badge {
+            background: #10b981;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .no-vehicles {
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        .no-vehicles-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .no-vehicles-text {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-vehicles-help {
+            font-size: 0.9rem;
+        }
+
+        .action-link {
+            background: #10b981;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+            .action-link:hover {
+                background: #059669;
+                transform: translateY(-1px);
+            }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #64748b;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid #e5e7eb;
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .nav-menu {
+                margin: 0.5rem 1rem;
+                justify-content: center;
+            }
+
+            .main-container {
+                padding: 1rem;
+            }
+
+            .content-card {
+                padding: 1.5rem;
+            }
+
+            .vehicles-table {
+                font-size: 0.8rem;
+            }
+
+                .vehicles-table th,
+                .vehicles-table td {
+                    padding: 0.5rem;
+                }
+
+            .page-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .vehicles-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC">
+            <h1>REVTEC</h1>
+        </div>
+    </header>
+
+    <ul class="nav-menu">
+        <li><a href="PanelPrincipal.html"> Página Principal</a></li>
+        <li><a href="RegistroVehiculo.html"> Registrar Vehículo</a></li>
+     </ul>
+
+    <main class="main-container">
+        <div class="content-card">
+            <h2 class="page-title">Vehículos Registrados</h2>
+
+            <div class="info-box">
+                <p class="info-text">
+                    <strong>Información:</strong> Aquí puede consultar el ID de sus vehículos registrados en su cuenta.
+                    Necesitará este ID para agendar citas de inspección.
+                </p>
+            </div>
+
+            <div id="loading" class="loading">
+                <div class="loading-spinner"></div>
+                <p>Cargando sus vehículos...</p>
+            </div>
+
+            <div id="vehiclesTable" style="display: none;">
+                <table class="vehicles-table">
+                    <thead>
+                        <tr>
+                            <th> ID</th>
+                            <th> Placa</th>
+                            <th> Marca</th>
+                            <th> Modelo</th>
+                            <th> Año</th>
+                            <th> Color</th>
+                            <th> Combustible</th>
+                            <th> Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vehiclesTableBody">
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="noVehicles" class="no-vehicles" style="display: none;">
+                <div class="no-vehicles-icon"></div>
+                <p class="no-vehicles-text">No tiene vehículos registrados</p>
+                <p class="no-vehicles-help">Para agendar citas, primero debe registrar un vehículo</p>
+                <br>
+                <a href="RegistroVehiculo.html" class="action-link">
+                     Registrar Mi Primer Vehículo
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE = window.location.protocol + '//' + window.location.host + '/api';
+        let usuario = null;
+
+        // Verificar sesión
+        function verificarSesion() {
+            const usuarioActual = localStorage.getItem('usuarioActual');
+            if (!usuarioActual) {
+                window.location.href = 'Login.html';
+                return null;
+            }
+            return JSON.parse(usuarioActual);
+        }
+
+        // Cargar vehículos del usuario
+        async function cargarVehiculos() {
+            try {
+                const response = await fetch(`/api/Vehiculo/porPropietario/${usuario.id}`);
+
+                if (!response.ok) {
+                    throw new Error(`Error ${response.status}: ${response.statusText}`);
+                }
+
+                const vehiculos = await response.json();
+
+                document.getElementById('loading').style.display = 'none';
+
+                if (vehiculos.length === 0) {
+                    document.getElementById('noVehicles').style.display = 'block';
+                } else {
+                    document.getElementById('vehiclesTable').style.display = 'block';
+                    mostrarVehiculos(vehiculos);
+                }
+            } catch (error) {
+                console.error('Error al cargar vehículos:', error);
+                document.getElementById('loading').innerHTML = `
+                    <p style="color: #ef4444;">❌ Error al cargar vehículos: ${error.message}</p>
+                    <br>
+                    <button onclick="location.reload()" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">
+                        🔄 Reintentar
+                    </button>
+                `;
+            }
+        }
+
+        // Mostrar vehículos en la tabla
+        function mostrarVehiculos(vehiculos) {
+            const tbody = document.getElementById('vehiclesTableBody');
+
+            tbody.innerHTML = vehiculos.map(vehiculo => `
+                <tr>
+                    <td>
+                        <span class="id">${vehiculo.idVehiculo}</span>
+                    </td>
+                    <td>
+                        <span class="placa">${vehiculo.numeroPlaca}</span>
+                    </td>
+                    <td>${vehiculo.marca}</td>
+                    <td>${vehiculo.modelo}</td>
+                    <td>${vehiculo.año}</td>
+                    <td>${vehiculo.color || 'N/A'}</td>
+                    <td>${vehiculo.tipoCombustible || 'N/A'}</td>
+                    <td>
+                        <a href="AgendarCita.html?vehiculo=${vehiculo.idVehiculo}" class="action-link">
+                             Agendar Cita
+                        </a>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Inicializar página
+        async function inicializar() {
+            usuario = verificarSesion();
+            if (!usuario) return;
+
+            await cargarVehiculos();
+        }
+
+        // Inicializar al cargar la página
+        document.addEventListener('DOMContentLoaded', inicializar);
+    </script>
+</body>
+</html>

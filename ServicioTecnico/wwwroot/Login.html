@@ -372,23 +372,19 @@
             Sistema de Revisión Vehicular
         </div>
     </header>
-
-    <ul class="nav-menu">
-        <li><a href="registro.html">📝 Registro</a></li>
-    </ul>
-
+      
     <main class="main-container">
         <div class="login-card">
-            <h2 class="login-title">🔐 Iniciar Sesión</h2>
+            <h2 class="login-title">Iniciar Sesión</h2>
 
             <form id="loginForm">
                 <div class="form-group">
-                    <label class="form-label">📧 Correo Electrónico</label>
+                    <label class="form-label">Correo Electrónico</label>
                     <input type="email" id="email" class="form-input" required placeholder="ejemplo@correo.com" autocomplete="email">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">🔒 Contraseña</label>
+                    <label class="form-label">Contraseña</label>
                     <div class="password-container">
                         <input type="password" id="password" class="form-input" required placeholder="Ingrese su contraseña" autocomplete="current-password">
                         <button type="button" id="togglePassword" class="toggle-password">👁️</button>
@@ -396,7 +392,7 @@
                 </div>
 
                 <button type="submit" id="loginBtn" class="login-button">
-                    ✨ Iniciar Sesión
+                    Iniciar Sesión
                 </button>
             </form>
 
@@ -404,7 +400,7 @@
 
             <div class="register-section">
                 <p class="register-text">¿No tienes una cuenta?</p>
-                <a href="registro.html" class="register-link">🚀 Regístrate aquí</a>
+                <a href="registro.html" class="register-link">Regístrarse aquí</a>
             </div>
 
             <div class="test-users">
@@ -423,7 +419,7 @@
 
             <!-- Sección de Debug -->
             <div id="debugSection" class="debug-section">
-                <div class="debug-title">🔧 Información de Debug:</div>
+                <div class="debug-title"> Información de Debug:</div>
                 <div id="debugContent" class="debug-content"></div>
             </div>
         </div>
@@ -547,14 +543,21 @@
                         })
                     });
 
+                    mostrarDebug(`Response status: ${loginResponse.status}`);
+
                     if (loginResponse.ok) {
                         usuario = await loginResponse.json();
                         metodoUsado = 'Endpoint específico';
                         mostrarDebug('Login exitoso con endpoint específico');
+                        mostrarDebug(`Usuario recibido: ${JSON.stringify(usuario)}`);
                     } else if (loginResponse.status === 401) {
+                        const errorText = await loginResponse.text();
+                        mostrarDebug(`Error 401: ${errorText}`);
                         throw new Error('Credenciales incorrectas');
                     } else {
-                        throw new Error('Endpoint no disponible');
+                        const errorText = await loginResponse.text();
+                        mostrarDebug(`Error ${loginResponse.status}: ${errorText}`);
+                        throw new Error('Error en el servidor');
                     }
                 } catch (endpointError) {
                     mostrarDebug(`Endpoint específico falló: ${endpointError.message}`);
@@ -570,7 +573,7 @@
                         mostrarDebug(`Fallback: ${usuarios.length} usuarios obtenidos`);
 
                         usuario = usuarios.find(u =>
-                            u.email === email.toLowerCase() &&
+                            u.email && u.email.toLowerCase() === email.toLowerCase() &&
                             u.password === password &&
                             u.estado === 'activo'
                         );
@@ -579,6 +582,7 @@
                             metodoUsado = 'Método fallback';
                             mostrarDebug('Login exitoso con método fallback');
                         } else {
+                            mostrarDebug('Usuario no encontrado en fallback');
                             throw new Error('Credenciales incorrectas');
                         }
                     } catch (fallbackError) {
@@ -589,17 +593,22 @@
 
                 if (usuario) {
                     // Crear objeto de usuario con TODAS las propiedades necesarias
+                    // Manejar tanto camelCase como PascalCase
                     const usuarioData = {
-                        id: usuario.idUsuario || usuario.id,
-                        nombre: usuario.nombre || '',
-                        apellidos: usuario.apellidos || '',
-                        email: usuario.email || email,
-                        tipoUsuario: usuario.tipoUsuario || 'cliente',
+                        id: usuario.idUsuario || usuario.IdUsuario,
+                        nombre: usuario.nombre || usuario.Nombre || '',
+                        apellidos: usuario.apellidos || usuario.Apellidos || '',
+                        email: usuario.email || usuario.Email || email,
+                        tipoUsuario: usuario.tipoUsuario || usuario.TipoUsuario || 'cliente',
+                        cedula: usuario.cedula || usuario.Cedula || '',
+                        telefono: usuario.telefono || usuario.Telefono || '',
+                        direccion: usuario.direccion || usuario.Direccion || '',
+                        estado: usuario.estado || usuario.Estado || 'activo',
                         loginTime: new Date().toISOString(),
                         metodo: metodoUsado
                     };
 
-                    // Verificar que todos los campos estén presentes
+                    // Verificar que todos los campos críticos estén presentes
                     const camposFaltantes = [];
                     if (!usuarioData.id) camposFaltantes.push('id');
                     if (!usuarioData.nombre) camposFaltantes.push('nombre');
@@ -609,6 +618,7 @@
                     if (camposFaltantes.length > 0) {
                         mostrarDebug(`Campos faltantes: ${camposFaltantes.join(', ')}`);
                         mostrarDebug(`Datos recibidos: ${JSON.stringify(usuario)}`);
+                        mostrarDebug(`Datos procesados: ${JSON.stringify(usuarioData)}`);
                         mensaje.innerHTML = '<div class="message error">❌ Datos de usuario incompletos</div>';
                         return;
                     }
@@ -686,10 +696,28 @@
             }
         }
 
+        // Función para probar endpoints
+        async function probarEndpoints() {
+            try {
+                // Probar endpoint debug
+                const debugResponse = await fetch(`${API_BASE}/Usuario/debug`);
+                if (debugResponse.ok) {
+                    const debugData = await debugResponse.json();
+                    mostrarDebug(`Debug endpoint: ${debugData.totalUsuarios} usuarios encontrados`);
+                    console.log('📊 Debug data:', debugData);
+                } else {
+                    mostrarDebug(`Debug endpoint error: ${debugResponse.status}`);
+                }
+            } catch (error) {
+                mostrarDebug(`Error probando endpoints: ${error.message}`);
+            }
+        }
+
         // Inicializar página
         window.addEventListener('load', () => {
             verificarSesionExistente();
             verificarConexion();
+            probarEndpoints();
         });
     </script>
 </body>

@@ -230,20 +230,26 @@ namespace ServicioTecnico.Controllers
         {
             try
             {
+                _logger.LogInformation("Intento de login para: {Email}", loginDto.Email);
+
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
 
                 var usuario = await _context.Usuarios
-                    .FirstOrDefaultAsync(u => u.Email == loginDto.Email.ToLower() &&
+                    .FirstOrDefaultAsync(u => u.Email.ToLower() == loginDto.Email.ToLower() &&
                                             u.Password == loginDto.Password &&
                                             u.Estado == "activo");
 
                 if (usuario == null)
                 {
+                    _logger.LogWarning("Login fallido para: {Email}", loginDto.Email);
                     return Unauthorized("Credenciales incorrectas");
                 }
+
+                _logger.LogInformation("Login exitoso para: {Email} - Usuario: {Nombre} {Apellidos}",
+                    loginDto.Email, usuario.Nombre, usuario.Apellidos);
 
                 var responseDto = new UsuarioResponseDto
                 {
@@ -263,7 +269,7 @@ namespace ServicioTecnico.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error en login");
+                _logger.LogError(ex, "Error en login para: {Email}", loginDto.Email);
                 return StatusCode(500, "Error interno del servidor");
             }
         }
@@ -274,11 +280,18 @@ namespace ServicioTecnico.Controllers
             try
             {
                 var usuariosCount = await _context.Usuarios.CountAsync();
+                var usuariosActivos = await _context.Usuarios.CountAsync(u => u.Estado == "activo");
+
+                _logger.LogInformation("Test de conexión exitoso. Total usuarios: {Total}, Activos: {Activos}",
+                    usuariosCount, usuariosActivos);
+
                 return Ok(new
                 {
                     connected = true,
                     usuariosCount = usuariosCount,
-                    timestamp = DateTime.Now
+                    usuariosActivos = usuariosActivos,
+                    timestamp = DateTime.Now,
+                    message = "Conexión a base de datos exitosa"
                 });
             }
             catch (Exception ex)
@@ -287,8 +300,39 @@ namespace ServicioTecnico.Controllers
                 return Ok(new
                 {
                     connected = false,
-                    error = ex.Message
+                    error = ex.Message,
+                    timestamp = DateTime.Now
                 });
+            }
+        }
+
+        [HttpGet("debug")]
+        public async Task<ActionResult<object>> Debug()
+        {
+            try
+            {
+                var usuarios = await _context.Usuarios
+                    .Select(u => new {
+                        u.IdUsuario,
+                        u.Email,
+                        u.Nombre,
+                        u.Apellidos,
+                        u.TipoUsuario,
+                        u.Estado
+                    })
+                    .ToListAsync();
+
+                return Ok(new
+                {
+                    totalUsuarios = usuarios.Count,
+                    usuarios = usuarios,
+                    timestamp = DateTime.Now
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error en debug");
+                return StatusCode(500, new { error = ex.Message });
             }
         }
     }

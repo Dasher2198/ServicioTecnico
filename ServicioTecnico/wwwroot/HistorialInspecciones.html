@@ -586,71 +586,66 @@
             <h1>REVTEC</h1>
         </div>
         <div class="header-subtitle">
-            Historial de Inspecciones
+            
         </div>
     </header>
 
     <ul class="nav-menu">
-        <li><a href="PanelPrincipal.html">🏠 Panel Principal</a></li>
+        <li><a href="PanelPrincipal.html">Página Principal</a></li>
     </ul>
 
     <main class="main-container">
         <div class="content-card">
-            <h2 id="tituloHistorial" class="page-title">📋 Historial de Inspecciones</h2>
+            <h2 id="tituloHistorial" class="page-title">Historial de Inspecciones</h2>
 
             <!-- Filtros -->
             <div class="filters-container">
-                <h3 class="filters-title">🔍 Filtros de Búsqueda</h3>
+                <h3 class="filters-title">Filtros de Búsqueda</h3>
 
                 <div id="filtrosCliente" style="display: none;">
                     <div class="filters-grid">
                         <div class="form-group">
-                            <label class="form-label">🚗 Filtrar por Vehículo</label>
+                            <label class="form-label">Filtrar por Vehículo</label>
                             <select id="filtroVehiculo" class="form-select" onchange="filtrarInspecciones()">
                                 <option value="">Todos los vehículos</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">📅 Desde</label>
+                            <label class="form-label">Desde</label>
                             <input type="date" id="filtroFechaDesde" class="form-input" onchange="filtrarInspecciones()">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">📅 Hasta</label>
+                            <label class="form-label">Hasta</label>
                             <input type="date" id="filtroFechaHasta" class="form-input" onchange="filtrarInspecciones()">
                         </div>
 
-                        <div class="form-group">
-                            <button onclick="limpiarFiltros()" class="filter-button">🗑️ Limpiar</button>
-                        </div>
-                    </div>
+                     </div>
                 </div>
 
                 <div id="filtrosTecnico" style="display: none;">
                     <div class="filters-grid">
                         <div class="form-group">
-                            <label class="form-label">🔍 Resultado</label>
+                            <label class="form-label"> Resultado</label>
                             <select id="filtroResultado" class="form-select" onchange="filtrarInspecciones()">
                                 <option value="">Todos los resultados</option>
-                                <option value="aprobado">✅ Aprobado</option>
-                                <option value="rechazado">❌ Rechazado</option>
+                                <option value="aprobado">Aprobado</option>
+                                <option value="rechazado">Rechazado</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">📅 Fecha</label>
+                            <label class="form-label">Fecha</label>
                             <input type="date" id="filtroFechaTecnico" class="form-input" onchange="filtrarInspecciones()">
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">🚗 Placa</label>
+                            <label class="form-label">Placa</label>
                             <input type="text" id="filtroPlaca" class="form-input" placeholder="ABC123" onchange="filtrarInspecciones()" style="text-transform: uppercase;">
                         </div>
 
-                        <div class="form-group">
-                            <button onclick="limpiarFiltros()" class="filter-button">🗑️ Limpiar</button>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -666,7 +661,7 @@
             </div>
 
             <div id="sinDatos" class="no-data">
-                <div class="no-data-icon">📭</div>
+                <div class="no-data-icon"></div>
                 <p class="no-data-text">No se encontraron inspecciones</p>
                 <p class="no-data-help">Intente ajustar los filtros de búsqueda</p>
             </div>
@@ -675,15 +670,15 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>📅 Fecha</th>
-                            <th>🚗 Vehículo</th>
-                            <th>🏢 Estación</th>
-                            <th>👨‍🔧 Técnico</th>
-                            <th>✅ Resultado</th>
-                            <th>📄 Certificado</th>
-                            <th>📅 Vencimiento</th>
-                            <th>🔍 Estado</th>
-                            <th>🔧 Acción</th>
+                            <th> Fecha</th>
+                            <th> Vehículo</th>
+                            <th> Estación</th>
+                            <th> Técnico</th>
+                            <th> Resultado</th>
+                            <th> Certificado</th>
+                            <th> Vencimiento</th>
+                            <th> Estado</th>
+                            <th> Acción</th>
                         </tr>
                     </thead>
                     <tbody id="cuerpoTabla">
@@ -701,8 +696,8 @@
     <div id="modalDetalles" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">🔍 Detalles de Inspección</h3>
-                <button onclick="cerrarModal()" class="modal-close">❌ Cerrar</button>
+                <h3 class="modal-title"> Detalles de Inspección</h3>
+                <button onclick="cerrarModal()" class="modal-close"> Cerrar</button>
             </div>
             <div id="contenidoModal">
                 <!-- Se llenará dinámicamente -->
@@ -819,7 +814,7 @@
 
             } catch (error) {
                 console.error('Error al cargar inspecciones:', error);
-                document.getElementById('cargando').innerHTML = '<p style="color: #ef4444;">⚠️ Error al cargar inspecciones</p>';
+                document.getElementById('cargando').innerHTML = '<p style="color: #ef4444;"> Error al cargar inspecciones</p>';
             }
         }
 
@@ -832,10 +827,10 @@
             ).length;
 
             const stats = [
-                { titulo: 'Total', valor: inspecciones.length, icono: '📊', color: '#3b82f6' },
-                { titulo: 'Aprobadas', valor: aprobadas, icono: '✅', color: '#10b981' },
-                { titulo: 'Rechazadas', valor: rechazadas, icono: '❌', color: '#ef4444' },
-                { titulo: 'Certificados Válidos', valor: certificadosValidos, icono: '📄', color: '#8b5cf6' }
+                { titulo: 'Total', valor: inspecciones.length, icono: '', color: '#3b82f6' },
+                { titulo: 'Aprobadas', valor: aprobadas, icono: '', color: '#10b981' },
+                { titulo: 'Rechazadas', valor: rechazadas, icono: '', color: '#ef4444' },
+                { titulo: 'Certificados Válidos', valor: certificadosValidos, icono: '', color: '#8b5cf6' }
             ];
 
             document.getElementById('estadisticasRapidas').innerHTML = stats.map(stat => `
@@ -892,7 +887,7 @@
                         <td>${inspeccion.tecnico?.nombre || '---'} ${inspeccion.tecnico?.apellidos || ''}</td>
                         <td>
                             <span class="status-badge status-${inspeccion.resultado}">
-                                ${inspeccion.resultado === 'aprobado' ? '✅ Aprobado' : '❌ Rechazado'}
+                                ${inspeccion.resultado === 'aprobado' ? ' Aprobado' : ' Rechazado'}
                             </span>
                         </td>
                         <td>${numeroCertificado}</td>
@@ -1052,34 +1047,34 @@
 
                 let contenido = `
                         <div class="detail-section">
-                            <h4 class="detail-title">📋 Información General</h4>
+                            <h4 class="detail-title"> Información General</h4>
                             <div class="detail-grid">
                                 <div class="detail-item">
-                                    <div class="detail-label">🚗 Vehículo:</div>
+                                    <div class="detail-label"> Vehículo:</div>
                                     <div class="detail-value">${inspeccion.vehiculo?.numeroPlaca} - ${inspeccion.vehiculo?.marca} ${inspeccion.vehiculo?.modelo}</div>
                                 </div>
                                 <div class="detail-item">
-                                    <div class="detail-label">📅 Fecha:</div>
+                                    <div class="detail-label"> Fecha:</div>
                                     <div class="detail-value">${new Date(inspeccion.fechaInspeccion).toLocaleDateString('es-ES')}</div>
                                 </div>
                                 <div class="detail-item">
-                                    <div class="detail-label">🏢 Estación:</div>
+                                    <div class="detail-label"> Estación:</div>
                                     <div class="detail-value">${inspeccion.estacion?.nombreEstacion}</div>
                                 </div>
                                 <div class="detail-item">
-                                    <div class="detail-label">👨‍🔧 Técnico:</div>
+                                    <div class="detail-label"> Técnico:</div>
                                     <div class="detail-value">${inspeccion.tecnico?.nombre} ${inspeccion.tecnico?.apellidos}</div>
                                 </div>
                                 <div class="detail-item">
-                                    <div class="detail-label">✅ Resultado:</div>
+                                    <div class="detail-label"> Resultado:</div>
                                     <div class="detail-value">
                                         <span style="color: ${inspeccion.resultado === 'aprobado' ? '#10b981' : '#ef4444'}; font-weight: 600;">
-                                            ${inspeccion.resultado === 'aprobado' ? '✅ Aprobado' : '❌ Rechazado'}
+                                            ${inspeccion.resultado === 'aprobado' ? ' Aprobado' : ' Rechazado'}
                                         </span>
                                     </div>
                                 </div>
                                 <div class="detail-item">
-                                    <div class="detail-label">📄 Certificado:</div>
+                                    <div class="detail-label"> Certificado:</div>
                                     <div class="detail-value">${inspeccion.certificado?.numeroCertificado || 'N/A'}</div>
                                 </div>
                             </div>
@@ -1089,7 +1084,7 @@
                 if (inspeccion.observacionesTecnicas) {
                     contenido += `
                             <div class="detail-section">
-                                <h4 class="detail-title">💬 Observaciones Técnicas</h4>
+                                <h4 class="detail-title"> Observaciones Técnicas</h4>
                                 <div class="observation-box">
                                     ${inspeccion.observacionesTecnicas}
                                 </div>
@@ -1100,13 +1095,13 @@
                 if (detallesInspeccion.length > 0) {
                     contenido += `
                             <div class="detail-section">
-                                <h4 class="detail-title">🔍 Detalles de Verificación</h4>
+                                <h4 class="detail-title"> Detalles de Verificación</h4>
                                 <div class="verification-list">
                         `;
 
                     detallesInspeccion.forEach(detalle => {
                         const claseResultado = detalle.resultadoItem === 'OK' ? 'ok' : 'fallo';
-                        const iconoResultado = detalle.resultadoItem === 'OK' ? '✅' : '❌';
+                        const iconoResultado = detalle.resultadoItem === 'OK' ? '✅' : 'X';
 
                         contenido += `
                                 <div class="verification-item ${detalle.resultadoItem === 'FALLO' ? 'fallo' : ''}">
@@ -1155,11 +1150,11 @@
 
             // Configurar interfaz según tipo de usuario
             if (usuario.tipoUsuario === 'cliente') {
-                document.getElementById('tituloHistorial').textContent = '📋 Historial de Inspecciones de mis Vehículos';
+                document.getElementById('tituloHistorial').textContent = ' Historial de Inspecciones de mis Vehículos';
                 document.getElementById('filtrosCliente').style.display = 'block';
                 await cargarVehiculos();
             } else if (usuario.tipoUsuario === 'tecnico') {
-                document.getElementById('tituloHistorial').textContent = '📋 Inspecciones Realizadas';
+                document.getElementById('tituloHistorial').textContent = ' Inspecciones Realizadas';
                 document.getElementById('filtrosTecnico').style.display = 'block';
             }
 

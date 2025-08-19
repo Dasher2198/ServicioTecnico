@@ -191,54 +191,6 @@
                 transform: none;
             }
 
-        .message-area {
-            margin-top: 1rem;
-            text-align: center;
-            min-height: 40px;
-        }
-
-        .message {
-            padding: 0.75rem;
-            border-radius: 8px;
-            margin: 0.5rem 0;
-            font-weight: 500;
-        }
-
-            .message.success {
-                background: #dcfce7;
-                color: #166534;
-                border: 1px solid #bbf7d0;
-            }
-
-            .message.error {
-                background: #fef2f2;
-                color: #dc2626;
-                border: 1px solid #fecaca;
-            }
-
-            .message.warning {
-                background: #fefce8;
-                color: #ca8a04;
-                border: 1px solid #fde047;
-            }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s linear infinite;
-            margin-right: 0.5rem;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
         .requirements-box {
             margin-top: 2rem;
             padding: 1rem;
@@ -260,15 +212,6 @@
             color: #64748b;
             font-size: 0.85rem;
             line-height: 1.4;
-        }
-
-        .station-info {
-            margin-top: 0.5rem;
-            padding: 0.75rem;
-            background: #f8fafc;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            color: #64748b;
         }
 
         /* Responsive */
@@ -316,271 +259,110 @@
             <h1>REVTEC</h1>
         </div>
         <div class="header-subtitle">
-            Agendar Cita de Inspección
+            
         </div>
     </header>
 
     <ul class="nav-menu">
-        <li><a href="PanelPrincipal.html">🏠 Panel Principal</a></li>
+        <li><a href="PanelPrincipal.html">Página Principal</a></li>
     </ul>
 
     <main class="main-container">
         <div class="form-card">
-            <h2 class="form-title">📅 Agendar Cita de Revisión</h2>
+            <h2 class="form-title"> Agendar Cita de Revisión</h2>
 
             <div class="info-box">
                 <p class="info-text">
-                    <strong>📋 Información:</strong> Seleccione su vehículo, la estación más conveniente y programe su cita.
+                    <strong> Información:</strong> Complete el formulario para agendar su cita de inspección técnica vehicular.
                 </p>
             </div>
 
-            <form id="citaForm">
+            <!-- Formulario que envía directamente al servidor -->
+            <form action="/api/Cita" method="POST" enctype="application/x-www-form-urlencoded">
+
                 <div class="form-group">
-                    <label class="form-label">🚗 Vehículo (Placa)</label>
-                    <select id="vehiculo" class="form-select" required>
-                        <option value="">Seleccione un vehículo...</option>
-                    </select>
+                    <label class="form-label">ID del Vehículo</label>
+                    <input type="number" name="IdVehiculo" class="form-input" required min="1" placeholder="Ingrese el ID del vehículo">
                     <div class="form-help">
-                        ℹ️ Si no ve su vehículo, debe registrarlo primero
+                         Consulte el ID de su vehículo en la sección "Mis Vehículos"
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">🏢 Estación de Inspección</label>
-                    <select id="estacion" class="form-select" required onchange="mostrarInfoEstacion()">
-                        <option value="">Seleccione una estación...</option>
+                    <label class="form-label">Seleccione la Estación</label>
+                    <select name="IdEstacion" class="form-select" required>
+                        <option value="">Estaciones</option>
+                        <option value="1">REVTEC San José Centro</option>
+                        <option value="2">REVTEC Cartago</option>
+                        <option value="3">REVTEC Alajuela</option>
+                        <option value="4">REVTEC Heredia</option>
+                        <option value="5">REVTEC Puntarenas</option>
+                        <option value="6">REVTEC Limón</option>
+                        <option value="7">RTV Guanacaste</option>
                     </select>
-                    <div id="infoEstacion"></div>
                 </div>
 
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">📅 Fecha</label>
-                        <input type="date" id="fecha" class="form-input" required>
+                        <label class="form-label">Fecha</label>
+                        <input type="date" name="FechaCita" class="form-input" required>
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">🕐 Hora</label>
-                        <input type="time" id="hora" class="form-input" required min="07:00" max="17:00">
+                        <label class="form-label">Hora</label>
+                        <select name="HoraCita" class="form-select" required>
+                            <option value="">Seleccione hora...</option>
+                            <option value="07:00:00">07:00 AM</option>
+                            <option value="07:30:00">07:30 AM</option>
+                            <option value="08:00:00">08:00 AM</option>
+                            <option value="08:30:00">08:30 AM</option>
+                            <option value="09:00:00">09:00 AM</option>
+                            <option value="09:30:00">09:30 AM</option>
+                            <option value="10:00:00">10:00 AM</option>
+                            <option value="10:30:00">10:30 AM</option>
+                            <option value="11:00:00">11:00 AM</option>
+                            <option value="11:30:00">11:30 AM</option>
+                            <option value="12:00:00">12:00 PM</option>
+                            <option value="12:30:00">12:30 PM</option>
+                            <option value="13:00:00">01:00 PM</option>
+                            <option value="13:30:00">01:30 PM</option>
+                            <option value="14:00:00">02:00 PM</option>
+                            <option value="14:30:00">02:30 PM</option>
+                            <option value="15:00:00">03:00 PM</option>
+                            <option value="15:30:00">03:30 PM</option>
+                            <option value="16:00:00">04:00 PM</option>
+                            <option value="16:30:00">04:30 PM</option>
+                            <option value="17:00:00">05:00 PM</option>
+                        </select>
                         <div class="form-help">
                             Horario: 7:00 AM - 5:00 PM
                         </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">💬 Observaciones (Opcional)</label>
-                    <textarea id="observaciones" class="form-textarea" rows="3" placeholder="Observaciones adicionales sobre su vehículo o la cita..."></textarea>
-                </div>
+                
+
+                <!-- Campo oculto para el estado -->
+                <input type="hidden" name="EstadoCita" value="programada">
 
                 <button type="submit" class="submit-button">
-                    ✅ Agendar Cita
+                    Agendar Cita
                 </button>
             </form>
 
-            <div id="mensaje" class="message-area"></div>
-
             <!-- Información adicional -->
             <div class="requirements-box">
-                <h4 class="requirements-title">📋 Documentos Requeridos:</h4>
+                <h4 class="requirements-title">Documentos Requeridos:</h4>
                 <ul class="requirements-list">
-                    <li>Cédula del propietario</li>
-                    <li>Tarjeta de circulación vigente</li>
-                    <li>Póliza de seguro obligatorio (SOAT)</li>
+                    <li>Cédula de Identidad</li>
+                    <li>Licencia de Conducir</li>
+                    <li>Comprobante de Cita</li>
                     <li>Marchamo al día</li>
                 </ul>
             </div>
+
+            
         </div>
     </main>
-
-    <script>
-        const API_BASE = window.location.protocol + '//' + window.location.host + '/api';
-        let usuario = null;
-        let estaciones = [];
-
-        // Verificar sesión
-        function verificarSesion() {
-            const usuarioActual = localStorage.getItem('usuarioActual');
-            if (!usuarioActual) {
-                window.location.href = 'Login.html';
-                return null;
-            }
-            return JSON.parse(usuarioActual);
-        }
-
-        // Cargar vehículos del usuario
-        async function cargarVehiculos() {
-            try {
-                const response = await fetch(`${API_BASE}/Vehiculo/porPropietario/${usuario.id}`);
-                const vehiculos = await response.json();
-
-                const selectVehiculo = document.getElementById('vehiculo');
-                selectVehiculo.innerHTML = '<option value="">Seleccione un vehículo...</option>';
-
-                vehiculos.forEach(vehiculo => {
-                    const option = document.createElement('option');
-                    option.value = vehiculo.idVehiculo;
-                    option.textContent = `${vehiculo.numeroPlaca} - ${vehiculo.marca} ${vehiculo.modelo} (${vehiculo.año})`;
-                    selectVehiculo.appendChild(option);
-                });
-
-                if (vehiculos.length === 0) {
-                    selectVehiculo.innerHTML = '<option value="">No tiene vehículos registrados</option>';
-                    document.getElementById('mensaje').innerHTML = `
-                            <div class="message warning">
-                                ⚠️ Debe registrar un vehículo antes de agendar una cita.
-                                <br><a href="RegistroVehiculo.html" style="color: #3b82f6; font-weight: 600;">Registrar vehículo aquí</a>
-                            </div>
-                        `;
-                }
-            } catch (error) {
-                console.error('Error al cargar vehículos:', error);
-                document.getElementById('mensaje').innerHTML =
-                    '<div class="message error">⚠️ Error al cargar sus vehículos</div>';
-            }
-        }
-
-        // Cargar estaciones
-        async function cargarEstaciones() {
-            try {
-                const response = await fetch(`${API_BASE}/Estacion`);
-                estaciones = await response.json();
-
-                const selectEstacion = document.getElementById('estacion');
-                selectEstacion.innerHTML = '<option value="">Seleccione una estación...</option>';
-
-                estaciones.filter(e => e.estado === 'activa').forEach(estacion => {
-                    const option = document.createElement('option');
-                    option.value = estacion.idEstacion;
-                    option.textContent = `${estacion.nombreEstacion} - ${estacion.provincia}, ${estacion.canton}`;
-                    option.title = `${estacion.direccion} | ${estacion.horarioAtencion}`;
-                    selectEstacion.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error al cargar estaciones:', error);
-                document.getElementById('mensaje').innerHTML =
-                    '<div class="message error">⚠️ Error al cargar estaciones</div>';
-            }
-        }
-
-        // Mostrar información de la estación seleccionada
-        function mostrarInfoEstacion() {
-            const estacionId = document.getElementById('estacion').value;
-            const infoDiv = document.getElementById('infoEstacion');
-
-            if (!estacionId) {
-                infoDiv.innerHTML = '';
-                return;
-            }
-
-            const estacion = estaciones.find(e => e.idEstacion == estacionId);
-            if (estacion) {
-                infoDiv.innerHTML = `
-                        <div class="station-info">
-                            📍 ${estacion.direccion}<br>
-                            📞 ${estacion.telefono || 'N/A'}<br>
-                            🕒 ${estacion.horarioAtencion || 'Consultar horarios'}
-                        </div>
-                    `;
-            }
-        }
-
-        // Configurar fecha mínima (hoy) y máxima (30 días)
-        function configurarFecha() {
-            const hoy = new Date();
-            const fechaMin = hoy.toISOString().split('T')[0];
-
-            const fechaMax = new Date();
-            fechaMax.setDate(fechaMax.getDate() + 30);
-            const fechaMaxStr = fechaMax.toISOString().split('T')[0];
-
-            const inputFecha = document.getElementById('fecha');
-            inputFecha.min = fechaMin;
-            inputFecha.max = fechaMaxStr;
-        }
-
-        // Validar día laboral
-        function validarDiaLaboral(fecha) {
-            const dia = new Date(fecha).getDay();
-            return dia >= 1 && dia <= 6; // Lunes a sábado
-        }
-
-        document.getElementById('citaForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const fecha = document.getElementById('fecha').value;
-            const mensaje = document.getElementById('mensaje');
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-
-            // Validar día laboral
-            if (!validarDiaLaboral(fecha)) {
-                mensaje.innerHTML = '<div class="message error">❌ Solo se pueden agendar citas de lunes a sábado</div>';
-                return;
-            }
-
-            const formData = {
-                idVehiculo: parseInt(document.getElementById('vehiculo').value),
-                idEstacion: parseInt(document.getElementById('estacion').value),
-                fechaCita: fecha,
-                horaCita: document.getElementById('hora').value + ':00',
-                observaciones: document.getElementById('observaciones').value || null,
-                estadoCita: 'programada'
-            };
-
-            // Mostrar loading
-            submitBtn.innerHTML = '<span class="loading-spinner"></span>Agendando...';
-            submitBtn.disabled = true;
-
-            try {
-                const response = await fetch(`${API_BASE}/Cita`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(formData)
-                });
-
-                if (response.ok) {
-                    mensaje.innerHTML = `
-                            <div class="message success">
-                                ✅ ¡Cita agendada exitosamente!
-                                <br><small>Recibirá una confirmación por email</small>
-                            </div>
-                        `;
-                    document.getElementById('citaForm').reset();
-                    configurarFecha();
-                } else {
-                    const error = await response.text();
-                    mensaje.innerHTML = '<div class="message error">❌ Error al agendar cita: ' + error + '</div>';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                mensaje.innerHTML = '<div class="message error">⚠️ Error al conectar con el servidor</div>';
-            } finally {
-                // Restaurar botón
-                submitBtn.innerHTML = '✅ Agendar Cita';
-                submitBtn.disabled = false;
-            }
-        });
-
-        // Limpiar mensajes al escribir
-        ['vehiculo', 'estacion', 'fecha', 'hora'].forEach(id => {
-            document.getElementById(id).addEventListener('input', () => {
-                document.getElementById('mensaje').innerHTML = '';
-            });
-        });
-
-        // Inicializar página
-        async function inicializar() {
-            usuario = verificarSesion();
-            if (!usuario) return;
-
-            configurarFecha();
-            await cargarVehiculos();
-            await cargarEstaciones();
-        }
-
-        inicializar();
-    </script>
 </body>
 </html>
