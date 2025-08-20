@@ -256,7 +256,7 @@
             <h1>REVTEC</h1>
         </div>
         <div class="header-subtitle">
-            Registro de Vehículo
+            
         </div>
     </header>
 
@@ -283,7 +283,7 @@
                     <label class="form-label">Número de Placa</label>
                     <input type="text" name="NumeroPlaca" class="form-input" required placeholder="ABC123" maxlength="10" style="text-transform: uppercase;">
                     <div class="form-help">
-                        ℹ️ Formato: ABC123 (letras y números, sin espacios ni guiones)
+                         Formato: ABC123 (letras y números, sin espacios ni guiones)
                     </div>
                 </div>
 
@@ -413,7 +413,7 @@
 
             // Mostrar loading
             submitBtn.disabled = true;
-            submitBtn.textContent = '⏳ Registrando...';
+            submitBtn.textContent = ' Registrando...';
 
             try {
                 // Recopilar datos del formulario
@@ -474,18 +474,18 @@
                         }
                     }
 
-                    errorMsg.textContent = '❌ ' + errorText;
+                    errorMsg.textContent = ' ' + errorText;
                     errorMsg.classList.remove('hidden');
                 }
 
             } catch (error) {
                 console.error('Error de red:', error);
-                errorMsg.textContent = '❌ Error de conexión. Verifique su conexión a internet.';
+                errorMsg.textContent = ' Error de conexión. Verifique su conexión a internet.';
                 errorMsg.classList.remove('hidden');
             } finally {
                 // Restaurar botón
                 submitBtn.disabled = false;
-                submitBtn.textContent = '💾 Registrar Vehículo';
+                submitBtn.textContent = ' Registrar Vehículo';
             }
         });
 

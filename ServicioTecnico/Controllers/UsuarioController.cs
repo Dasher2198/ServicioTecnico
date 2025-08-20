@@ -27,27 +27,29 @@ namespace ServicioTecnico.Controllers
             {
                 var usuarios = await _context.Usuarios
                     .Where(u => u.Estado == "activo")
-                    .Select(u => new UsuarioResponseDto
-                    {
-                        IdUsuario = u.IdUsuario,
-                        Nombre = u.Nombre,
-                        Apellidos = u.Apellidos,
-                        Cedula = u.Cedula,
-                        Email = u.Email,
-                        Telefono = u.Telefono,
-                        Direccion = u.Direccion,
-                        TipoUsuario = u.TipoUsuario,
-                        Estado = u.Estado,
-                        FechaRegistro = u.FechaRegistro
-                    })
+                    .AsNoTracking() // Mejorar rendimiento
                     .ToListAsync();
 
-                return Ok(usuarios);
+                var usuariosResponse = usuarios.Select(u => new UsuarioResponseDto
+                {
+                    IdUsuario = u.IdUsuario,
+                    Nombre = u.Nombre ?? string.Empty,
+                    Apellidos = u.Apellidos ?? string.Empty,
+                    Cedula = u.Cedula ?? string.Empty,
+                    Email = u.Email ?? string.Empty,
+                    Telefono = u.Telefono,
+                    Direccion = u.Direccion,
+                    TipoUsuario = u.TipoUsuario ?? "cliente",
+                    Estado = u.Estado ?? "activo",
+                    FechaRegistro = u.FechaRegistro
+                }).ToList();
+
+                return Ok(usuariosResponse);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener usuarios");
-                return StatusCode(500, "Error interno del servidor");
+                return StatusCode(500, new { error = "Error interno del servidor", details = ex.Message });
             }
         }
 
@@ -56,22 +58,24 @@ namespace ServicioTecnico.Controllers
         {
             try
             {
-                var usuario = await _context.Usuarios.FindAsync(id);
+                var usuario = await _context.Usuarios
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(u => u.IdUsuario == id);
 
                 if (usuario == null || usuario.Estado == "inactivo")
-                    return NotFound("Usuario no encontrado");
+                    return NotFound(new { error = "Usuario no encontrado" });
 
                 var usuarioDto = new UsuarioResponseDto
                 {
                     IdUsuario = usuario.IdUsuario,
-                    Nombre = usuario.Nombre,
-                    Apellidos = usuario.Apellidos,
-                    Cedula = usuario.Cedula,
-                    Email = usuario.Email,
+                    Nombre = usuario.Nombre ?? string.Empty,
+                    Apellidos = usuario.Apellidos ?? string.Empty,
+                    Cedula = usuario.Cedula ?? string.Empty,
+                    Email = usuario.Email ?? string.Empty,
                     Telefono = usuario.Telefono,
                     Direccion = usuario.Direccion,
-                    TipoUsuario = usuario.TipoUsuario,
-                    Estado = usuario.Estado,
+                    TipoUsuario = usuario.TipoUsuario ?? "cliente",
+                    Estado = usuario.Estado ?? "activo",
                     FechaRegistro = usuario.FechaRegistro
                 };
 
@@ -80,7 +84,7 @@ namespace ServicioTecnico.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al obtener usuario {UserId}", id);
-                return StatusCode(500, "Error interno del servidor");
+                return StatusCode(500, new { error = "Error interno del servidor", details = ex.Message });
             }
         }
 
@@ -101,19 +105,19 @@ namespace ServicioTecnico.Controllers
 
                 if (existeUsuario)
                 {
-                    return Conflict("Ya existe un usuario con esa cédula o email");
+                    return Conflict(new { error = "Ya existe un usuario con esa cédula o email" });
                 }
 
                 var usuario = new Usuario
                 {
-                    Nombre = usuarioDto.Nombre.Trim(),
-                    Apellidos = usuarioDto.Apellidos.Trim(),
-                    Cedula = usuarioDto.Cedula.Trim(),
-                    Email = usuarioDto.Email.ToLower().Trim(),
+                    Nombre = usuarioDto.Nombre?.Trim() ?? string.Empty,
+                    Apellidos = usuarioDto.Apellidos?.Trim() ?? string.Empty,
+                    Cedula = usuarioDto.Cedula?.Trim() ?? string.Empty,
+                    Email = usuarioDto.Email?.ToLower().Trim() ?? string.Empty,
                     Telefono = usuarioDto.Telefono?.Trim(),
                     Direccion = usuarioDto.Direccion?.Trim(),
-                    TipoUsuario = usuarioDto.TipoUsuario,
-                    Password = usuarioDto.Password, // En producción, hash la contraseña
+                    TipoUsuario = usuarioDto.TipoUsuario ?? "cliente",
+                    Password = usuarioDto.Password ?? string.Empty, // En producción, hash la contraseña
                     Estado = "activo",
                     FechaRegistro = DateTime.Now
                 };
@@ -140,88 +144,7 @@ namespace ServicioTecnico.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al crear usuario");
-                return StatusCode(500, "Error interno del servidor");
-            }
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuario(int id, UsuarioUpdateDto usuarioDto)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                var usuario = await _context.Usuarios.FindAsync(id);
-                if (usuario == null)
-                {
-                    return NotFound("Usuario no encontrado");
-                }
-
-                // Verificar si la nueva cédula o email ya existe en otro usuario
-                var existeOtroUsuario = await _context.Usuarios
-                    .AnyAsync(u => u.IdUsuario != id && (u.Cedula == usuarioDto.Cedula || u.Email == usuarioDto.Email));
-
-                if (existeOtroUsuario)
-                {
-                    return Conflict("Ya existe otro usuario con esa cédula o email");
-                }
-
-                // Actualizar solo los campos permitidos
-                usuario.Nombre = usuarioDto.Nombre.Trim();
-                usuario.Apellidos = usuarioDto.Apellidos.Trim();
-                usuario.Cedula = usuarioDto.Cedula.Trim();
-                usuario.Email = usuarioDto.Email.ToLower().Trim();
-                usuario.Telefono = usuarioDto.Telefono?.Trim();
-                usuario.Direccion = usuarioDto.Direccion?.Trim();
-
-                _context.Entry(usuario).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al actualizar usuario {UserId}", id);
-                return StatusCode(500, "Error interno del servidor");
-            }
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUsuario(int id)
-        {
-            try
-            {
-                var usuario = await _context.Usuarios.FindAsync(id);
-                if (usuario == null)
-                {
-                    return NotFound("Usuario no encontrado");
-                }
-
-                // Verificar si el usuario tiene vehículos o inspecciones asociadas
-                var tieneRelaciones = await _context.Vehiculos.AnyAsync(v => v.IdPropietario == id) ||
-                                    await _context.Inspecciones.AnyAsync(i => i.IdTecnico == id);
-
-                if (tieneRelaciones)
-                {
-                    // Desactivar en lugar de eliminar
-                    usuario.Estado = "inactivo";
-                    _context.Entry(usuario).State = EntityState.Modified;
-                }
-                else
-                {
-                    _context.Usuarios.Remove(usuario);
-                }
-
-                await _context.SaveChangesAsync();
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al eliminar usuario {UserId}", id);
-                return StatusCode(500, "Error interno del servidor");
+                return StatusCode(500, new { error = "Error interno del servidor", details = ex.Message });
             }
         }
 
@@ -238,6 +161,7 @@ namespace ServicioTecnico.Controllers
                 }
 
                 var usuario = await _context.Usuarios
+                    .AsNoTracking()
                     .FirstOrDefaultAsync(u => u.Email.ToLower() == loginDto.Email.ToLower() &&
                                             u.Password == loginDto.Password &&
                                             u.Estado == "activo");
@@ -245,7 +169,7 @@ namespace ServicioTecnico.Controllers
                 if (usuario == null)
                 {
                     _logger.LogWarning("Login fallido para: {Email}", loginDto.Email);
-                    return Unauthorized("Credenciales incorrectas");
+                    return Unauthorized(new { error = "Credenciales incorrectas" });
                 }
 
                 _logger.LogInformation("Login exitoso para: {Email} - Usuario: {Nombre} {Apellidos}",
@@ -254,14 +178,14 @@ namespace ServicioTecnico.Controllers
                 var responseDto = new UsuarioResponseDto
                 {
                     IdUsuario = usuario.IdUsuario,
-                    Nombre = usuario.Nombre,
-                    Apellidos = usuario.Apellidos,
-                    Cedula = usuario.Cedula,
-                    Email = usuario.Email,
+                    Nombre = usuario.Nombre ?? string.Empty,
+                    Apellidos = usuario.Apellidos ?? string.Empty,
+                    Cedula = usuario.Cedula ?? string.Empty,
+                    Email = usuario.Email ?? string.Empty,
                     Telefono = usuario.Telefono,
                     Direccion = usuario.Direccion,
-                    TipoUsuario = usuario.TipoUsuario,
-                    Estado = usuario.Estado,
+                    TipoUsuario = usuario.TipoUsuario ?? "cliente",
+                    Estado = usuario.Estado ?? "activo",
                     FechaRegistro = usuario.FechaRegistro
                 };
 
@@ -270,7 +194,7 @@ namespace ServicioTecnico.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error en login para: {Email}", loginDto.Email);
-                return StatusCode(500, "Error interno del servidor");
+                return StatusCode(500, new { error = "Error interno del servidor", details = ex.Message });
             }
         }
 
@@ -312,6 +236,7 @@ namespace ServicioTecnico.Controllers
             try
             {
                 var usuarios = await _context.Usuarios
+                    .AsNoTracking()
                     .Select(u => new {
                         u.IdUsuario,
                         u.Email,
@@ -338,20 +263,20 @@ namespace ServicioTecnico.Controllers
     }
 }
 
-// DTOs para el manejo de datos
+// DTOs para el manejo de datos - Simplificados para evitar conflictos
 namespace ServicioTecnico.DTOs
 {
     public class UsuarioResponseDto
     {
         public int IdUsuario { get; set; }
-        public string Nombre { get; set; }
-        public string Apellidos { get; set; }
-        public string Cedula { get; set; }
-        public string Email { get; set; }
+        public string Nombre { get; set; } = string.Empty;
+        public string Apellidos { get; set; } = string.Empty;
+        public string Cedula { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
         public string? Telefono { get; set; }
         public string? Direccion { get; set; }
-        public string TipoUsuario { get; set; }
-        public string Estado { get; set; }
+        public string TipoUsuario { get; set; } = "cliente";
+        public string Estado { get; set; } = "activo";
         public DateTime FechaRegistro { get; set; }
     }
 
@@ -359,20 +284,20 @@ namespace ServicioTecnico.DTOs
     {
         [Required(ErrorMessage = "El nombre es requerido")]
         [StringLength(50, ErrorMessage = "El nombre no puede exceder 50 caracteres")]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Los apellidos son requeridos")]
         [StringLength(100, ErrorMessage = "Los apellidos no pueden exceder 100 caracteres")]
-        public string Apellidos { get; set; }
+        public string Apellidos { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "La cédula es requerida")]
         [StringLength(20, ErrorMessage = "La cédula no puede exceder 20 caracteres")]
-        public string Cedula { get; set; }
+        public string Cedula { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El email es requerido")]
         [EmailAddress(ErrorMessage = "Formato de email inválido")]
         [StringLength(100, ErrorMessage = "El email no puede exceder 100 caracteres")]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [StringLength(15, ErrorMessage = "El teléfono no puede exceder 15 caracteres")]
         public string? Telefono { get; set; }
@@ -382,46 +307,20 @@ namespace ServicioTecnico.DTOs
 
         [Required(ErrorMessage = "El tipo de usuario es requerido")]
         [RegularExpression("^(cliente|tecnico)$", ErrorMessage = "Tipo de usuario inválido")]
-        public string TipoUsuario { get; set; }
+        public string TipoUsuario { get; set; } = "cliente";
 
         [Required(ErrorMessage = "La contraseña es requerida")]
         [StringLength(255, MinimumLength = 6, ErrorMessage = "La contraseña debe tener entre 6 y 255 caracteres")]
-        public string Password { get; set; }
-    }
-
-    public class UsuarioUpdateDto
-    {
-        [Required(ErrorMessage = "El nombre es requerido")]
-        [StringLength(50, ErrorMessage = "El nombre no puede exceder 50 caracteres")]
-        public string Nombre { get; set; }
-
-        [Required(ErrorMessage = "Los apellidos son requeridos")]
-        [StringLength(100, ErrorMessage = "Los apellidos no pueden exceder 100 caracteres")]
-        public string Apellidos { get; set; }
-
-        [Required(ErrorMessage = "La cédula es requerida")]
-        [StringLength(20, ErrorMessage = "La cédula no puede exceder 20 caracteres")]
-        public string Cedula { get; set; }
-
-        [Required(ErrorMessage = "El email es requerido")]
-        [EmailAddress(ErrorMessage = "Formato de email inválido")]
-        [StringLength(100, ErrorMessage = "El email no puede exceder 100 caracteres")]
-        public string Email { get; set; }
-
-        [StringLength(15, ErrorMessage = "El teléfono no puede exceder 15 caracteres")]
-        public string? Telefono { get; set; }
-
-        [StringLength(200, ErrorMessage = "La dirección no puede exceder 200 caracteres")]
-        public string? Direccion { get; set; }
+        public string Password { get; set; } = string.Empty;
     }
 
     public class LoginDto
     {
         [Required(ErrorMessage = "El email es requerido")]
         [EmailAddress(ErrorMessage = "Formato de email inválido")]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "La contraseña es requerida")]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
     }
 }

@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\" />
-    <Folder Include="NewFolder\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

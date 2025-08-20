@@ -899,7 +899,7 @@
                         </td>
                         <td>
                             <button onclick="verDetalles(${inspeccion.idInspeccion})" class="action-button">
-                                👁️ Ver
+                                 Ver
                             </button>
                         </td>
                     `;
@@ -1101,7 +1101,7 @@
 
                     detallesInspeccion.forEach(detalle => {
                         const claseResultado = detalle.resultadoItem === 'OK' ? 'ok' : 'fallo';
-                        const iconoResultado = detalle.resultadoItem === 'OK' ? '✅' : 'X';
+                        const iconoResultado = detalle.resultadoItem === 'OK' ? '' : 'X';
 
                         contenido += `
                                 <div class="verification-item ${detalle.resultadoItem === 'FALLO' ? 'fallo' : ''}">

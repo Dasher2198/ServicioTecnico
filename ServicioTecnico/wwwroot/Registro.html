@@ -307,69 +307,69 @@
             <h1>REVTEC</h1>
         </div>
         <div class="header-subtitle">
-            Registro de Usuario
+            
         </div>
     </header>
 
     <ul class="nav-menu">
-        <li><a href="Login.html">🔐 Iniciar Sesión</a></li>
+        <li><a href="Login.html"> Iniciar Sesión</a></li>
     </ul>
 
     <main class="main-container">
         <div class="form-card">
-            <h2 class="form-title">📝 Crear Cuenta</h2>
+            <h2 class="form-title"> Crear Cuenta</h2>
 
             <form id="registroForm">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">👤 Nombre</label>
+                        <label class="form-label"> Nombre</label>
                         <input type="text" id="nombre" class="form-input" required placeholder="Tu nombre">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">👥 Apellidos</label>
+                        <label class="form-label"> Apellidos</label>
                         <input type="text" id="apellidos" class="form-input" required placeholder="Tus apellidos">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">🆔 Cédula</label>
+                    <label class="form-label"> Cédula</label>
                     <input type="text" id="cedula" class="form-input" required placeholder="123456789" maxlength="20">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">📧 Correo Electrónico</label>
+                    <label class="form-label"> Correo Electrónico</label>
                     <input type="email" id="email" class="form-input" required placeholder="ejemplo@correo.com">
                 </div>
 
                 <div class="form-grid">
                     <div class="form-group">
-                        <label class="form-label">📞 Teléfono</label>
+                        <label class="form-label"> Teléfono</label>
                         <input type="tel" id="telefono" class="form-input" placeholder="8888-9999">
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">🏢 Tipo de Usuario</label>
+                        <label class="form-label"> Tipo de Usuario</label>
                         <select id="tipoUsuario" class="form-select" required>
                             <option value="">Seleccione...</option>
-                            <option value="cliente">👤 Cliente</option>
-                            <option value="tecnico">🔧 Técnico</option>
+                            <option value="cliente"> Cliente</option>
+                            <option value="tecnico"> Técnico</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">🏠 Dirección</label>
+                    <label class="form-label"> Dirección</label>
                     <input type="text" id="direccion" class="form-input" placeholder="Su dirección completa">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">🔒 Contraseña</label>
+                    <label class="form-label"> Contraseña</label>
                     <input type="password" id="password" class="form-input" required placeholder="Mínimo 6 caracteres" minlength="6">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">🔒 Confirmar Contraseña</label>
+                    <label class="form-label"> Confirmar Contraseña</label>
                     <input type="password" id="confirmPassword" class="form-input" required placeholder="Repita su contraseña" minlength="6">
                     <div class="form-help" id="passwordHelp"></div>
                 </div>
@@ -382,7 +382,7 @@
                 </div>
 
                 <button type="submit" class="submit-button">
-                    🚀 Crear Cuenta
+                     Crear Cuenta
                 </button>
             </form>
 
@@ -403,14 +403,14 @@
 
             // Validar contraseñas
             if (password !== confirmPassword) {
-                mensaje.innerHTML = '<div class="message error">❌ Las contraseñas no coinciden</div>';
+                mensaje.innerHTML = '<div class="message error"> Las contraseñas no coinciden</div>';
                 return;
             }
 
             // Validar cédula (solo números)
             const cedula = document.getElementById('cedula').value;
             if (!/^\d+$/.test(cedula)) {
-                mensaje.innerHTML = '<div class="message error">❌ La cédula debe contener solo números</div>';
+                mensaje.innerHTML = '<div class="message error"> La cédula debe contener solo números</div>';
                 return;
             }
 
@@ -440,7 +440,7 @@
                 });
 
                 if (response.ok) {
-                    mensaje.innerHTML = '<div class="message success">✅ ¡Usuario registrado exitosamente! Redirigiendo al login...</div>';
+                    mensaje.innerHTML = '<div class="message success"> ¡Usuario registrado exitosamente!</div>';
 
                     // Limpiar formulario
                     document.getElementById('registroForm').reset();
@@ -450,20 +450,20 @@
                     }, 2000);
                 } else {
                     const errorText = await response.text();
-                    let errorMessage = '❌ Error al registrar usuario';
+                    let errorMessage = ' Error al registrar usuario';
 
                     if (errorText.includes('cedula') || errorText.includes('email')) {
-                        errorMessage = '❌ Ya existe un usuario con esa cédula o email';
+                        errorMessage = ' Ya existe un usuario con esa cédula o email';
                     }
 
                     mensaje.innerHTML = `<div class="message error">${errorMessage}</div>`;
                 }
             } catch (error) {
                 console.error('Error:', error);
-                mensaje.innerHTML = '<div class="message error">⚠️ Error al conectar con el servidor</div>';
+                mensaje.innerHTML = '<div class="message error"> Error al conectar con el servidor</div>';
             } finally {
                 // Restaurar botón
-                submitBtn.innerHTML = '🚀 Crear Cuenta';
+                submitBtn.innerHTML = ' Crear Cuenta';
                 submitBtn.disabled = false;
             }
         });
@@ -477,12 +477,12 @@
             if (confirmPassword && password !== confirmPassword) {
                 this.style.borderColor = '#ef4444';
                 this.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
-                helpText.textContent = '❌ Las contraseñas no coinciden';
+                helpText.textContent = ' Las contraseñas no coinciden';
                 helpText.style.color = '#ef4444';
             } else if (confirmPassword && password === confirmPassword) {
                 this.style.borderColor = '#10b981';
                 this.style.boxShadow = '0 0 0 3px rgba(16, 185, 129, 0.1)';
-                helpText.textContent = '✅ Las contraseñas coinciden';
+                helpText.textContent = ' Las contraseñas coinciden';
                 helpText.style.color = '#10b981';
             } else {
                 this.style.borderColor = '';

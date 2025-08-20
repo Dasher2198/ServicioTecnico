@@ -63,6 +63,7 @@
             border-radius: 10px;
             margin: 1rem 2rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            justify-content: center;
         }
 
             .nav-menu a {
@@ -275,15 +276,6 @@
                     background: #6d28d9;
                 }
 
-        .connection-status {
-            margin-top: 1rem;
-            padding: 0.5rem;
-            border-radius: 6px;
-            text-align: center;
-            font-size: 0.8rem;
-            display: none;
-        }
-
         .loading-spinner {
             display: inline-block;
             width: 14px;
@@ -299,27 +291,6 @@
             to {
                 transform: rotate(360deg);
             }
-        }
-
-        .debug-section {
-            margin-top: 1rem;
-            padding: 0.5rem;
-            background: #f0f9ff;
-            border-radius: 6px;
-            border-left: 4px solid #0ea5e9;
-            font-size: 0.8rem;
-            display: none;
-        }
-
-        .debug-title {
-            font-weight: 600;
-            color: #0c4a6e;
-            margin-bottom: 0.5rem;
-        }
-
-        .debug-content {
-            font-family: monospace;
-            color: #075985;
         }
 
         /* Responsive */
@@ -369,30 +340,34 @@
             <h1>REVTEC</h1>
         </div>
         <div class="header-subtitle">
-            Sistema de Revisión Vehicular
+            Sistema de Revisión Técnica Vehicular
         </div>
     </header>
-      
+
+    <ul class="nav-menu">
+        <li><a href="Registro.html"> Crear Cuenta</a></li>
+    </ul>
+
     <main class="main-container">
         <div class="login-card">
-            <h2 class="login-title">Iniciar Sesión</h2>
+            <h2 class="login-title"> Iniciar Sesión</h2>
 
             <form id="loginForm">
                 <div class="form-group">
-                    <label class="form-label">Correo Electrónico</label>
+                    <label class="form-label"> Correo Electrónico</label>
                     <input type="email" id="email" class="form-input" required placeholder="ejemplo@correo.com" autocomplete="email">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Contraseña</label>
+                    <label class="form-label"> Contraseña</label>
                     <div class="password-container">
                         <input type="password" id="password" class="form-input" required placeholder="Ingrese su contraseña" autocomplete="current-password">
-                        <button type="button" id="togglePassword" class="toggle-password">👁️</button>
+                        <button type="button" id="togglePassword" class="toggle-password"></button>
                     </div>
                 </div>
 
                 <button type="submit" id="loginBtn" class="login-button">
-                    Iniciar Sesión
+                     Iniciar Sesión
                 </button>
             </form>
 
@@ -400,11 +375,11 @@
 
             <div class="register-section">
                 <p class="register-text">¿No tienes una cuenta?</p>
-                <a href="registro.html" class="register-link">Regístrarse aquí</a>
+                <a href="Registro.html" class="register-link">Regístrarse aquí</a>
             </div>
 
             <div class="test-users">
-                <h4>👥 Usuarios de Prueba:</h4>
+                <h4> Usuarios de Prueba:</h4>
                 <div class="test-user-item">
                     <span><strong style="color: #059669;">Cliente:</strong> cliente@test.cr / cliente123</span>
                     <button onclick="fillLogin('cliente@test.cr', 'cliente123')" class="use-button">Usar</button>
@@ -414,36 +389,17 @@
                     <button onclick="fillLogin('tecnico@revtec.cr', 'tecnico123')" class="use-button tecnico">Usar</button>
                 </div>
             </div>
-
-            <div id="connectionStatus" class="connection-status"></div>
-
-            <!-- Sección de Debug -->
-            <div id="debugSection" class="debug-section">
-                <div class="debug-title"> Información de Debug:</div>
-                <div id="debugContent" class="debug-content"></div>
-            </div>
         </div>
     </main>
 
     <script>
         const API_BASE = window.location.protocol + '//' + window.location.host + '/api';
-        console.log('🔗 API Base URL:', API_BASE);
-
-        // Función para mostrar debug
-        function mostrarDebug(mensaje) {
-            const debugSection = document.getElementById('debugSection');
-            const debugContent = document.getElementById('debugContent');
-            debugContent.textContent = mensaje;
-            debugSection.style.display = 'block';
-            console.log('🔧 DEBUG:', mensaje);
-        }
 
         // Función para completar login automáticamente
         function fillLogin(email, password) {
             document.getElementById('email').value = email;
             document.getElementById('password').value = password;
             document.getElementById('email').focus();
-            mostrarDebug(`Datos prellenados: ${email}`);
         }
 
         // Toggle mostrar/ocultar contraseña
@@ -451,55 +407,10 @@
             const passwordField = document.getElementById('password');
             const type = passwordField.type === 'password' ? 'text' : 'password';
             passwordField.type = type;
-            this.textContent = type === 'password' ? '👁️' : '🙈';
+            this.textContent = type === 'password' ? '' : '';
         });
 
-        // Verificar conexión al cargar la página
-        async function verificarConexion() {
-            const statusDiv = document.getElementById('connectionStatus');
-            statusDiv.style.display = 'block';
-            statusDiv.innerHTML = '🔄 Verificando conexión...';
-            statusDiv.style.background = '#f3f4f6';
-            statusDiv.style.color = '#6b7280';
-
-            try {
-                const response = await fetch(`${API_BASE}/Usuario/test-connection`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.connected) {
-                        statusDiv.innerHTML = `✅ Conectado (${data.usuariosCount} usuarios registrados)`;
-                        statusDiv.style.background = '#dcfce7';
-                        statusDiv.style.color = '#166534';
-                        mostrarDebug(`API conectada: ${data.usuariosCount} usuarios`);
-
-                        setTimeout(() => {
-                            statusDiv.style.display = 'none';
-                        }, 3000);
-                    } else {
-                        statusDiv.innerHTML = '❌ Sin conexión a base de datos';
-                        statusDiv.style.background = '#fef2f2';
-                        statusDiv.style.color = '#dc2626';
-                        mostrarDebug('API sin conexión a BD');
-                    }
-                } else {
-                    throw new Error(`HTTP ${response.status}`);
-                }
-            } catch (error) {
-                console.error('Error de conexión:', error);
-                statusDiv.innerHTML = '⚠️ Error de conexión al servidor';
-                statusDiv.style.background = '#fef2f2';
-                statusDiv.style.color = '#dc2626';
-                mostrarDebug(`Error de conexión: ${error.message}`);
-            }
-        }
-
-        // Función de login mejorada y corregida
+        // Función de login principal
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -508,14 +419,12 @@
             const mensaje = document.getElementById('mensaje');
             const submitBtn = document.getElementById('loginBtn');
 
-            // Limpiar debug y localStorage anterior
+            // Limpiar localStorage anterior
             localStorage.removeItem('usuarioActual');
-            mostrarDebug('Iniciando proceso de login...');
 
             // Validaciones básicas
             if (!email || !password) {
                 mensaje.innerHTML = '<div class="message error">❌ Por favor complete todos los campos</div>';
-                mostrarDebug('Faltan campos requeridos');
                 return;
             }
 
@@ -524,13 +433,9 @@
             submitBtn.disabled = true;
 
             try {
-                mostrarDebug(`Intentando login para: ${email}`);
-
-                // Intentar método principal primero
                 let usuario = null;
-                let metodoUsado = '';
 
-                // Método 1: Endpoint de login específico
+                // Método 1: Intentar endpoint de login específico
                 try {
                     const loginResponse = await fetch(`${API_BASE}/Usuario/login`, {
                         method: 'POST',
@@ -543,24 +448,16 @@
                         })
                     });
 
-                    mostrarDebug(`Response status: ${loginResponse.status}`);
-
                     if (loginResponse.ok) {
                         usuario = await loginResponse.json();
-                        metodoUsado = 'Endpoint específico';
-                        mostrarDebug('Login exitoso con endpoint específico');
-                        mostrarDebug(`Usuario recibido: ${JSON.stringify(usuario)}`);
+                        console.log(' Login exitoso con endpoint específico');
                     } else if (loginResponse.status === 401) {
-                        const errorText = await loginResponse.text();
-                        mostrarDebug(`Error 401: ${errorText}`);
                         throw new Error('Credenciales incorrectas');
                     } else {
-                        const errorText = await loginResponse.text();
-                        mostrarDebug(`Error ${loginResponse.status}: ${errorText}`);
                         throw new Error('Error en el servidor');
                     }
                 } catch (endpointError) {
-                    mostrarDebug(`Endpoint específico falló: ${endpointError.message}`);
+                    console.log(' Endpoint específico falló, probando método alternativo...');
 
                     // Método 2: Fallback - obtener todos los usuarios
                     try {
@@ -570,30 +467,24 @@
                         }
 
                         const usuarios = await usuariosResponse.json();
-                        mostrarDebug(`Fallback: ${usuarios.length} usuarios obtenidos`);
-
                         usuario = usuarios.find(u =>
                             u.email && u.email.toLowerCase() === email.toLowerCase() &&
                             u.password === password &&
                             u.estado === 'activo'
                         );
 
-                        if (usuario) {
-                            metodoUsado = 'Método fallback';
-                            mostrarDebug('Login exitoso con método fallback');
-                        } else {
-                            mostrarDebug('Usuario no encontrado en fallback');
+                        if (!usuario) {
                             throw new Error('Credenciales incorrectas');
                         }
+
+                        console.log(' Login exitoso con método alternativo');
                     } catch (fallbackError) {
-                        mostrarDebug(`Fallback falló: ${fallbackError.message}`);
                         throw new Error('No se pudo conectar con el servidor');
                     }
                 }
 
                 if (usuario) {
-                    // Crear objeto de usuario con TODAS las propiedades necesarias
-                    // Manejar tanto camelCase como PascalCase
+                    // Crear objeto de usuario normalizado
                     const usuarioData = {
                         id: usuario.idUsuario || usuario.IdUsuario,
                         nombre: usuario.nombre || usuario.Nombre || '',
@@ -604,8 +495,7 @@
                         telefono: usuario.telefono || usuario.Telefono || '',
                         direccion: usuario.direccion || usuario.Direccion || '',
                         estado: usuario.estado || usuario.Estado || 'activo',
-                        loginTime: new Date().toISOString(),
-                        metodo: metodoUsado
+                        loginTime: new Date().toISOString()
                     };
 
                     // Verificar que todos los campos críticos estén presentes
@@ -616,9 +506,7 @@
                     if (!usuarioData.tipoUsuario) camposFaltantes.push('tipoUsuario');
 
                     if (camposFaltantes.length > 0) {
-                        mostrarDebug(`Campos faltantes: ${camposFaltantes.join(', ')}`);
-                        mostrarDebug(`Datos recibidos: ${JSON.stringify(usuario)}`);
-                        mostrarDebug(`Datos procesados: ${JSON.stringify(usuarioData)}`);
+                        console.error('❌ Campos faltantes:', camposFaltantes);
                         mensaje.innerHTML = '<div class="message error">❌ Datos de usuario incompletos</div>';
                         return;
                     }
@@ -629,32 +517,28 @@
                     // Verificar que se guardó correctamente
                     const verificacion = localStorage.getItem('usuarioActual');
                     if (!verificacion) {
-                        mostrarDebug('Error: No se pudo guardar en localStorage');
-                        mensaje.innerHTML = '<div class="message error">❌ Error al guardar sesión</div>';
+                        mensaje.innerHTML = '<div class="message error"> Error al guardar sesión</div>';
                         return;
                     }
 
-                    mostrarDebug(`Usuario guardado: ${usuarioData.nombre} ${usuarioData.apellidos} (${usuarioData.tipoUsuario})`);
-                    mostrarDebug(`LocalStorage verificado: ${verificacion.length} caracteres`);
+                    console.log(` Usuario guardado: ${usuarioData.nombre} ${usuarioData.apellidos} (${usuarioData.tipoUsuario})`);
 
-                    mensaje.innerHTML = `<div class="message success">✅ ¡Bienvenido ${usuarioData.nombre}! Redirigiendo...</div>`;
+                    mensaje.innerHTML = `<div class="message success"> ¡Bienvenid@ ${usuarioData.nombre}! </div>`;
 
                     setTimeout(() => {
                         window.location.href = 'PanelPrincipal.html';
                     }, 1500);
 
                 } else {
-                    mostrarDebug('Usuario no encontrado o credenciales incorrectas');
-                    mensaje.innerHTML = '<div class="message error">❌ Credenciales incorrectas</div>';
+                    mensaje.innerHTML = '<div class="message error"> Credenciales incorrectas</div>';
                 }
 
             } catch (error) {
                 console.error('💥 Error en login:', error);
-                mostrarDebug(`Error final: ${error.message}`);
-                mensaje.innerHTML = `<div class="message error">⚠️ ${error.message}</div>`;
+                mensaje.innerHTML = `<div class="message error"> ${error.message}</div>`;
             } finally {
                 // Restaurar botón
-                submitBtn.innerHTML = '✨ Iniciar Sesión';
+                submitBtn.innerHTML = ' Iniciar Sesión';
                 submitBtn.disabled = false;
             }
         });
@@ -663,7 +547,6 @@
         ['email', 'password'].forEach(id => {
             document.getElementById(id).addEventListener('input', () => {
                 document.getElementById('mensaje').innerHTML = '';
-                document.getElementById('debugSection').style.display = 'none';
             });
         });
 
@@ -673,8 +556,6 @@
             if (usuarioActual) {
                 try {
                     const usuario = JSON.parse(usuarioActual);
-                    mostrarDebug(`Sesión existente: ${usuario.nombre} ${usuario.apellidos}`);
-
                     const loginTime = new Date(usuario.loginTime);
                     const ahora = new Date();
                     const horasTranscurridas = (ahora - loginTime) / (1000 * 60 * 60);
@@ -685,39 +566,16 @@
                         return;
                     } else {
                         localStorage.removeItem('usuarioActual');
-                        mostrarDebug('Sesión expirada, eliminada');
                     }
                 } catch (error) {
                     localStorage.removeItem('usuarioActual');
-                    mostrarDebug('Datos de sesión corruptos, eliminados');
                 }
-            } else {
-                mostrarDebug('No hay sesión previa');
-            }
-        }
-
-        // Función para probar endpoints
-        async function probarEndpoints() {
-            try {
-                // Probar endpoint debug
-                const debugResponse = await fetch(`${API_BASE}/Usuario/debug`);
-                if (debugResponse.ok) {
-                    const debugData = await debugResponse.json();
-                    mostrarDebug(`Debug endpoint: ${debugData.totalUsuarios} usuarios encontrados`);
-                    console.log('📊 Debug data:', debugData);
-                } else {
-                    mostrarDebug(`Debug endpoint error: ${debugResponse.status}`);
-                }
-            } catch (error) {
-                mostrarDebug(`Error probando endpoints: ${error.message}`);
             }
         }
 
         // Inicializar página
         window.addEventListener('load', () => {
             verificarSesionExistente();
-            verificarConexion();
-            probarEndpoints();
         });
     </script>
 </body>

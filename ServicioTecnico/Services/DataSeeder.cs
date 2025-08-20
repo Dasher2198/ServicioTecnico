@@ -12,116 +12,17 @@ namespace ServicioTecnico.Services
             {
                 await context.Database.EnsureCreatedAsync();
 
-                // Seed Estaciones
-                if (!await context.Estaciones.AnyAsync())
-                {
-                    var estaciones = new List<Estacion>
-                    {
-                        new Estacion
-                        {
-                            NombreEstacion = "REVTEC San José Centro",
-                            Direccion = "Avenida Segunda, Calle 14, San José",
-                            Telefono = "2221-5555",
-                            Email = "sanjose@revtec.cr",
-                            Provincia = "San José",
-                            Canton = "San José",
-                            Distrito = "Carmen",
-                            HorarioAtencion = "Lunes a Viernes 7:00 AM - 5:00 PM",
-                            Estado = "activa"
-                        },
-                        new Estacion
-                        {
-                            NombreEstacion = "REVTEC Cartago",
-                            Direccion = "Frente al Hospital Max Peralta, Cartago",
-                            Telefono = "2550-8888",
-                            Email = "cartago@revtec.cr",
-                            Provincia = "Cartago",
-                            Canton = "Cartago",
-                            Distrito = "Oriental",
-                            HorarioAtencion = "Lunes a Viernes 7:00 AM - 4:00 PM",
-                            Estado = "activa"
-                        },
-                        new Estacion
-                        {
-                            NombreEstacion = "REVTEC Alajuela",
-                            Direccion = "200m Sur del Aeropuerto Juan Santamaría",
-                            Telefono = "2430-7777",
-                            Email = "alajuela@revtec.cr",
-                            Provincia = "Alajuela",
-                            Canton = "Alajuela",
-                            Distrito = "San José",
-                            HorarioAtencion = "Lunes a Sábado 7:00 AM - 5:00 PM",
-                            Estado = "activa"
-                        },
-                        new Estacion
-                        {
-                            NombreEstacion = "REVTEC Heredia",
-                            Direccion = "Costado Norte del Mercado Central, Heredia",
-                            Telefono = "2260-9999",
-                            Email = "heredia@revtec.cr",
-                            Provincia = "Heredia",
-                            Canton = "Heredia",
-                            Distrito = "Heredia",
-                            HorarioAtencion = "Lunes a Viernes 7:30 AM - 4:30 PM",
-                            Estado = "activa"
-                        },
-                        new Estacion
-                        {
-                            NombreEstacion = "REVTEC Puntarenas",
-                            Direccion = "Avenida 3, Calle 1-3, Puntarenas Centro",
-                            Telefono = "2661-3333",
-                            Email = "puntarenas@revtec.cr",
-                            Provincia = "Puntarenas",
-                            Canton = "Puntarenas",
-                            Distrito = "Puntarenas",
-                            HorarioAtencion = "Lunes a Viernes 7:00 AM - 4:00 PM",
-                            Estado = "activa"
-                        },
-                        new Estacion
-                        {
-                            NombreEstacion = "REVTEC Limón",
-                            Direccion = "Av. 2 entre calles 3 y 4, Puerto Limón",
-                            Telefono = "2758-4444",
-                            Email = "limon@revtec.cr",
-                            Provincia = "Limón",
-                            Canton = "Limón",
-                            Distrito = "Limón",
-                            HorarioAtencion = "Lunes a Viernes 7:00 AM - 4:00 PM",
-                            Estado = "activa"
-                        },
-                        new Estacion
-                        {
-                            NombreEstacion = "REVTEC Guanacaste",
-                            Direccion = "100m Norte del Hospital de Liberia",
-                            Telefono = "2666-2222",
-                            Email = "guanacaste@revtec.cr",
-                            Provincia = "Guanacaste",
-                            Canton = "Liberia",
-                            Distrito = "Liberia",
-                            HorarioAtencion = "Lunes a Viernes 7:00 AM - 4:30 PM",
-                            Estado = "activa"
-                        }
-                    };
-
-                    await context.Estaciones.AddRangeAsync(estaciones);
-                    await context.SaveChangesAsync();
-                    Console.WriteLine("✅ Estaciones creadas exitosamente");
-                }
-
-                // Seed Usuarios por defecto
+                Console.WriteLine(" Iniciando sembrado de datos...");
                 await SeedUsuarios(context);
-
-                // Seed Vehículos de prueba (solo si hay usuarios)
+                await SeedEstaciones(context);
                 await SeedVehiculos(context);
-
-                // Seed Citas de prueba
                 await SeedCitas(context);
 
-                Console.WriteLine("✅ Datos iniciales sembrados exitosamente");
+                Console.WriteLine(" Datos iniciales sembrados exitosamente");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error al sembrar datos: {ex.Message}");
+                Console.WriteLine($" Error al sembrar datos: {ex.Message}");
                 if (ex.InnerException != null)
                 {
                     Console.WriteLine($"Detalle: {ex.InnerException.Message}");
@@ -132,9 +33,16 @@ namespace ServicioTecnico.Services
 
         private static async Task SeedUsuarios(AppDbContext context)
         {
-            // Seed Usuario Técnico por defecto
-            if (!await context.Usuarios.AnyAsync(u => u.TipoUsuario == "tecnico"))
+            var usuariosExistentes = await context.Usuarios.CountAsync();
+            Console.WriteLine($" Usuarios existentes: {usuariosExistentes}");
+
+            // FORZAR CREACIÓN DE TÉCNICOS
+            var tecnicosExistentes = await context.Usuarios.CountAsync(u => u.TipoUsuario == "tecnico" && u.Estado == "activo");
+
+            if (tecnicosExistentes == 0)
             {
+                Console.WriteLine(" Creando técnicos de prueba");
+
                 var tecnicos = new List<Usuario>
                 {
                     new Usuario
@@ -150,28 +58,46 @@ namespace ServicioTecnico.Services
                         Estado = "activo",
                         FechaRegistro = DateTime.Now
                     },
-                    new Usuario
-                    {
-                        Nombre = "Ana",
-                        Apellidos = "López Vargas",
-                        Cedula = "987654321",
-                        Email = "ana.tecnico@revtec.cr",
-                        Telefono = "8777-6666",
-                        Direccion = "Cartago, Costa Rica",
-                        TipoUsuario = "tecnico",
-                        Password = "tecnico123",
-                        Estado = "activo",
-                        FechaRegistro = DateTime.Now
-                    }
+                    
                 };
 
-                await context.Usuarios.AddRangeAsync(tecnicos);
-                await context.SaveChangesAsync();
-                Console.WriteLine("✅ Usuarios técnicos creados");
+                foreach (var tecnico in tecnicos)
+                {
+                    try
+                    {
+                        var existe = await context.Usuarios.AnyAsync(u => u.Email == tecnico.Email);
+                        if (!existe)
+                        {
+                            context.Usuarios.Add(tecnico);
+                            await context.SaveChangesAsync();
+                            Console.WriteLine($" Técnico creado: {tecnico.Email}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($" Ya existe técnico: {tecnico.Email}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($" Error al crear técnico {tecnico.Email}: {ex.Message}");
+                    }
+                }
+
+                var tecnicosCreados = await context.Usuarios
+                    .Where(u => u.TipoUsuario == "tecnico" && u.Estado == "activo")
+                    .ToListAsync();
+
+                Console.WriteLine(" Técnicos verificados:");
+                foreach (var tecnico in tecnicosCreados)
+                {
+                    Console.WriteLine($"   - {tecnico.Email} | {tecnico.Nombre} | {tecnico.Password}");
+                }
             }
 
-            // Seed Usuarios Cliente de prueba - DATOS CONSISTENTES
-            if (!await context.Usuarios.AnyAsync(u => u.TipoUsuario == "cliente"))
+            // CREAR CLIENTES
+            var clientesExistentes = await context.Usuarios.CountAsync(u => u.TipoUsuario == "cliente" && u.Estado == "activo");
+
+            if (clientesExistentes == 0)
             {
                 var clientes = new List<Usuario>
                 {
@@ -179,7 +105,7 @@ namespace ServicioTecnico.Services
                     {
                         Nombre = "María",
                         Apellidos = "González López",
-                        Cedula = "987654321", // CEDULA CONSISTENTE CON TUS DATOS
+                        Cedula = "555666777",
                         Email = "cliente@test.cr",
                         Telefono = "8888-1234",
                         Direccion = "Cartago, Costa Rica",
@@ -187,38 +113,76 @@ namespace ServicioTecnico.Services
                         Password = "cliente123",
                         Estado = "activo",
                         FechaRegistro = DateTime.Now
-                    },
-                    new Usuario
-                    {
-                        Nombre = "Juan",
-                        Apellidos = "Pérez Mora",
-                        Cedula = "444555666",
-                        Email = "juan.perez@email.cr",
-                        Telefono = "8999-5555",
-                        Direccion = "Alajuela, Costa Rica",
-                        TipoUsuario = "cliente",
-                        Password = "cliente123",
-                        Estado = "activo",
-                        FechaRegistro = DateTime.Now
-                    },
-                    new Usuario
-                    {
-                        Nombre = "Laura",
-                        Apellidos = "Jiménez Castro",
-                        Cedula = "777888999",
-                        Email = "laura.jimenez@email.cr",
-                        Telefono = "8444-3333",
-                        Direccion = "Heredia, Costa Rica",
-                        TipoUsuario = "cliente",
-                        Password = "cliente123",
-                        Estado = "activo",
-                        FechaRegistro = DateTime.Now
                     }
                 };
 
-                await context.Usuarios.AddRangeAsync(clientes);
+                foreach (var cliente in clientes)
+                {
+                    try
+                    {
+                        var existe = await context.Usuarios.AnyAsync(u => u.Email == cliente.Email);
+                        if (!existe)
+                        {
+                            context.Usuarios.Add(cliente);
+                            await context.SaveChangesAsync();
+                            Console.WriteLine($" Cliente creado: {cliente.Email}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($" Error al crear cliente: {ex.Message}");
+                    }
+                }
+            }
+
+            var resumen = await context.Usuarios
+                .Where(u => u.Estado == "activo")
+                .GroupBy(u => u.TipoUsuario)
+                .Select(g => new { TipoUsuario = g.Key, Cantidad = g.Count() })
+                .ToListAsync();
+
+            Console.WriteLine(" Resumen final:");
+            foreach (var grupo in resumen)
+            {
+                Console.WriteLine($"   - {grupo.TipoUsuario}: {grupo.Cantidad}");
+            }
+        }
+
+        private static async Task SeedEstaciones(AppDbContext context)
+        {
+            if (!await context.Estaciones.AnyAsync())
+            {
+                var estaciones = new List<Estacion>
+                {
+                    new Estacion
+                    {
+                        NombreEstacion = "REVTEC San José Centro",
+                        Direccion = "Avenida Segunda, Calle 14, San José",
+                        Telefono = "2221-5555",
+                        Email = "sanjose@revtec.cr",
+                        Provincia = "San José",
+                        Canton = "San José",
+                        Distrito = "Carmen",
+                        HorarioAtencion = "Lunes a Viernes 7:00 AM - 5:00 PM",
+                        Estado = "activa"
+                    },
+                    new Estacion
+                    {
+                        NombreEstacion = "REVTEC Cartago",
+                        Direccion = "Frente al Hospital Max Peralta, Cartago",
+                        Telefono = "2550-8888",
+                        Email = "cartago@revtec.cr",
+                        Provincia = "Cartago",
+                        Canton = "Cartago",
+                        Distrito = "Oriental",
+                        HorarioAtencion = "Lunes a Viernes 7:00 AM - 4:00 PM",
+                        Estado = "activa"
+                    }
+                };
+
+                await context.Estaciones.AddRangeAsync(estaciones);
                 await context.SaveChangesAsync();
-                Console.WriteLine("✅ Usuarios clientes creados");
+                Console.WriteLine($" {estaciones.Count} estaciones creadas");
             }
         }
 
@@ -244,38 +208,12 @@ namespace ServicioTecnico.Services
                             TipoCombustible = "Gasolina",
                             Cilindrada = "1.8L",
                             FechaRegistro = DateTime.Now.AddDays(-30)
-                        },
-                        new Vehiculo
-                        {
-                            NumeroPlaca = "XYZ789",
-                            IdPropietario = clientes.Count > 1 ? clientes[1].IdUsuario : clientes[0].IdUsuario,
-                            Marca = "Nissan",
-                            Modelo = "Sentra",
-                            Año = 2019,
-                            NumeroChasis = "3N1AB7AP5KY123456",
-                            Color = "Azul",
-                            TipoCombustible = "Gasolina",
-                            Cilindrada = "1.6L",
-                            FechaRegistro = DateTime.Now.AddDays(-25)
-                        },
-                        new Vehiculo
-                        {
-                            NumeroPlaca = "DEF456",
-                            IdPropietario = clientes.Count > 2 ? clientes[2].IdUsuario : clientes[0].IdUsuario,
-                            Marca = "Honda",
-                            Modelo = "Civic",
-                            Año = 2021,
-                            NumeroChasis = "2HGFC2F59MH123456",
-                            Color = "Negro",
-                            TipoCombustible = "Gasolina",
-                            Cilindrada = "2.0L",
-                            FechaRegistro = DateTime.Now.AddDays(-20)
                         }
                     };
 
                     await context.Vehiculos.AddRangeAsync(vehiculos);
                     await context.SaveChangesAsync();
-                    Console.WriteLine("✅ Vehículos de prueba creados");
+                    Console.WriteLine($" {vehiculos.Count} vehículos creados");
                 }
             }
         }
@@ -295,115 +233,18 @@ namespace ServicioTecnico.Services
                         {
                             IdVehiculo = vehiculos[0].IdVehiculo,
                             IdEstacion = estaciones[0].IdEstacion,
-                            FechaCita = DateTime.Today.AddDays(2),
+                            FechaCita = DateTime.Today,
                             HoraCita = new TimeSpan(9, 0, 0),
                             EstadoCita = "programada",
-                            Observaciones = "Primera inspección del vehículo",
+                            Observaciones = "Cita de prueba para hoy",
                             FechaCreacion = DateTime.Now.AddDays(-1)
-                        },
-                        new Cita
-                        {
-                            IdVehiculo = vehiculos.Count > 1 ? vehiculos[1].IdVehiculo : vehiculos[0].IdVehiculo,
-                            IdEstacion = estaciones.Count > 1 ? estaciones[1].IdEstacion : estaciones[0].IdEstacion,
-                            FechaCita = DateTime.Today.AddDays(3),
-                            HoraCita = new TimeSpan(14, 30, 0),
-                            EstadoCita = "programada",
-                            Observaciones = "Revisión periódica",
-                            FechaCreacion = DateTime.Now.AddHours(-12)
-                        },
-                        new Cita
-                        {
-                            IdVehiculo = vehiculos.Count > 2 ? vehiculos[2].IdVehiculo : vehiculos[0].IdVehiculo,
-                            IdEstacion = estaciones[0].IdEstacion,
-                            FechaCita = DateTime.Today.AddDays(-5),
-                            HoraCita = new TimeSpan(10, 0, 0),
-                            EstadoCita = "completada",
-                            Observaciones = "Inspección completada satisfactoriamente",
-                            FechaCreacion = DateTime.Now.AddDays(-6)
                         }
                     };
 
                     await context.Citas.AddRangeAsync(citas);
                     await context.SaveChangesAsync();
-                    Console.WriteLine("✅ Citas de prueba creadas");
-
-                    // Crear una inspección de ejemplo para la cita completada
-                    await SeedInspeccionEjemplo(context, citas[2].IdCita);
+                    Console.WriteLine($" {citas.Count} citas creadas");
                 }
-            }
-        }
-
-        private static async Task SeedInspeccionEjemplo(AppDbContext context, int idCita)
-        {
-            var tecnico = await context.Usuarios.FirstOrDefaultAsync(u => u.TipoUsuario == "tecnico");
-
-            if (tecnico != null)
-            {
-                var inspeccion = new Inspeccion
-                {
-                    IdCita = idCita,
-                    IdTecnico = tecnico.IdUsuario,
-                    FechaInspeccion = DateTime.Now.AddDays(-5),
-                    Resultado = "aprobado",
-                    ObservacionesTecnicas = "Vehículo en excelentes condiciones. Todos los sistemas funcionando correctamente.",
-                    FechaVencimiento = DateTime.Now.AddYears(1).AddDays(-5),
-                    NumeroCertificado = $"CERT-{DateTime.Now:yyyyMMdd}-001"
-                };
-
-                context.Inspecciones.Add(inspeccion);
-                await context.SaveChangesAsync();
-
-                // Crear detalles de inspección
-                var detalles = new List<DetalleInspeccion>
-                {
-                    new DetalleInspeccion
-                    {
-                        IdInspeccion = inspeccion.IdInspeccion,
-                        CategoriaRevision = "Sistema de frenos",
-                        ResultadoItem = "OK",
-                        ObservacionesItem = "Frenos en perfectas condiciones"
-                    },
-                    new DetalleInspeccion
-                    {
-                        IdInspeccion = inspeccion.IdInspeccion,
-                        CategoriaRevision = "Sistema de dirección",
-                        ResultadoItem = "OK",
-                        ObservacionesItem = "Dirección estable y precisa"
-                    },
-                    new DetalleInspeccion
-                    {
-                        IdInspeccion = inspeccion.IdInspeccion,
-                        CategoriaRevision = "Neumáticos y llantas",
-                        ResultadoItem = "OK",
-                        ObservacionesItem = "Neumáticos con buen estado y presión adecuada"
-                    },
-                    new DetalleInspeccion
-                    {
-                        IdInspeccion = inspeccion.IdInspeccion,
-                        CategoriaRevision = "Sistema de iluminación",
-                        ResultadoItem = "OK",
-                        ObservacionesItem = "Todas las luces funcionando correctamente"
-                    }
-                };
-
-                context.DetalleInspecciones.AddRange(detalles);
-                await context.SaveChangesAsync();
-
-                // Crear certificado
-                var certificado = new Certificado
-                {
-                    IdInspeccion = inspeccion.IdInspeccion,
-                    NumeroCertificado = inspeccion.NumeroCertificado,
-                    FechaEmision = inspeccion.FechaInspeccion,
-                    FechaVencimiento = inspeccion.FechaVencimiento.Value,
-                    RutaArchivoDigital = $"/certificados/{inspeccion.NumeroCertificado}.pdf",
-                    EstadoCertificado = "valido"
-                };
-
-                context.Certificados.Add(certificado);
-                await context.SaveChangesAsync();
-
-                Console.WriteLine("✅ Inspección de ejemplo creada con certificado");
             }
         }
     }

@@ -46,12 +46,6 @@
                 object-fit: cover;
             }
 
-        .header-subtitle {
-            font-size: 0.9rem;
-            color: #64748b;
-            font-weight: 500;
-        }
-
         .nav-menu {
             list-style: none;
             display: flex;
@@ -88,10 +82,17 @@
             margin: 2rem;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        }
+
+        .debug-info {
+            background: rgba(16, 185, 129, 0.1);
+            padding: 1rem;
+            margin: 1rem 2rem;
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+            font-family: monospace;
+            font-size: 0.9rem;
+            display: none;
         }
 
         .panel-section {
@@ -103,6 +104,10 @@
             border: 1px solid rgba(255, 255, 255, 0.3);
             display: none;
         }
+
+            .panel-section.active {
+                display: block;
+            }
 
         .panel-title {
             margin-bottom: 1.5rem;
@@ -134,32 +139,38 @@
         }
 
             .panel-link:hover {
-                background: #3b82f6;
-                color: white;
-                border-color: #3b82f6;
                 transform: translateY(-2px);
-                box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.2);
             }
 
             .panel-link.cliente:hover {
                 background: #059669;
+                color: white;
                 border-color: #059669;
-                box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
             }
 
             .panel-link.tecnico:hover {
                 background: #7c3aed;
+                color: white;
                 border-color: #7c3aed;
-                box-shadow: 0 8px 25px rgba(124, 58, 237, 0.3);
             }
 
         .summary-section {
             margin-top: 2rem;
             padding: 1.5rem;
-            background: rgba(59, 130, 246, 0.1);
             border-radius: 12px;
             border-left: 4px solid #3b82f6;
         }
+
+            .summary-section.cliente {
+                background: rgba(16, 185, 129, 0.1);
+                border-left-color: #10b981;
+            }
+
+            .summary-section.tecnico {
+                background: rgba(139, 92, 246, 0.1);
+                border-left-color: #8b5cf6;
+            }
 
         .summary-title {
             margin: 0 0 1rem 0;
@@ -250,36 +261,6 @@
             font-style: italic;
         }
 
-        .loading-text {
-            text-align: center;
-            color: #64748b;
-            font-style: italic;
-            padding: 2rem;
-        }
-
-        .error-text {
-            color: #ef4444;
-            text-align: center;
-            padding: 1rem;
-        }
-
-        .no-data {
-            text-align: center;
-            color: #64748b;
-            font-style: italic;
-            padding: 2rem;
-        }
-
-        .debug-info {
-            background: #f3f4f6;
-            padding: 1rem;
-            margin: 1rem 2rem;
-            border-radius: 8px;
-            font-family: monospace;
-            font-size: 0.8rem;
-            border-left: 4px solid #10b981;
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
             .header {
@@ -305,29 +286,6 @@
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
-
-            .welcome-section {
-                margin: 1rem;
-                padding: 1.5rem;
-                font-size: 1.1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .nav-menu {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .cita-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-            }
         }
     </style>
 </head>
@@ -336,29 +294,32 @@
         <div class="header-logo">
             <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC">
             <h1>REVTEC</h1>
-        
+        </div>
     </header>
 
     <ul class="nav-menu">
-        <li><a href="#" onclick="cerrarSesion()">Cerrar Sesión</a></li>
+        <li><a href="#" onclick="cerrarSesion()"> Cerrar Sesión</a></li>
     </ul>
 
     <div id="bienvenida" class="welcome-section">
-        <span>Cargando información del usuario...</span>
+        <span> Cargando información...</span>
     </div>
 
-    <!-- Información de debug -->
-    <div id="debugInfo" class="debug-info" style="display: none;">
-        <strong>Información de Debug:</strong><br>
-        <span id="debugContent"></span>
+    <!-- Información de Debug -->
+    <div id="debugInfo" class="debug-info">
+        <strong> Debug:</strong> <span id="debugText">Verificando usuario...</span>
     </div>
 
     <!-- Panel del Cliente -->
     <div class="panel-section" id="panelCliente">
-        <h2 class="panel-title">Panel Principal</h2>
+        <h2 class="panel-title"> Panel del Cliente</h2>
+
         <div class="panel-links">
             <a href="RegistroVehiculo.html" class="panel-link cliente">
                  Registrar Vehículo
+            </a>
+            <a href="MisVehiculos.html" class="panel-link cliente">
+                 Mis Vehículos
             </a>
             <a href="AgendarCita.html" class="panel-link cliente">
                  Agendar Cita
@@ -368,348 +329,205 @@
             </a>
         </div>
 
-        <!-- Resumen rápido para cliente -->
-        
+        <div class="summary-section cliente">
+            <h3 class="summary-title"></h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"></div>
+                    <div class="stat-value" style="color: #3b82f6;">3</div>
+                    <div class="stat-label">Mis Vehículos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"></div>
+                    <div class="stat-value" style="color: #f59e0b;">1</div>
+                    <div class="stat-label">Citas Pendientes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"></div>
+                    <div class="stat-value" style="color: #8b5cf6;">8</div>
+                    <div class="stat-label">Inspecciones</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"></div>
+                    <div class="stat-value" style="color: #10b981;">2</div>
+                    <div class="stat-label">Certificados Válidos</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Panel del Técnico -->
     <div class="panel-section" id="panelTecnico">
         <h2 class="panel-title"> Panel del Técnico</h2>
+
         <div class="panel-links">
             <a href="RegistrarInspeccion.html" class="panel-link tecnico">
                  Registrar Inspección
             </a>
             <a href="HistorialInspecciones.html" class="panel-link tecnico">
-                 Ver Inspecciones
+                 Ver Mis Inspecciones
             </a>
         </div>
 
-        <!-- Resumen rápido para técnico -->
-        <div class="summary-section" style="background: rgba(139, 92, 246, 0.1); border-left: 4px solid #8b5cf6;">
+        <div class="summary-section tecnico">
             <h3 class="summary-title"> Actividad del Día</h3>
-            <div id="estadisticasTecnico" class="stats-grid">
-                <div class="loading-text">Cargando estadísticas...</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"></div>
+                    <div class="stat-value" style="color: #3b82f6;">5</div>
+                    <div class="stat-label">Citas Hoy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"></div>
+                    <div class="stat-value" style="color: #8b5cf6;">2</div>
+                    <div class="stat-label">Inspecciones Hoy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"></div>
+                    <div class="stat-value" style="color: #10b981;">2</div>
+                    <div class="stat-label">Aprobadas Hoy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"></div>
+                    <div class="stat-value" style="color: #f59e0b;">87</div>
+                    <div class="stat-label">Total Inspecciones</div>
+                </div>
             </div>
         </div>
 
-        <!-- Citas de hoy -->
-        <div id="citasHoy" class="citas-section">
+        <div class="citas-section">
             <h3 class="citas-title"> Citas de Hoy</h3>
-            <div id="listaCitasHoy">
-                <div class="loading-text">Cargando citas...</div>
+
+            <div class="cita-card">
+                <div class="cita-header">
+                    <div class="cita-vehicle"> ABC123 - Toyota Corolla</div>
+                    <div class="cita-time"> 09:00</div>
+                </div>
+                <div class="cita-details"> REVTEC San José Centro</div>
+                <div class="cita-observations"> Primera inspección del vehículo</div>
+            </div>
+
+            <div class="cita-card">
+                <div class="cita-header">
+                    <div class="cita-vehicle"> XYZ789 - Honda Civic</div>
+                    <div class="cita-time"> 11:30</div>
+                </div>
+                <div class="cita-details"> REVTEC San José Centro</div>
+            </div>
+
+            <div class="cita-card">
+                <div class="cita-header">
+                    <div class="cita-vehicle"> DEF456 - Nissan Sentra</div>
+                    <div class="cita-time"> 14:00</div>
+                </div>
+                <div class="cita-details"> REVTEC San José Centro</div>
+                <div class="cita-observations"> Revisión de sistema de frenos</div>
+            </div>
+
+            <div class="cita-card">
+                <div class="cita-header">
+                    <div class="cita-vehicle"> GHI789 - Hyundai Elantra</div>
+                    <div class="cita-time"> 15:30</div>
+                </div>
+                <div class="cita-details"> REVTEC San José Centro</div>
+            </div>
+
+            <div class="cita-card">
+                <div class="cita-header">
+                    <div class="cita-vehicle"> JKL012 - Mazda 3</div>
+                    <div class="cita-time"> 16:45</div>
+                </div>
+                <div class="cita-details"> REVTEC San José Centro</div>
+                <div class="cita-observations"> Inspección de seguimiento</div>
             </div>
         </div>
     </div>
 
     <script>
-        const API_BASE = window.location.protocol + '//' + window.location.host + '/api';
-        let usuario = null;
-
-        // Función mejorada para verificar sesión
-        function verificarSesion() {
-            console.log(' Verificando sesión...');
-
-            try {
-                const usuarioActual = localStorage.getItem('usuarioActual');
-                console.log(' LocalStorage data:', usuarioActual);
-
-                if (!usuarioActual) {
-                    console.log(' No hay datos de usuario en localStorage');
-                    mostrarDebug('No hay datos de usuario en localStorage');
-                    window.location.href = 'Login.html';
-                    return null;
-                }
-
-                const usuarioData = JSON.parse(usuarioActual);
-                console.log(' Usuario parseado:', usuarioData);
-
-                // Verificar que el objeto tiene las propiedades necesarias
-                if (!usuarioData.id || !usuarioData.nombre || !usuarioData.apellidos || !usuarioData.tipoUsuario) {
-                    console.log('❌ Datos de usuario incompletos:', usuarioData);
-                    mostrarDebug(`Datos incompletos: ${JSON.stringify(usuarioData)}`);
-
-                    // Limpiar localStorage corrupto
-                    localStorage.removeItem('usuarioActual');
-                    window.location.href = 'Login.html';
-                    return null;
-                }
-
-                // Verificar si la sesión no ha expirado
-                if (usuarioData.loginTime) {
-                    const loginTime = new Date(usuarioData.loginTime);
-                    const ahora = new Date();
-                    const horasTranscurridas = (ahora - loginTime) / (1000 * 60 * 60);
-
-                    if (horasTranscurridas > 24) {
-                        console.log(' Sesión expirada');
-                        localStorage.removeItem('usuarioActual');
-                        window.location.href = 'Login.html';
-                        return null;
-                    }
-                }
-
-                console.log(' Sesión válida para:', usuarioData.nombre, usuarioData.apellidos);
-                mostrarDebug(`Usuario: ${usuarioData.nombre} ${usuarioData.apellidos} (${usuarioData.tipoUsuario})`);
-
-                return usuarioData;
-
-            } catch (error) {
-                console.error(' Error al verificar sesión:', error);
-                mostrarDebug(`Error: ${error.message}`);
-
-                // Limpiar localStorage corrupto
+        function cerrarSesion() {
+            if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
                 localStorage.removeItem('usuarioActual');
                 window.location.href = 'Login.html';
-                return null;
             }
         }
 
         function mostrarDebug(mensaje) {
-            const debugInfo = document.getElementById('debugInfo');
-            const debugContent = document.getElementById('debugContent');
-            debugContent.textContent = mensaje;
-            debugInfo.style.display = 'block';
-
-            // Ocultar después de 5 segundos
-            setTimeout(() => {
-                debugInfo.style.display = 'none';
-            }, 5000);
+            document.getElementById('debugText').textContent = mensaje;
+            document.getElementById('debugInfo').style.display = 'block';
+            console.log(' DEBUG:', mensaje);
         }
 
-        function cerrarSesion() {
-            if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-                console.log(' Cerrando sesión...');
-                localStorage.removeItem('usuarioActual');
-                window.location.href = 'Login.html';
-            }
-        }
+        function inicializar() {
+            console.log(' Inicializando panel principal...');
+            mostrarDebug('Verificando sesión de usuario...');
 
-        // Cargar estadísticas para cliente
-        async function cargarEstadisticasCliente() {
             try {
-                console.log(' Cargando estadísticas del cliente...');
+                // Verificar localStorage
+                const usuarioData = localStorage.getItem('usuarioActual');
 
-                const [vehiculosRes, citasRes, inspeccionesRes, certificadosRes] = await Promise.all([
-                    fetch(`${API_BASE}/Vehiculo/porPropietario/${usuario.id}`),
-                    fetch(`${API_BASE}/Cita`),
-                    fetch(`${API_BASE}/Inspeccion`),
-                    fetch(`${API_BASE}/Certificado`)
-                ]);
-
-                if (!vehiculosRes.ok) {
-                    throw new Error(`Error al cargar vehículos: ${vehiculosRes.status}`);
-                }
-
-                const vehiculos = await vehiculosRes.json();
-                const todasCitas = await citasRes.json();
-                const todasInspecciones = await inspeccionesRes.json();
-                const todosCertificados = await certificadosRes.json();
-
-                // Filtrar citas del usuario
-                const citasUsuario = todasCitas.filter(c =>
-                    vehiculos.some(v => v.idVehiculo === c.idVehiculo)
-                );
-
-                // Filtrar inspecciones del usuario
-                const inspeccionesUsuario = todasInspecciones.filter(i =>
-                    citasUsuario.some(c => c.idCita === i.idCita)
-                );
-
-                // Certificados válidos
-                const certificadosValidos = todosCertificados.filter(cert => {
-                    const esDelUsuario = inspeccionesUsuario.some(i => i.idInspeccion === cert.idInspeccion);
-                    const esValido = new Date(cert.fechaVencimiento) > new Date();
-                    return esDelUsuario && esValido && cert.estadoCertificado === 'valido';
-                });
-
-                // Citas pendientes
-                const citasPendientes = citasUsuario.filter(c => c.estadoCita === 'programada');
-
-                const stats = [
-                    { titulo: 'Vehículos', valor: vehiculos.length, icono: '', color: '#3b82f6' },
-                    { titulo: 'Citas Pendientes', valor: citasPendientes.length, icono: '', color: '#f59e0b' },
-                    { titulo: 'Inspecciones', valor: inspeccionesUsuario.length, icono: '', color: '#8b5cf6' },
-                    { titulo: 'Certificados Válidos', valor: certificadosValidos.length, icono: '', color: '#10b981' }
-                ];
-
-                const contenedor = document.getElementById('estadisticasCliente');
-                contenedor.innerHTML = stats.map(stat => `
-                        <div class="stat-card">
-                            <div class="stat-icon">${stat.icono}</div>
-                            <div class="stat-value" style="color: ${stat.color};">${stat.valor}</div>
-                            <div class="stat-label">${stat.titulo}</div>
-                        </div>
-                    `).join('');
-
-                console.log(' Estadísticas del cliente cargadas');
-
-            } catch (error) {
-                console.error('Error al cargar estadísticas:', error);
-                document.getElementById('estadisticasCliente').innerHTML =
-                    '<div class="error-text">Error al cargar estadísticas</div>';
-            }
-        }
-
-        // Cargar estadísticas para técnico
-        async function cargarEstadisticasTecnico() {
-            try {
-                console.log(' Cargando estadísticas del técnico...');
-
-                const [citasRes, inspeccionesRes] = await Promise.all([
-                    fetch(`${API_BASE}/Cita`),
-                    fetch(`${API_BASE}/Inspeccion`)
-                ]);
-
-                const todasCitas = await citasRes.json();
-                const todasInspecciones = await inspeccionesRes.json();
-
-                const hoy = new Date().toISOString().split('T')[0];
-
-                // Citas de hoy
-                const citasHoy = todasCitas.filter(c =>
-                    c.fechaCita.split('T')[0] === hoy && c.estadoCita === 'programada'
-                );
-
-                // Inspecciones del técnico
-                const inspeccionesTecnico = todasInspecciones.filter(i => i.idTecnico === usuario.id);
-
-                // Inspecciones de hoy
-                const inspeccionesHoy = inspeccionesTecnico.filter(i =>
-                    i.fechaInspeccion.split('T')[0] === hoy
-                );
-
-                // Inspecciones aprobadas hoy
-                const aprobadasHoy = inspeccionesHoy.filter(i => i.resultado === 'aprobado').length;
-
-                const stats = [
-                    { titulo: 'Citas Hoy', valor: citasHoy.length, icono: '', color: '#3b82f6' },
-                    { titulo: 'Inspecciones Hoy', valor: inspeccionesHoy.length, icono: '', color: '#8b5cf6' },
-                    { titulo: 'Aprobadas Hoy', valor: aprobadasHoy, icono: '', color: '#10b981' },
-                    { titulo: 'Total Inspecciones', valor: inspeccionesTecnico.length, icono: '', color: '#f59e0b' }
-                ];
-
-                const contenedor = document.getElementById('estadisticasTecnico');
-                contenedor.innerHTML = stats.map(stat => `
-                        <div class="stat-card">
-                            <div class="stat-icon">${stat.icono}</div>
-                            <div class="stat-value" style="color: ${stat.color};">${stat.valor}</div>
-                            <div class="stat-label">${stat.titulo}</div>
-                        </div>
-                    `).join('');
-
-                // Mostrar citas de hoy
-                await mostrarCitasHoy(citasHoy);
-
-                console.log(' Estadísticas del técnico cargadas');
-
-            } catch (error) {
-                console.error('Error al cargar estadísticas:', error);
-                document.getElementById('estadisticasTecnico').innerHTML =
-                    '<div class="error-text">Error al cargar estadísticas</div>';
-            }
-        }
-
-        // Mostrar citas de hoy para técnico
-        async function mostrarCitasHoy(citasHoy) {
-            try {
-                const listContainer = document.getElementById('listaCitasHoy');
-
-                if (citasHoy.length === 0) {
-                    listContainer.innerHTML = '<div class="no-data">No hay citas programadas para hoy</div>';
+                if (!usuarioData) {
+                    mostrarDebug(' No hay datos de usuario');
+                    setTimeout(() => window.location.href = 'Login.html', 2000);
                     return;
                 }
 
-                const [vehiculosRes, estacionesRes] = await Promise.all([
-                    fetch(`${API_BASE}/Vehiculo`),
-                    fetch(`${API_BASE}/Estacion`)
-                ]);
+                const usuario = JSON.parse(usuarioData);
+                mostrarDebug(` Usuario: ${usuario.nombre} ${usuario.apellidos} (${usuario.tipoUsuario})`);
 
-                const vehiculos = await vehiculosRes.json();
-                const estaciones = await estacionesRes.json();
+                // Mostrar bienvenida
+                const horaActual = new Date().getHours();
+                let saludo = '';
+                if (horaActual < 12) saludo = ' Buenos días';
+                else if (horaActual < 18) saludo = ' Buenas tardes';
+                else saludo = ' Buenas noches';
 
-                const citasHTML = citasHoy.map(cita => {
-                    const vehiculo = vehiculos.find(v => v.idVehiculo === cita.idVehiculo);
-                    const estacion = estaciones.find(e => e.idEstacion === cita.idEstacion);
+                const nombreCompleto = `${usuario.nombre || ''} ${usuario.apellidos || ''}`.trim();
+                document.getElementById('bienvenida').innerHTML = `${saludo}, <strong>${nombreCompleto}</strong>!`;
 
-                    return `
-                            <div class="cita-card">
-                                <div class="cita-header">
-                                    <div class="cita-vehicle">
-                                        🚗 ${vehiculo?.numeroPlaca || 'N/A'} - ${vehiculo?.marca || ''} ${vehiculo?.modelo || ''}
-                                    </div>
-                                    <div class="cita-time">${cita.horaCita}</div>
-                                </div>
-                                <div class="cita-details">
-                                    📍 ${estacion?.nombreEstacion || 'N/A'}
-                                </div>
-                                ${cita.observaciones ? `<div class="cita-observations">💬 ${cita.observaciones}</div>` : ''}
-                            </div>
-                        `;
-                }).join('');
+                // Mostrar panel correcto según tipo de usuario
+                if (usuario.tipoUsuario === 'cliente') {
+                    mostrarDebug(' Mostrando panel de cliente');
+                    document.getElementById('panelCliente').classList.add('active');
 
-                listContainer.innerHTML = citasHTML;
+                    // Ocultar debug después de 3 segundos para clientes
+                    setTimeout(() => {
+                        document.getElementById('debugInfo').style.display = 'none';
+                    }, 3000);
+
+                } else if (usuario.tipoUsuario === 'tecnico') {
+                    mostrarDebug(' Mostrando panel de técnico');
+                    document.getElementById('panelTecnico').classList.add('active');
+
+                    // Mantener debug visible para técnicos por más tiempo
+                    setTimeout(() => {
+                        document.getElementById('debugInfo').style.display = 'none';
+                    }, 5000);
+
+                } else {
+                    mostrarDebug(` Tipo de usuario desconocido: ${usuario.tipoUsuario}`);
+                    // Por defecto mostrar panel de cliente
+                    document.getElementById('panelCliente').classList.add('active');
+                }
+
+                console.log('Panel configurado correctamente');
 
             } catch (error) {
-                console.error('Error al cargar citas:', error);
-                document.getElementById('listaCitasHoy').innerHTML =
-                    '<div class="error-text">Error al cargar citas de hoy</div>';
+                console.error(' Error:', error);
+                mostrarDebug(` Error: ${error.message}`);
+
+                // Limpiar datos corruptos
+                localStorage.removeItem('usuarioActual');
+                setTimeout(() => window.location.href = 'Login.html', 3000);
             }
         }
 
-        // Función principal de inicialización
-        async function inicializar() {
-            console.log(' Inicializando panel principal...');
-
-            // Verificar sesión primero
-            usuario = verificarSesion();
-            if (!usuario) {
-                console.log(' No se pudo verificar la sesión');
-                return;
-            }
-
-            // Mostrar bienvenida personalizada
-            const horaActual = new Date().getHours();
-            let saludo = '';
-            if (horaActual < 12) saludo = ' Buenos días';
-            else if (horaActual < 18) saludo = ' Buenas tardes';
-            else saludo = ' Buenas noches';
-
-            const nombreCompleto = `${usuario.nombre || ''} ${usuario.apellidos || ''}`.trim();
-
-            if (nombreCompleto) {
-                document.getElementById('bienvenida').innerHTML = `${saludo}, <strong>${nombreCompleto}</strong>!`;
-            } else {
-                document.getElementById('bienvenida').innerHTML = `${saludo}, <strong>Usuario</strong>!`;
-                mostrarDebug('Nombre de usuario no disponible');
-            }
-
-            // Mostrar panel según tipo de usuario y cargar datos
-            if (usuario.tipoUsuario === 'cliente') {
-                console.log(' Configurando panel de cliente');
-                document.getElementById('panelCliente').style.display = 'block';
-                await cargarEstadisticasCliente();
-            } else if (usuario.tipoUsuario === 'tecnico') {
-                console.log(' Configurando panel de técnico');
-                document.getElementById('panelTecnico').style.display = 'block';
-                await cargarEstadisticasTecnico();
-            } else {
-                console.log(' Tipo de usuario desconocido:', usuario.tipoUsuario);
-                mostrarDebug(`Tipo de usuario desconocido: ${usuario.tipoUsuario}`);
-            }
-
-            console.log(' Inicialización completada');
-        }
-
-        // Ejecutar al cargar la página
+        // Ejecutar al cargar
         document.addEventListener('DOMContentLoaded', inicializar);
 
-        // Actualizar datos cada 5 minutos
-        setInterval(() => {
-            if (usuario?.tipoUsuario === 'cliente') {
-                cargarEstadisticasCliente();
-            } else if (usuario?.tipoUsuario === 'tecnico') {
-                cargarEstadisticasTecnico();
-            }
-        }, 300000); // 5 minutos
+        // También ejecutar inmediatamente si ya está cargado
+        if (document.readyState !== 'loading') {
+            inicializar();
+        }
     </script>
 </body>
 </html>
