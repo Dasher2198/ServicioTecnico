@@ -59,7 +59,7 @@ namespace ServicioTecnico.Data
                 entity.HasCheckConstraint("CK_Estacion_Estado", "[Estado] IN ('activa', 'inactiva')");
             });
 
-            // Configuración para Vehiculo
+            // Configuración para Vehiculo - CORREGIDO
             modelBuilder.Entity<Vehiculo>(entity =>
             {
                 entity.HasKey(e => e.IdVehiculo);
@@ -68,10 +68,10 @@ namespace ServicioTecnico.Data
                 entity.Property(e => e.NumeroPlaca).IsRequired().HasMaxLength(10);
                 entity.Property(e => e.Marca).IsRequired().HasMaxLength(50);
                 entity.Property(e => e.Modelo).IsRequired().HasMaxLength(50);
-                entity.Property(e => e.NumeroChasis).HasMaxLength(50);
-                entity.Property(e => e.Color).HasMaxLength(30);
-                entity.Property(e => e.TipoCombustible).HasMaxLength(20);
-                entity.Property(e => e.Cilindrada).HasMaxLength(10);
+                entity.Property(e => e.NumeroChasis).HasMaxLength(50); // OPCIONAL
+                entity.Property(e => e.Color).HasMaxLength(30); // OPCIONAL
+                entity.Property(e => e.TipoCombustible).HasMaxLength(20); // OPCIONAL
+                entity.Property(e => e.Cilindrada).HasMaxLength(10); // OPCIONAL
                 entity.Property(e => e.FechaRegistro).HasDefaultValueSql("GETDATE()");
 
                 entity.HasOne(d => d.Propietario)

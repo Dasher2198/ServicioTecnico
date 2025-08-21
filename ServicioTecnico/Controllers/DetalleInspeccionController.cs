@@ -15,6 +15,7 @@ namespace ServicioTecnico.Controllers
         {
             _context = context;
         }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DetalleInspeccion>>> GetDetalles()
         {
@@ -63,6 +64,14 @@ namespace ServicioTecnico.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [HttpGet("porInspeccion/{idInspeccion}")]
+        public async Task<ActionResult<IEnumerable<DetalleInspeccion>>> GetDetallesPorInspeccion(int idInspeccion)
+        {
+            return await _context.DetalleInspecciones
+                .Where(d => d.IdInspeccion == idInspeccion)
+                .ToListAsync();
         }
     }
 }

@@ -286,18 +286,18 @@ namespace ServicioTecnico.Controllers
     {
         [Required(ErrorMessage = "La placa es requerida")]
         [StringLength(10, ErrorMessage = "La placa no puede exceder 10 caracteres")]
-        public string NumeroPlaca { get; set; }
+        public string NumeroPlaca { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El propietario es requerido")]
         public int IdPropietario { get; set; }
 
         [Required(ErrorMessage = "La marca es requerida")]
         [StringLength(50, ErrorMessage = "La marca no puede exceder 50 caracteres")]
-        public string Marca { get; set; }
+        public string Marca { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El modelo es requerido")]
         [StringLength(50, ErrorMessage = "El modelo no puede exceder 50 caracteres")]
-        public string Modelo { get; set; }
+        public string Modelo { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El año es requerido")]
         [Range(1900, 2030, ErrorMessage = "El año debe estar entre 1900 y 2030")]
@@ -320,15 +320,15 @@ namespace ServicioTecnico.Controllers
     {
         [Required(ErrorMessage = "La placa es requerida")]
         [StringLength(10, ErrorMessage = "La placa no puede exceder 10 caracteres")]
-        public string NumeroPlaca { get; set; }
+        public string NumeroPlaca { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "La marca es requerida")]
         [StringLength(50, ErrorMessage = "La marca no puede exceder 50 caracteres")]
-        public string Marca { get; set; }
+        public string Marca { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El modelo es requerido")]
         [StringLength(50, ErrorMessage = "El modelo no puede exceder 50 caracteres")]
-        public string Modelo { get; set; }
+        public string Modelo { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El año es requerido")]
         [Range(1900, 2030, ErrorMessage = "El año debe estar entre 1900 y 2030")]

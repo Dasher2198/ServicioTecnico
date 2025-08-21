@@ -209,6 +209,29 @@
             font-weight: 500;
         }
 
+        .loading-section {
+            text-align: center;
+            margin: 2rem;
+            color: #64748b;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid #e5e7eb;
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
         .citas-section {
             margin-top: 1.5rem;
         }
@@ -261,6 +284,18 @@
             font-style: italic;
         }
 
+        .no-data {
+            text-align: center;
+            color: #64748b;
+            font-style: italic;
+            padding: 2rem;
+        }
+
+        .no-data-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header {
@@ -310,6 +345,12 @@
         <strong> Debug:</strong> <span id="debugText">Verificando usuario...</span>
     </div>
 
+    <!-- Loading -->
+    <div id="loadingSection" class="loading-section">
+        <div class="loading-spinner"></div>
+        <p>Cargando datos del usuario...</p>
+    </div>
+
     <!-- Panel del Cliente -->
     <div class="panel-section" id="panelCliente">
         <h2 class="panel-title"> Panel del Cliente</h2>
@@ -330,28 +371,17 @@
         </div>
 
         <div class="summary-section cliente">
-            <h3 class="summary-title"></h3>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon"></div>
-                    <div class="stat-value" style="color: #3b82f6;">3</div>
-                    <div class="stat-label">Mis Vehículos</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"></div>
-                    <div class="stat-value" style="color: #f59e0b;">1</div>
-                    <div class="stat-label">Citas Pendientes</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"></div>
-                    <div class="stat-value" style="color: #8b5cf6;">8</div>
-                    <div class="stat-label">Inspecciones</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"></div>
-                    <div class="stat-value" style="color: #10b981;">2</div>
-                    <div class="stat-label">Certificados Válidos</div>
-                </div>
+            <h3 class="summary-title"> Resumen de mi Cuenta</h3>
+            <div class="stats-grid" id="statsCliente">
+                <!-- Se llenará dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Sección de citas próximas -->
+        <div class="citas-section" id="citasProximasSection">
+            <h3 class="citas-title"> Mis Próximas Citas</h3>
+            <div id="citasProximasContainer">
+                <!-- Se llenará dinámicamente -->
             </div>
         </div>
     </div>
@@ -371,79 +401,23 @@
 
         <div class="summary-section tecnico">
             <h3 class="summary-title"> Actividad del Día</h3>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon"></div>
-                    <div class="stat-value" style="color: #3b82f6;">5</div>
-                    <div class="stat-label">Citas Hoy</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"></div>
-                    <div class="stat-value" style="color: #8b5cf6;">2</div>
-                    <div class="stat-label">Inspecciones Hoy</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"></div>
-                    <div class="stat-value" style="color: #10b981;">2</div>
-                    <div class="stat-label">Aprobadas Hoy</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon"></div>
-                    <div class="stat-value" style="color: #f59e0b;">87</div>
-                    <div class="stat-label">Total Inspecciones</div>
-                </div>
+            <div class="stats-grid" id="statsTecnico">
+                <!-- Se llenará dinámicamente -->
             </div>
         </div>
 
-        <div class="citas-section">
+        <div class="citas-section" id="citasHoySection">
             <h3 class="citas-title"> Citas de Hoy</h3>
-
-            <div class="cita-card">
-                <div class="cita-header">
-                    <div class="cita-vehicle"> ABC123 - Toyota Corolla</div>
-                    <div class="cita-time"> 09:00</div>
-                </div>
-                <div class="cita-details"> REVTEC San José Centro</div>
-                <div class="cita-observations"> Primera inspección del vehículo</div>
-            </div>
-
-            <div class="cita-card">
-                <div class="cita-header">
-                    <div class="cita-vehicle"> XYZ789 - Honda Civic</div>
-                    <div class="cita-time"> 11:30</div>
-                </div>
-                <div class="cita-details"> REVTEC San José Centro</div>
-            </div>
-
-            <div class="cita-card">
-                <div class="cita-header">
-                    <div class="cita-vehicle"> DEF456 - Nissan Sentra</div>
-                    <div class="cita-time"> 14:00</div>
-                </div>
-                <div class="cita-details"> REVTEC San José Centro</div>
-                <div class="cita-observations"> Revisión de sistema de frenos</div>
-            </div>
-
-            <div class="cita-card">
-                <div class="cita-header">
-                    <div class="cita-vehicle"> GHI789 - Hyundai Elantra</div>
-                    <div class="cita-time"> 15:30</div>
-                </div>
-                <div class="cita-details"> REVTEC San José Centro</div>
-            </div>
-
-            <div class="cita-card">
-                <div class="cita-header">
-                    <div class="cita-vehicle"> JKL012 - Mazda 3</div>
-                    <div class="cita-time"> 16:45</div>
-                </div>
-                <div class="cita-details"> REVTEC San José Centro</div>
-                <div class="cita-observations"> Inspección de seguimiento</div>
+            <div id="citasHoyContainer">
+                <!-- Se llenará dinámicamente -->
             </div>
         </div>
     </div>
 
     <script>
+        const API_BASE = window.location.protocol + '//' + window.location.host + '/api';
+        let usuario = null;
+
         function cerrarSesion() {
             if (confirm('¿Estás seguro de que deseas cerrar sesión?')) {
                 localStorage.removeItem('usuarioActual');
@@ -457,7 +431,286 @@
             console.log(' DEBUG:', mensaje);
         }
 
-        function inicializar() {
+        // Función para cargar datos del cliente
+        async function cargarDatosCliente() {
+            try {
+                mostrarDebug(`Cargando datos para cliente ID: ${usuario.id}`);
+
+                // Cargar vehículos del usuario
+                const vehiculosResponse = await fetch(`${API_BASE}/Vehiculo/porPropietario/${usuario.id}`);
+                const vehiculos = vehiculosResponse.ok ? await vehiculosResponse.json() : [];
+
+                // Cargar todas las citas y filtrar las del usuario
+                const citasResponse = await fetch(`${API_BASE}/Cita`);
+                const todasCitas = citasResponse.ok ? await citasResponse.json() : [];
+
+                const citasUsuario = todasCitas.filter(cita =>
+                    vehiculos.some(vehiculo => vehiculo.idVehiculo === cita.idVehiculo)
+                );
+
+                // Cargar inspecciones y certificados
+                const inspeccionesResponse = await fetch(`${API_BASE}/Inspeccion`);
+                const todasInspecciones = inspeccionesResponse.ok ? await inspeccionesResponse.json() : [];
+
+                const inspeccionesUsuario = todasInspecciones.filter(inspeccion =>
+                    citasUsuario.some(cita => cita.idCita === inspeccion.idCita)
+                );
+
+                const certificadosResponse = await fetch(`${API_BASE}/Certificado`);
+                const todosCertificados = certificadosResponse.ok ? await certificadosResponse.json() : [];
+
+                const certificadosUsuario = todosCertificados.filter(certificado =>
+                    inspeccionesUsuario.some(inspeccion => inspeccion.idInspeccion === certificado.idInspeccion)
+                );
+
+                // Calcular estadísticas
+                const citasPendientes = citasUsuario.filter(c => c.estadoCita === 'programada').length;
+                const inspeccionesTotales = inspeccionesUsuario.length;
+                const certificadosValidos = certificadosUsuario.filter(c =>
+                    new Date(c.fechaVencimiento) > new Date() && c.estadoCertificado === 'valido'
+                ).length;
+
+                // Mostrar estadísticas
+                document.getElementById('statsCliente').innerHTML = `
+                        <div class="stat-card">
+                            <div class="stat-icon"></div>
+                            <div class="stat-value" style="color: #3b82f6;">${vehiculos.length}</div>
+                            <div class="stat-label">Mis Vehículos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"></div>
+                            <div class="stat-value" style="color: #f59e0b;">${citasPendientes}</div>
+                            <div class="stat-label">Citas Pendientes</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"></div>
+                            <div class="stat-value" style="color: #8b5cf6;">${inspeccionesTotales}</div>
+                            <div class="stat-label">Inspecciones</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"></div>
+                            <div class="stat-value" style="color: #10b981;">${certificadosValidos}</div>
+                            <div class="stat-label">Certificados Válidos</div>
+                        </div>
+                    `;
+
+                // Mostrar próximas citas
+                await mostrarProximasCitas(citasUsuario, vehiculos);
+
+                mostrarDebug(`Datos cargados: ${vehiculos.length} vehículos, ${citasPendientes} citas pendientes`);
+
+            } catch (error) {
+                console.error('Error al cargar datos del cliente:', error);
+                mostrarDebug(`Error: ${error.message}`);
+
+                // Mostrar datos por defecto en caso de error
+                document.getElementById('statsCliente').innerHTML = `
+                        <div class="stat-card">
+                            <div class="stat-icon"></div>
+                            <div class="stat-value" style="color: #ef4444;">Error</div>
+                            <div class="stat-label">Error al cargar</div>
+                        </div>
+                    `;
+            }
+        }
+
+        // Función para mostrar próximas citas
+        async function mostrarProximasCitas(citasUsuario, vehiculos) {
+            try {
+                // Obtener estaciones
+                const estacionesResponse = await fetch(`${API_BASE}/Estacion`);
+                const estaciones = estacionesResponse.ok ? await estacionesResponse.json() : [];
+
+                // Filtrar citas futuras y programadas
+                const ahora = new Date();
+                const citasProximas = citasUsuario
+                    .filter(cita => {
+                        const fechaCita = new Date(cita.fechaCita);
+                        return fechaCita >= ahora && cita.estadoCita === 'programada';
+                    })
+                    .sort((a, b) => new Date(a.fechaCita) - new Date(b.fechaCita))
+                    .slice(0, 5); // Mostrar máximo 5
+
+                const container = document.getElementById('citasProximasContainer');
+
+                if (citasProximas.length === 0) {
+                    container.innerHTML = `
+                            <div class="no-data">
+                                <div class="no-data-icon"></div>
+                                <p>No tienes citas programadas próximamente</p>
+                                <p style="margin-top: 0.5rem;"><a href="AgendarCita.html" style="color: #3b82f6;">¿Deseas agendar una cita?</a></p>
+                            </div>
+                        `;
+                    return;
+                }
+
+                container.innerHTML = citasProximas.map(cita => {
+                    const vehiculo = vehiculos.find(v => v.idVehiculo === cita.idVehiculo);
+                    const estacion = estaciones.find(e => e.idEstacion === cita.idEstacion);
+                    const fechaFormateada = new Date(cita.fechaCita).toLocaleDateString('es-ES');
+                    const horaFormateada = formatearHora(cita.horaCita);
+
+                    return `
+                            <div class="cita-card">
+                                <div class="cita-header">
+                                    <div class="cita-vehicle">
+                                         ${vehiculo?.numeroPlaca || 'N/A'} - ${vehiculo?.marca || ''} ${vehiculo?.modelo || ''}
+                                    </div>
+                                    <div class="cita-time"> ${fechaFormateada} ⏰ ${horaFormateada}</div>
+                                </div>
+                                <div class="cita-details">
+                                     ${estacion?.nombreEstacion || 'Estación no encontrada'}
+                                </div>
+                                ${cita.observaciones ? `<div class="cita-observations"> ${cita.observaciones}</div>` : ''}
+                            </div>
+                        `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error al cargar próximas citas:', error);
+                document.getElementById('citasProximasContainer').innerHTML = `
+                        <div class="no-data">
+                            <div class="no-data-icon"></div>
+                            <p>Error al cargar las citas</p>
+                        </div>
+                    `;
+            }
+        }
+
+        // Función para cargar datos del técnico
+        async function cargarDatosTecnico() {
+            try {
+                mostrarDebug(`Cargando datos para técnico ID: ${usuario.id}`);
+
+                // Cargar inspecciones del técnico
+                const inspeccionesResponse = await fetch(`${API_BASE}/Inspeccion`);
+                const todasInspecciones = inspeccionesResponse.ok ? await inspeccionesResponse.json() : [];
+
+                const inspeccionesTecnico = todasInspecciones.filter(i => i.idTecnico === usuario.id);
+
+                // Cargar citas de hoy
+                const citasResponse = await fetch(`${API_BASE}/Cita`);
+                const todasCitas = citasResponse.ok ? await citasResponse.json() : [];
+
+                const hoy = new Date().toISOString().split('T')[0];
+                const citasHoy = todasCitas.filter(c => c.fechaCita.split('T')[0] === hoy);
+
+                // Estadísticas del día
+                const inspeccionesHoy = inspeccionesTecnico.filter(i =>
+                    i.fechaInspeccion.split('T')[0] === hoy
+                ).length;
+
+                const inspeccionesAprobadas = inspeccionesTecnico.filter(i =>
+                    i.fechaInspeccion.split('T')[0] === hoy && i.resultado === 'aprobado'
+                ).length;
+
+                // Mostrar estadísticas
+                document.getElementById('statsTecnico').innerHTML = `
+                        <div class="stat-card">
+                            <div class="stat-icon"></div>
+                            <div class="stat-value" style="color: #3b82f6;">${citasHoy.length}</div>
+                            <div class="stat-label">Citas Hoy</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"></div>
+                            <div class="stat-value" style="color: #8b5cf6;">${inspeccionesHoy}</div>
+                            <div class="stat-label">Inspecciones Hoy</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"></div>
+                            <div class="stat-value" style="color: #10b981;">${inspeccionesAprobadas}</div>
+                            <div class="stat-label">Aprobadas Hoy</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon"></div>
+                            <div class="stat-value" style="color: #f59e0b;">${inspeccionesTecnico.length}</div>
+                            <div class="stat-label">Total Inspecciones</div>
+                        </div>
+                    `;
+
+                // Mostrar citas de hoy
+                await mostrarCitasHoy(citasHoy);
+
+                mostrarDebug(`Datos técnico cargados: ${inspeccionesTecnico.length} inspecciones totales`);
+
+            } catch (error) {
+                console.error('Error al cargar datos del técnico:', error);
+                mostrarDebug(`Error: ${error.message}`);
+            }
+        }
+
+        // Función para mostrar citas de hoy
+        async function mostrarCitasHoy(citasHoy) {
+            try {
+                const vehiculosResponse = await fetch(`${API_BASE}/Vehiculo`);
+                const vehiculos = vehiculosResponse.ok ? await vehiculosResponse.json() : [];
+
+                const estacionesResponse = await fetch(`${API_BASE}/Estacion`);
+                const estaciones = estacionesResponse.ok ? await estacionesResponse.json() : [];
+
+                const container = document.getElementById('citasHoyContainer');
+
+                if (citasHoy.length === 0) {
+                    container.innerHTML = `
+                            <div class="no-data">
+                                <div class="no-data-icon"></div>
+                                <p>No hay citas programadas para hoy</p>
+                            </div>
+                        `;
+                    return;
+                }
+
+                // Ordenar por hora
+                citasHoy.sort((a, b) => a.horaCita.localeCompare(b.horaCita));
+
+                container.innerHTML = citasHoy.map(cita => {
+                    const vehiculo = vehiculos.find(v => v.idVehiculo === cita.idVehiculo);
+                    const estacion = estaciones.find(e => e.idEstacion === cita.idEstacion);
+                    const horaFormateada = formatearHora(cita.horaCita);
+
+                    return `
+                            <div class="cita-card">
+                                <div class="cita-header">
+                                    <div class="cita-vehicle">
+                                         ${vehiculo?.numeroPlaca || 'N/A'} - ${vehiculo?.marca || ''} ${vehiculo?.modelo || ''}
+                                    </div>
+                                    <div class="cita-time">⏰ ${horaFormateada}</div>
+                                </div>
+                                <div class="cita-details">
+                                     ${estacion?.nombreEstacion || 'Estación no encontrada'}
+                                </div>
+                                ${cita.observaciones ? `<div class="cita-observations">📝 ${cita.observaciones}</div>` : ''}
+                            </div>
+                        `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error al cargar citas de hoy:', error);
+                document.getElementById('citasHoyContainer').innerHTML = `
+                        <div class="no-data">
+                            <div class="no-data-icon">❌</div>
+                            <p>Error al cargar las citas</p>
+                        </div>
+                    `;
+            }
+        }
+
+        // Función para formatear hora
+        function formatearHora(timeSpan) {
+            if (typeof timeSpan === 'string') {
+                if (timeSpan.includes(':')) {
+                    const partes = timeSpan.split(':');
+                    const hora = parseInt(partes[0]);
+                    const minuto = partes[1];
+                    const ampm = hora >= 12 ? 'PM' : 'AM';
+                    const hora12 = hora % 12 || 12;
+                    return `${hora12}:${minuto} ${ampm}`;
+                }
+            }
+            return timeSpan;
+        }
+
+        async function inicializar() {
             console.log(' Inicializando panel principal...');
             mostrarDebug('Verificando sesión de usuario...');
 
@@ -471,7 +724,7 @@
                     return;
                 }
 
-                const usuario = JSON.parse(usuarioData);
+                usuario = JSON.parse(usuarioData);
                 mostrarDebug(` Usuario: ${usuario.nombre} ${usuario.apellidos} (${usuario.tipoUsuario})`);
 
                 // Mostrar bienvenida
@@ -484,32 +737,38 @@
                 const nombreCompleto = `${usuario.nombre || ''} ${usuario.apellidos || ''}`.trim();
                 document.getElementById('bienvenida').innerHTML = `${saludo}, <strong>${nombreCompleto}</strong>!`;
 
+                // Ocultar loading
+                document.getElementById('loadingSection').style.display = 'none';
+
                 // Mostrar panel correcto según tipo de usuario
                 if (usuario.tipoUsuario === 'cliente') {
                     mostrarDebug(' Mostrando panel de cliente');
                     document.getElementById('panelCliente').classList.add('active');
+                    await cargarDatosCliente();
 
-                    // Ocultar debug después de 3 segundos para clientes
+                    // Ocultar debug después de 5 segundos para clientes
                     setTimeout(() => {
                         document.getElementById('debugInfo').style.display = 'none';
-                    }, 3000);
+                    }, 5000);
 
                 } else if (usuario.tipoUsuario === 'tecnico') {
                     mostrarDebug(' Mostrando panel de técnico');
                     document.getElementById('panelTecnico').classList.add('active');
+                    await cargarDatosTecnico();
 
                     // Mantener debug visible para técnicos por más tiempo
                     setTimeout(() => {
                         document.getElementById('debugInfo').style.display = 'none';
-                    }, 5000);
+                    }, 8000);
 
                 } else {
                     mostrarDebug(` Tipo de usuario desconocido: ${usuario.tipoUsuario}`);
                     // Por defecto mostrar panel de cliente
                     document.getElementById('panelCliente').classList.add('active');
+                    await cargarDatosCliente();
                 }
 
-                console.log('Panel configurado correctamente');
+                console.log(' Panel configurado correctamente');
 
             } catch (error) {
                 console.error(' Error:', error);

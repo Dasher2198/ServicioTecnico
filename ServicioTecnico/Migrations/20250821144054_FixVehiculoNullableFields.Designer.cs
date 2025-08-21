@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ServicioTecnico.Data;
 
@@ -11,9 +12,11 @@ using ServicioTecnico.Data;
 namespace ServicioTecnico.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250821144054_FixVehiculoNullableFields")]
+    partial class FixVehiculoNullableFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,7 +57,6 @@ namespace ServicioTecnico.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("RutaArchivoDigital")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -138,7 +140,6 @@ namespace ServicioTecnico.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ObservacionesItem")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -181,7 +182,6 @@ namespace ServicioTecnico.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -193,7 +193,6 @@ namespace ServicioTecnico.Migrations
                         .HasDefaultValue("activa");
 
                     b.Property<string>("HorarioAtencion")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -208,7 +207,6 @@ namespace ServicioTecnico.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Telefono")
-                        .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
@@ -241,12 +239,10 @@ namespace ServicioTecnico.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("NumeroCertificado")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ObservacionesTecnicas")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 

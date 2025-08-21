@@ -48,12 +48,6 @@
                 object-fit: cover;
             }
 
-        .header-subtitle {
-            font-size: 0.9rem;
-            color: #64748b;
-            font-weight: 500;
-        }
-
         .nav-menu {
             list-style: none;
             display: flex;
@@ -102,71 +96,6 @@
             font-weight: 700;
             text-align: center;
         }
-
-        .filters-container {
-            background: #f8fafc;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 2rem;
-            border-left: 4px solid #3b82f6;
-        }
-
-        .filters-title {
-            margin: 0 0 1rem 0;
-            color: #1e293b;
-            font-size: 1rem;
-        }
-
-        .filters-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            align-items: end;
-        }
-
-        .form-group {
-            margin: 0;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #374151;
-            font-weight: 600;
-            font-size: 0.875rem;
-        }
-
-        .form-input, .form-select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            background: white;
-        }
-
-            .form-input:focus, .form-select:focus {
-                outline: none;
-                border-color: #3b82f6;
-                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-            }
-
-        .filter-button {
-            background: #6b7280;
-            color: white;
-            border: none;
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-
-            .filter-button:hover {
-                background: #4b5563;
-            }
 
         .stats-grid {
             display: grid;
@@ -240,279 +169,158 @@
             margin-bottom: 0.5rem;
         }
 
-        .no-data-help {
-            color: #64748b;
-            font-size: 0.9rem;
+        .inspections-grid {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
         }
 
-        .table-container {
-            display: none;
-            overflow-x: auto;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 1.5rem;
-        }
-
-        .table {
-            width: 100%;
-            border-collapse: collapse;
+        .inspection-card {
             background: white;
-            margin: 0;
-        }
-
-            .table th {
-                background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
-                color: #1e293b;
-                font-weight: 600;
-                padding: 1rem 0.75rem;
-                text-align: left;
-                font-size: 0.875rem;
-                border-bottom: 2px solid #e5e7eb;
-                white-space: nowrap;
-            }
-
-            .table td {
-                padding: 1rem 0.75rem;
-                border-bottom: 1px solid #f1f5f9;
-                color: #374151;
-                font-size: 0.875rem;
-                vertical-align: top;
-            }
-
-            .table tr:hover {
-                background: #f8fafc;
-            }
-
-            .table tr:last-child td {
-                border-bottom: none;
-            }
-
-        .status-badge {
-            padding: 0.25rem 0.75rem;
+            padding: 1.5rem;
             border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #10b981;
+            transition: all 0.2s;
         }
 
-        .status-aprobado {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
+            .inspection-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            }
+
+            .inspection-card.rejected {
+                border-left-color: #ef4444;
+            }
+
+        .inspection-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
-        .status-rechazado {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-        }
-
-        .status-vigente {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
-        }
-
-        .status-vencido {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-        }
-
-        .action-button {
+        .inspection-id {
             background: #3b82f6;
             color: white;
-            border: none;
-            padding: 0.25rem 0.5rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-            .action-button:hover {
-                background: #2563eb;
-            }
-
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .pagination-button {
-            padding: 0.5rem 0.75rem;
-            border: 1px solid #d1d5db;
-            background: white;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.875rem;
-        }
-
-            .pagination-button:hover:not(:disabled) {
-                background: #f3f4f6;
-            }
-
-            .pagination-button:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-            }
-
-            .pagination-button.active {
-                background: #3b82f6;
-                color: white;
-                border-color: #3b82f6;
-            }
-
-        .pagination-info {
-            color: #64748b;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-weight: 600;
             font-size: 0.9rem;
         }
 
-        /* Modal */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            backdrop-filter: blur(5px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 16px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .modal-title {
-            margin: 0;
-            color: #1e293b;
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .modal-close {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
+        .inspection-date {
+            color: #64748b;
             font-weight: 500;
         }
 
-            .modal-close:hover {
-                background: #dc2626;
-            }
-
-        .detail-section {
-            margin-bottom: 1.5rem;
-        }
-
-        .detail-title {
-            margin: 0 0 1rem 0;
-            color: #1e293b;
-            font-size: 1rem;
+        .inspection-result {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
             font-weight: 600;
+            font-size: 0.9rem;
         }
 
-        .detail-grid {
+        .result-aprobado {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .result-rechazado {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .inspection-details {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
-            background: #f8fafc;
-            padding: 1rem;
-            border-radius: 8px;
+            margin-bottom: 1rem;
         }
 
         .detail-item {
-            font-size: 0.9rem;
+            background: #f8fafc;
+            padding: 0.75rem;
+            border-radius: 6px;
         }
 
         .detail-label {
             font-weight: 600;
             color: #374151;
-        }
-
-        .detail-value {
-            color: #64748b;
-        }
-
-        .observation-box {
-            background: #f8fafc;
-            padding: 1rem;
-            border-radius: 8px;
-            border-left: 4px solid #3b82f6;
-            margin-bottom: 1.5rem;
-        }
-
-        .verification-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .verification-item {
-            margin-bottom: 0.75rem;
-            padding: 0.75rem;
-            background: white;
-            border-radius: 8px;
-            border-left: 4px solid #10b981;
-        }
-
-            .verification-item.fallo {
-                border-left-color: #ef4444;
-            }
-
-        .verification-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            font-size: 0.8rem;
             margin-bottom: 0.25rem;
         }
 
-        .verification-category {
-            font-weight: 600;
+        .detail-value {
             color: #1e293b;
+            font-weight: 500;
         }
 
-        .verification-result {
+        .certificate-info {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #0ea5e9;
+            margin-top: 1rem;
+        }
+
+        .certificate-title {
+            font-weight: 600;
+            color: #0c4a6e;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .certificate-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .certificate-item {
+            font-size: 0.85rem;
+        }
+
+        .certificate-label {
+            font-weight: 500;
+            color: #075985;
+        }
+
+        .certificate-value {
+            color: #0c4a6e;
+        }
+
+        .status-vigente {
+            color: #10b981;
             font-weight: 600;
         }
 
-            .verification-result.ok {
-                color: #10b981;
-            }
-
-            .verification-result.fallo {
-                color: #ef4444;
-            }
-
-        .verification-observation {
-            font-size: 0.9rem;
-            color: #64748b;
-            font-style: italic;
+        .status-vencido {
+            color: #ef4444;
+            font-weight: 600;
         }
+
+        .message {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            font-weight: 500;
+            text-align: center;
+        }
+
+            .message.success {
+                background: #dcfce7;
+                color: #166534;
+                border: 1px solid #bbf7d0;
+            }
+
+            .message.info {
+                background: #dbeafe;
+                color: #1e40af;
+                border: 1px solid #93c5fd;
+            }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -535,46 +343,16 @@
                 padding: 1.5rem;
             }
 
-            .filters-grid {
-                grid-template-columns: 1fr;
-            }
-
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            .table-container {
-                font-size: 0.8rem;
-            }
-
-            .table th,
-            .table td {
-                padding: 0.5rem 0.25rem;
-            }
-
-            .detail-grid {
+            .inspection-details {
                 grid-template-columns: 1fr;
             }
 
-            .modal-content {
-                margin: 1rem;
-                padding: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .nav-menu {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .stats-grid {
+            .certificate-details {
                 grid-template-columns: 1fr;
-            }
-
-            .pagination {
-                flex-direction: column;
-                gap: 0.5rem;
             }
         }
     </style>
@@ -585,70 +363,16 @@
             <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC">
             <h1>REVTEC</h1>
         </div>
-        <div class="header-subtitle">
-            
-        </div>
     </header>
 
     <ul class="nav-menu">
-        <li><a href="PanelPrincipal.html">Página Principal</a></li>
+        <li><a href="PanelPrincipal.html"> Página Principal</a></li>
+        <li><a href="RegistrarInspeccion.html"> Registrar Inspección</a></li>
     </ul>
 
     <main class="main-container">
         <div class="content-card">
-            <h2 id="tituloHistorial" class="page-title">Historial de Inspecciones</h2>
-
-            <!-- Filtros -->
-            <div class="filters-container">
-                <h3 class="filters-title">Filtros de Búsqueda</h3>
-
-                <div id="filtrosCliente" style="display: none;">
-                    <div class="filters-grid">
-                        <div class="form-group">
-                            <label class="form-label">Filtrar por Vehículo</label>
-                            <select id="filtroVehiculo" class="form-select" onchange="filtrarInspecciones()">
-                                <option value="">Todos los vehículos</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Desde</label>
-                            <input type="date" id="filtroFechaDesde" class="form-input" onchange="filtrarInspecciones()">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Hasta</label>
-                            <input type="date" id="filtroFechaHasta" class="form-input" onchange="filtrarInspecciones()">
-                        </div>
-
-                     </div>
-                </div>
-
-                <div id="filtrosTecnico" style="display: none;">
-                    <div class="filters-grid">
-                        <div class="form-group">
-                            <label class="form-label"> Resultado</label>
-                            <select id="filtroResultado" class="form-select" onchange="filtrarInspecciones()">
-                                <option value="">Todos los resultados</option>
-                                <option value="aprobado">Aprobado</option>
-                                <option value="rechazado">Rechazado</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Fecha</label>
-                            <input type="date" id="filtroFechaTecnico" class="form-input" onchange="filtrarInspecciones()">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Placa</label>
-                            <input type="text" id="filtroPlaca" class="form-input" placeholder="ABC123" onchange="filtrarInspecciones()" style="text-transform: uppercase;">
-                        </div>
-
-                        
-                    </div>
-                </div>
-            </div>
+            <h2 class="page-title"> Inspecciones Realizadas</h2>
 
             <!-- Estadísticas rápidas -->
             <div id="estadisticasRapidas" class="stats-grid">
@@ -662,57 +386,24 @@
 
             <div id="sinDatos" class="no-data">
                 <div class="no-data-icon"></div>
-                <p class="no-data-text">No se encontraron inspecciones</p>
-                <p class="no-data-help">Intente ajustar los filtros de búsqueda</p>
+                <p class="no-data-text">No has realizado inspecciones aún</p>
+                <p style="color: #64748b; font-size: 0.9rem;">
+                    Ve a <strong>"Registrar Inspección"</strong> para realizar tu primera inspección técnica
+                </p>
             </div>
 
-            <div id="tablaContainer" class="table-container">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th> Fecha</th>
-                            <th> Vehículo</th>
-                            <th> Estación</th>
-                            <th> Técnico</th>
-                            <th> Resultado</th>
-                            <th> Certificado</th>
-                            <th> Vencimiento</th>
-                            <th> Estado</th>
-                            <th> Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cuerpoTabla">
-                    </tbody>
-                </table>
+            <div id="mensaje"></div>
 
-                <div id="paginacion" class="pagination">
-                    <!-- Se llenará dinámicamente -->
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Modal para detalles de inspección -->
-    <div id="modalDetalles" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title"> Detalles de Inspección</h3>
-                <button onclick="cerrarModal()" class="modal-close"> Cerrar</button>
-            </div>
-            <div id="contenidoModal">
+            <div id="inspeccionesContainer" class="inspections-grid">
                 <!-- Se llenará dinámicamente -->
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
         const API_BASE = window.location.protocol + '//' + window.location.host + '/api';
         let usuario = null;
         let inspecciones = [];
-        let inspeccionesOriginales = [];
-        let vehiculos = [];
-        let paginaActual = 1;
-        const itemsPorPagina = 10;
 
         // Verificar sesión
         function verificarSesion() {
@@ -721,116 +412,103 @@
                 window.location.href = 'Login.html';
                 return null;
             }
-            return JSON.parse(usuarioActual);
-        }
-
-        // Cargar vehículos del usuario (solo para clientes)
-        async function cargarVehiculos() {
-            if (usuario.tipoUsuario !== 'cliente') return;
-
-            try {
-                const response = await fetch(`${API_BASE}/Vehiculo/porPropietario/${usuario.id}`);
-                vehiculos = await response.json();
-
-                const filtroVehiculo = document.getElementById('filtroVehiculo');
-                filtroVehiculo.innerHTML = '<option value="">Todos los vehículos</option>';
-
-                vehiculos.forEach(vehiculo => {
-                    const option = document.createElement('option');
-                    option.value = vehiculo.idVehiculo;
-                    option.textContent = `${vehiculo.numeroPlaca} - ${vehiculo.marca} ${vehiculo.modelo}`;
-                    filtroVehiculo.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error al cargar vehículos:', error);
+            const user = JSON.parse(usuarioActual);
+            if (user.tipoUsuario !== 'tecnico') {
+                window.location.href = 'PanelPrincipal.html';
+                return null;
             }
+            return user;
         }
 
-        // Cargar inspecciones
+        // Cargar inspecciones del técnico
         async function cargarInspecciones() {
             try {
                 document.getElementById('cargando').style.display = 'block';
-                document.getElementById('tablaContainer').style.display = 'none';
+                document.getElementById('inspeccionesContainer').style.display = 'none';
                 document.getElementById('sinDatos').style.display = 'none';
 
-                // Cargar datos necesarios
-                const [citasRes, inspeccionesRes, vehiculosRes, estacionesRes, usuariosRes, certificadosRes] = await Promise.all([
-                    fetch(`${API_BASE}/Cita`),
-                    fetch(`${API_BASE}/Inspeccion`),
-                    fetch(`${API_BASE}/Vehiculo`),
-                    fetch(`${API_BASE}/Estacion`),
-                    fetch(`${API_BASE}/Usuario`),
-                    fetch(`${API_BASE}/Certificado`)
-                ]);
+                console.log(' Cargando inspecciones para técnico ID:', usuario.id);
 
-                const citas = await citasRes.json();
-                const todasInspecciones = await inspeccionesRes.json();
-                const todosVehiculos = await vehiculosRes.json();
-                const estaciones = await estacionesRes.json();
-                const usuarios = await usuariosRes.json();
-                const certificados = await certificadosRes.json();
-
-                // Filtrar inspecciones según el tipo de usuario
-                let inspeccionesFiltradas = [];
-
-                if (usuario.tipoUsuario === 'cliente') {
-                    // Cliente: solo sus vehículos
-                    const vehiculosUsuario = todosVehiculos.filter(v => v.idPropietario === usuario.id);
-                    const citasUsuario = citas.filter(c =>
-                        vehiculosUsuario.some(v => v.idVehiculo === c.idVehiculo)
-                    );
-                    inspeccionesFiltradas = todasInspecciones.filter(i =>
-                        citasUsuario.some(c => c.idCita === i.idCita)
-                    );
-                } else if (usuario.tipoUsuario === 'tecnico') {
-                    // Técnico: inspecciones que ha realizado
-                    inspeccionesFiltradas = todasInspecciones.filter(i => i.idTecnico === usuario.id);
+                // Cargar inspecciones
+                const inspeccionesRes = await fetch(`${API_BASE}/Inspeccion`);
+                if (!inspeccionesRes.ok) {
+                    throw new Error(`Error ${inspeccionesRes.status}: ${inspeccionesRes.statusText}`);
                 }
 
-                // Enriquecer datos de inspecciones
-                inspeccionesOriginales = inspeccionesFiltradas.map(inspeccion => {
+                const todasInspecciones = await inspeccionesRes.json();
+                console.log(' Total inspecciones en sistema:', todasInspecciones.length);
+
+                // Filtrar inspecciones del técnico
+                const misInspecciones = todasInspecciones.filter(i =>
+                    i.idTecnico === usuario.id || i.IdTecnico === usuario.id
+                );
+                console.log(' Mis inspecciones:', misInspecciones.length);
+
+                if (misInspecciones.length === 0) {
+                    mostrarMensajeNoInspecciones();
+                    return;
+                }
+
+                // Cargar datos adicionales
+                const [vehiculosRes, usuariosRes, citasRes, estacionesRes] = await Promise.all([
+                    fetch(`${API_BASE}/Vehiculo`).catch(() => ({ ok: false })),
+                    fetch(`${API_BASE}/Usuario`).catch(() => ({ ok: false })),
+                    fetch(`${API_BASE}/Cita`).catch(() => ({ ok: false })),
+                    fetch(`${API_BASE}/Estacion`).catch(() => ({ ok: false }))
+                ]);
+
+                const vehiculos = vehiculosRes.ok ? await vehiculosRes.json() : [];
+                const usuarios = usuariosRes.ok ? await usuariosRes.json() : [];
+                const citas = citasRes.ok ? await citasRes.json() : [];
+                const estaciones = estacionesRes.ok ? await estacionesRes.json() : [];
+
+                console.log(' Datos adicionales cargados:', {
+                    vehiculos: vehiculos.length,
+                    usuarios: usuarios.length,
+                    citas: citas.length,
+                    estaciones: estaciones.length
+                });
+
+                // Enriquecer inspecciones
+                inspecciones = misInspecciones.map(inspeccion => {
                     const cita = citas.find(c => c.idCita === inspeccion.idCita);
-                    const vehiculo = todosVehiculos.find(v => v.idVehiculo === cita?.idVehiculo);
+                    const vehiculo = vehiculos.find(v => v.idVehiculo === cita?.idVehiculo);
+                    const propietario = usuarios.find(u => u.idUsuario === vehiculo?.idPropietario);
                     const estacion = estaciones.find(e => e.idEstacion === cita?.idEstacion);
-                    const tecnico = usuarios.find(u => u.idUsuario === inspeccion.idTecnico);
-                    const certificado = certificados.find(c => c.idInspeccion === inspeccion.idInspeccion);
 
                     return {
                         ...inspeccion,
+                        cita,
                         vehiculo,
-                        estacion,
-                        tecnico,
-                        certificado,
-                        cita
+                        propietario,
+                        estacion
                     };
                 });
 
                 // Ordenar por fecha más reciente
-                inspeccionesOriginales.sort((a, b) => new Date(b.fechaInspeccion) - new Date(a.fechaInspeccion));
+                inspecciones.sort((a, b) => new Date(b.fechaInspeccion) - new Date(a.fechaInspeccion));
 
-                inspecciones = [...inspeccionesOriginales];
                 mostrarEstadisticas();
                 mostrarInspecciones();
 
             } catch (error) {
-                console.error('Error al cargar inspecciones:', error);
-                document.getElementById('cargando').innerHTML = '<p style="color: #ef4444;"> Error al cargar inspecciones</p>';
+                console.error(' Error al cargar inspecciones:', error);
+                mostrarError(error);
             }
         }
 
-        // Mostrar estadísticas rápidas
+        // Mostrar estadísticas
         function mostrarEstadisticas() {
+            const total = inspecciones.length;
             const aprobadas = inspecciones.filter(i => i.resultado === 'aprobado').length;
             const rechazadas = inspecciones.filter(i => i.resultado === 'rechazado').length;
-            const certificadosValidos = inspecciones.filter(i =>
-                i.certificado && new Date(i.certificado.fechaVencimiento) > new Date()
-            ).length;
+            const conCertificado = inspecciones.filter(i => i.numeroCertificado).length;
 
             const stats = [
-                { titulo: 'Total', valor: inspecciones.length, icono: '', color: '#3b82f6' },
+                { titulo: 'Total', valor: total, icono: '', color: '#3b82f6' },
                 { titulo: 'Aprobadas', valor: aprobadas, icono: '', color: '#10b981' },
                 { titulo: 'Rechazadas', valor: rechazadas, icono: '', color: '#ef4444' },
-                { titulo: 'Certificados Válidos', valor: certificadosValidos, icono: '', color: '#8b5cf6' }
+                { titulo: 'Con Certificado', valor: conCertificado, icono: '', color: '#8b5cf6' }
             ];
 
             document.getElementById('estadisticasRapidas').innerHTML = stats.map(stat => `
@@ -842,326 +520,169 @@
                 `).join('');
         }
 
-        // Mostrar inspecciones en la tabla con paginación
+        // Mostrar inspecciones
         function mostrarInspecciones() {
             document.getElementById('cargando').style.display = 'none';
+            document.getElementById('inspeccionesContainer').style.display = 'block';
 
             if (inspecciones.length === 0) {
-                document.getElementById('sinDatos').style.display = 'block';
-                document.getElementById('tablaContainer').style.display = 'none';
+                mostrarMensajeNoInspecciones();
                 return;
             }
 
-            document.getElementById('sinDatos').style.display = 'none';
-            document.getElementById('tablaContainer').style.display = 'block';
+            const container = document.getElementById('inspeccionesContainer');
+            container.innerHTML = inspecciones.map(inspeccion => {
+                const fechaInspeccion = new Date(inspeccion.fechaInspeccion).toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
 
-            // Paginación
-            const inicio = (paginaActual - 1) * itemsPorPagina;
-            const fin = inicio + itemsPorPagina;
-            const inspeccionesPagina = inspecciones.slice(inicio, fin);
-
-            const cuerpoTabla = document.getElementById('cuerpoTabla');
-            cuerpoTabla.innerHTML = '';
-
-            inspeccionesPagina.forEach(inspeccion => {
-                const fila = document.createElement('tr');
-
-                const fechaInspeccion = new Date(inspeccion.fechaInspeccion).toLocaleDateString('es-ES');
                 const fechaVencimiento = inspeccion.fechaVencimiento ?
-                    new Date(inspeccion.fechaVencimiento).toLocaleDateString('es-ES') : '---';
+                    new Date(inspeccion.fechaVencimiento).toLocaleDateString('es-ES') : 'N/A';
 
-                const estadoCertificado = inspeccion.certificado ?
-                    (new Date(inspeccion.certificado.fechaVencimiento) > new Date() ? 'Vigente' : 'Vencido') :
-                    '---';
+                const estaVigente = inspeccion.fechaVencimiento ?
+                    new Date(inspeccion.fechaVencimiento) > new Date() : false;
 
-                const numeroCertificado = inspeccion.certificado ?
-                    inspeccion.certificado.numeroCertificado : '---';
-
-                fila.innerHTML = `
-                        <td>${fechaInspeccion}</td>
-                        <td>
-                            <strong>${inspeccion.vehiculo?.numeroPlaca || '---'}</strong><br>
-                            <small style="color: #64748b;">${inspeccion.vehiculo?.marca || ''} ${inspeccion.vehiculo?.modelo || ''}</small>
-                        </td>
-                        <td>${inspeccion.estacion?.nombreEstacion || '---'}</td>
-                        <td>${inspeccion.tecnico?.nombre || '---'} ${inspeccion.tecnico?.apellidos || ''}</td>
-                        <td>
-                            <span class="status-badge status-${inspeccion.resultado}">
-                                ${inspeccion.resultado === 'aprobado' ? ' Aprobado' : ' Rechazado'}
-                            </span>
-                        </td>
-                        <td>${numeroCertificado}</td>
-                        <td>${fechaVencimiento}</td>
-                        <td>
-                            <span class="status-badge status-${estadoCertificado === 'Vigente' ? 'vigente' : 'vencido'}">
-                                ${estadoCertificado}
-                            </span>
-                        </td>
-                        <td>
-                            <button onclick="verDetalles(${inspeccion.idInspeccion})" class="action-button">
-                                 Ver
-                            </button>
-                        </td>
-                    `;
-
-                cuerpoTabla.appendChild(fila);
-            });
-
-            // Actualizar paginación
-            actualizarPaginacion();
-        }
-
-        // Actualizar paginación
-        function actualizarPaginacion() {
-            const totalPaginas = Math.ceil(inspecciones.length / itemsPorPagina);
-            const paginacion = document.getElementById('paginacion');
-
-            if (totalPaginas <= 1) {
-                paginacion.innerHTML = '';
-                return;
-            }
-
-            let html = '';
-
-            // Botón anterior
-            html += `<button onclick="cambiarPagina(${paginaActual - 1})"
-                                class="pagination-button"
-                                ${paginaActual === 1 ? 'disabled' : ''}>
-                            ← Anterior
-                         </button>`;
-
-            // Números de página
-            for (let i = 1; i <= totalPaginas; i++) {
-                if (i === paginaActual) {
-                    html += `<button class="pagination-button active">${i}</button>`;
-                } else {
-                    html += `<button onclick="cambiarPagina(${i})" class="pagination-button">${i}</button>`;
-                }
-            }
-
-            // Botón siguiente
-            html += `<button onclick="cambiarPagina(${paginaActual + 1})"
-                                class="pagination-button"
-                                ${paginaActual === totalPaginas ? 'disabled' : ''}>
-                            Siguiente →
-                         </button>`;
-
-            html += `<div class="pagination-info">
-                            Mostrando ${(paginaActual - 1) * itemsPorPagina + 1} - ${Math.min(paginaActual * itemsPorPagina, inspecciones.length)}
-                            de ${inspecciones.length} inspecciones
-                         </div>`;
-
-            paginacion.innerHTML = html;
-        }
-
-        // Cambiar página
-        function cambiarPagina(nuevaPagina) {
-            const totalPaginas = Math.ceil(inspecciones.length / itemsPorPagina);
-            if (nuevaPagina >= 1 && nuevaPagina <= totalPaginas) {
-                paginaActual = nuevaPagina;
-                mostrarInspecciones();
-            }
-        }
-
-        // Filtrar inspecciones
-        function filtrarInspecciones() {
-            inspecciones = [...inspeccionesOriginales];
-
-            if (usuario.tipoUsuario === 'cliente') {
-                const vehiculoSeleccionado = document.getElementById('filtroVehiculo').value;
-                const fechaDesde = document.getElementById('filtroFechaDesde').value;
-                const fechaHasta = document.getElementById('filtroFechaHasta').value;
-
-                if (vehiculoSeleccionado) {
-                    inspecciones = inspecciones.filter(i =>
-                        i.vehiculo && i.vehiculo.idVehiculo == vehiculoSeleccionado
-                    );
-                }
-
-                if (fechaDesde) {
-                    inspecciones = inspecciones.filter(i =>
-                        new Date(i.fechaInspeccion) >= new Date(fechaDesde)
-                    );
-                }
-
-                if (fechaHasta) {
-                    inspecciones = inspecciones.filter(i =>
-                        new Date(i.fechaInspeccion) <= new Date(fechaHasta + 'T23:59:59')
-                    );
-                }
-            } else if (usuario.tipoUsuario === 'tecnico') {
-                const resultado = document.getElementById('filtroResultado').value;
-                const fecha = document.getElementById('filtroFechaTecnico').value;
-                const placa = document.getElementById('filtroPlaca').value.toUpperCase();
-
-                if (resultado) {
-                    inspecciones = inspecciones.filter(i => i.resultado === resultado);
-                }
-
-                if (fecha) {
-                    inspecciones = inspecciones.filter(i =>
-                        i.fechaInspeccion.split('T')[0] === fecha
-                    );
-                }
-
-                if (placa) {
-                    inspecciones = inspecciones.filter(i =>
-                        i.vehiculo?.numeroPlaca?.includes(placa)
-                    );
-                }
-            }
-
-            paginaActual = 1;
-            mostrarEstadisticas();
-            mostrarInspecciones();
-        }
-
-        // Limpiar filtros
-        function limpiarFiltros() {
-            if (usuario.tipoUsuario === 'cliente') {
-                document.getElementById('filtroVehiculo').value = '';
-                document.getElementById('filtroFechaDesde').value = '';
-                document.getElementById('filtroFechaHasta').value = '';
-            } else if (usuario.tipoUsuario === 'tecnico') {
-                document.getElementById('filtroResultado').value = '';
-                document.getElementById('filtroFechaTecnico').value = '';
-                document.getElementById('filtroPlaca').value = '';
-            }
-
-            inspecciones = [...inspeccionesOriginales];
-            paginaActual = 1;
-            mostrarEstadisticas();
-            mostrarInspecciones();
-        }
-
-        // Ver detalles de inspección
-        async function verDetalles(idInspeccion) {
-            try {
-                const inspeccion = inspecciones.find(i => i.idInspeccion === idInspeccion);
-                if (!inspeccion) return;
-
-                // Cargar detalles de inspección
-                const response = await fetch(`${API_BASE}/DetalleInspeccion`);
-                const detalles = await response.json();
-                const detallesInspeccion = detalles.filter(d => d.idInspeccion === idInspeccion);
-
-                let contenido = `
-                        <div class="detail-section">
-                            <h4 class="detail-title"> Información General</h4>
-                            <div class="detail-grid">
-                                <div class="detail-item">
-                                    <div class="detail-label"> Vehículo:</div>
-                                    <div class="detail-value">${inspeccion.vehiculo?.numeroPlaca} - ${inspeccion.vehiculo?.marca} ${inspeccion.vehiculo?.modelo}</div>
-                                </div>
-                                <div class="detail-item">
-                                    <div class="detail-label"> Fecha:</div>
-                                    <div class="detail-value">${new Date(inspeccion.fechaInspeccion).toLocaleDateString('es-ES')}</div>
-                                </div>
-                                <div class="detail-item">
-                                    <div class="detail-label"> Estación:</div>
-                                    <div class="detail-value">${inspeccion.estacion?.nombreEstacion}</div>
-                                </div>
-                                <div class="detail-item">
-                                    <div class="detail-label"> Técnico:</div>
-                                    <div class="detail-value">${inspeccion.tecnico?.nombre} ${inspeccion.tecnico?.apellidos}</div>
-                                </div>
-                                <div class="detail-item">
-                                    <div class="detail-label"> Resultado:</div>
-                                    <div class="detail-value">
-                                        <span style="color: ${inspeccion.resultado === 'aprobado' ? '#10b981' : '#ef4444'}; font-weight: 600;">
-                                            ${inspeccion.resultado === 'aprobado' ? ' Aprobado' : ' Rechazado'}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="detail-item">
-                                    <div class="detail-label"> Certificado:</div>
-                                    <div class="detail-value">${inspeccion.certificado?.numeroCertificado || 'N/A'}</div>
+                return `
+                        <div class="inspection-card ${inspeccion.resultado === 'rechazado' ? 'rejected' : ''}">
+                            <div class="inspection-header">
+                                <div class="inspection-id">ID: ${inspeccion.idInspeccion}</div>
+                                <div class="inspection-date"> ${fechaInspeccion}</div>
+                                <div class="inspection-result result-${inspeccion.resultado}">
+                                    ${inspeccion.resultado === 'aprobado' ? ' APROBADO' : ' RECHAZADO'}
                                 </div>
                             </div>
+
+                            <div class="inspection-details">
+                                <div class="detail-item">
+                                    <div class="detail-label"> Vehículo</div>
+                                    <div class="detail-value">
+                                        ${inspeccion.vehiculo ?
+                        `${inspeccion.vehiculo.numeroPlaca} - ${inspeccion.vehiculo.marca} ${inspeccion.vehiculo.modelo}` :
+                        'N/A'
+                    }
+                                    </div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <div class="detail-label"> Propietario</div>
+                                    <div class="detail-value">
+                                        ${inspeccion.propietario ?
+                        `${inspeccion.propietario.nombre} ${inspeccion.propietario.apellidos}` :
+                        'N/A'
+                    }
+                                    </div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <div class="detail-label"> Estación</div>
+                                    <div class="detail-value">
+                                        ${inspeccion.estacion?.nombreEstacion || 'N/A'}
+                                    </div>
+                                </div>
+
+                                <div class="detail-item">
+                                    <div class="detail-label"> Cita</div>
+                                    <div class="detail-value">
+                                        ${inspeccion.cita ?
+                        `ID: ${inspeccion.cita.idCita} - ${new Date(inspeccion.cita.fechaCita).toLocaleDateString('es-ES')}` :
+                        'N/A'
+                    }
+                                    </div>
+                                </div>
+                            </div>
+
+                            ${inspeccion.observacionesTecnicas ? `
+                                <div class="detail-item" style="grid-column: 1 / -1;">
+                                    <div class="detail-label"> Observaciones</div>
+                                    <div class="detail-value">${inspeccion.observacionesTecnicas}</div>
+                                </div>
+                            ` : ''}
+
+                            ${inspeccion.numeroCertificado ? `
+                                <div class="certificate-info">
+                                    <div class="certificate-title"> Información del Certificado</div>
+                                    <div class="certificate-details">
+                                        <div class="certificate-item">
+                                            <span class="certificate-label">Número:</span>
+                                            <span class="certificate-value">${inspeccion.numeroCertificado}</span>
+                                        </div>
+                                        <div class="certificate-item">
+                                            <span class="certificate-label">Vencimiento:</span>
+                                            <span class="certificate-value">${fechaVencimiento}</span>
+                                        </div>
+                                        <div class="certificate-item">
+                                            <span class="certificate-label">Estado:</span>
+                                            <span class="certificate-value ${estaVigente ? 'status-vigente' : 'status-vencido'}">
+                                                ${estaVigente ? ' Vigente' : ' Vencido'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ` : ''}
                         </div>
                     `;
+            }).join('');
 
-                if (inspeccion.observacionesTecnicas) {
-                    contenido += `
-                            <div class="detail-section">
-                                <h4 class="detail-title"> Observaciones Técnicas</h4>
-                                <div class="observation-box">
-                                    ${inspeccion.observacionesTecnicas}
-                                </div>
-                            </div>
-                        `;
-                }
-
-                if (detallesInspeccion.length > 0) {
-                    contenido += `
-                            <div class="detail-section">
-                                <h4 class="detail-title"> Detalles de Verificación</h4>
-                                <div class="verification-list">
-                        `;
-
-                    detallesInspeccion.forEach(detalle => {
-                        const claseResultado = detalle.resultadoItem === 'OK' ? 'ok' : 'fallo';
-                        const iconoResultado = detalle.resultadoItem === 'OK' ? '' : 'X';
-
-                        contenido += `
-                                <div class="verification-item ${detalle.resultadoItem === 'FALLO' ? 'fallo' : ''}">
-                                    <div class="verification-header">
-                                        <div class="verification-category">${detalle.categoriaRevision}</div>
-                                        <div class="verification-result ${claseResultado}">${iconoResultado} ${detalle.resultadoItem}</div>
-                                    </div>
-                                    ${detalle.observacionesItem ? `<div class="verification-observation">${detalle.observacionesItem}</div>` : ''}
-                                </div>
-                            `;
-                    });
-
-                    contenido += '</div></div>';
-                }
-
-                document.getElementById('contenidoModal').innerHTML = contenido;
-                document.getElementById('modalDetalles').style.display = 'flex';
-
-            } catch (error) {
-                console.error('Error al cargar detalles:', error);
-                alert('Error al cargar los detalles de la inspección');
-            }
+            mostrarMensaje(' Inspecciones cargadas correctamente', 'success');
         }
 
-        // Cerrar modal
-        function cerrarModal() {
-            document.getElementById('modalDetalles').style.display = 'none';
+        // Mostrar mensaje cuando no hay inspecciones
+        function mostrarMensajeNoInspecciones() {
+            document.getElementById('cargando').style.display = 'none';
+            document.getElementById('inspeccionesContainer').style.display = 'none';
+            document.getElementById('sinDatos').style.display = 'block';
+
+            // Mostrar estadísticas vacías
+            mostrarEstadisticas();
         }
 
-        // Cerrar modal al hacer clic fuera
-        document.getElementById('modalDetalles').addEventListener('click', function (e) {
-            if (e.target === this) {
-                cerrarModal();
-            }
-        });
+        // Mostrar error
+        function mostrarError(error) {
+            document.getElementById('cargando').innerHTML = `
+                    <div style="text-align: center; color: #ef4444;">
+                        <div style="font-size: 2rem; margin-bottom: 1rem;"></div>
+                        <p style="font-weight: 600; margin-bottom: 0.5rem;">Error al cargar inspecciones</p>
+                        <p style="font-size: 0.9rem; margin-bottom: 1rem;">${error.message}</p>
+                        <button onclick="cargarInspecciones()" style="
+                            background: #3b82f6;
+                            color: white;
+                            border: none;
+                            padding: 0.5rem 1rem;
+                            border-radius: 6px;
+                            cursor: pointer;
+                            font-weight: 500;
+                        ">
+                             Reintentar
+                        </button>
+                    </div>
+                `;
+        }
 
-        // Formatear entrada de placa en mayúsculas
-        document.getElementById('filtroPlaca')?.addEventListener('input', function () {
-            this.value = this.value.toUpperCase();
-        });
+        // Mostrar mensaje
+        function mostrarMensaje(texto, tipo) {
+            const mensaje = document.getElementById('mensaje');
+            mensaje.innerHTML = `<div class="message ${tipo}">${texto}</div>`;
+
+            setTimeout(() => {
+                mensaje.innerHTML = '';
+            }, 5000);
+        }
 
         // Inicializar página
         async function inicializar() {
             usuario = verificarSesion();
             if (!usuario) return;
 
-            // Configurar interfaz según tipo de usuario
-            if (usuario.tipoUsuario === 'cliente') {
-                document.getElementById('tituloHistorial').textContent = ' Historial de Inspecciones de mis Vehículos';
-                document.getElementById('filtrosCliente').style.display = 'block';
-                await cargarVehiculos();
-            } else if (usuario.tipoUsuario === 'tecnico') {
-                document.getElementById('tituloHistorial').textContent = ' Inspecciones Realizadas';
-                document.getElementById('filtrosTecnico').style.display = 'block';
-            }
-
+            console.log(' Inicializando historial para técnico:', usuario.nombre, usuario.apellidos);
             await cargarInspecciones();
         }
 
-        inicializar();
+        // Ejecutar al cargar la página
+        document.addEventListener('DOMContentLoaded', inicializar);
     </script>
 </body>
 </html>

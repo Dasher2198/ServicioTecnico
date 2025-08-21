@@ -10,7 +10,7 @@ namespace ServicioTecnico.Models
         public int IdVehiculo { get; set; }
 
         [Required, StringLength(10)]
-        public string NumeroPlaca { get; set; }
+        public string NumeroPlaca { get; set; } = string.Empty;
 
         [Required]
         public int IdPropietario { get; set; }
@@ -20,10 +20,10 @@ namespace ServicioTecnico.Models
         public Usuario? Propietario { get; set; }
 
         [Required, StringLength(50)]
-        public string Marca { get; set; }
+        public string Marca { get; set; } = string.Empty;
 
         [Required, StringLength(50)]
-        public string Modelo { get; set; }
+        public string Modelo { get; set; } = string.Empty;
 
         public int Año { get; set; }
 

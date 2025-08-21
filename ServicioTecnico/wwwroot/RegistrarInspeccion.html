@@ -48,12 +48,6 @@
                 object-fit: cover;
             }
 
-        .header-subtitle {
-            font-size: 0.9rem;
-            color: #64748b;
-            font-weight: 500;
-        }
-
         .nav-menu {
             list-style: none;
             display: flex;
@@ -81,8 +75,8 @@
 
         .main-container {
             flex: 1;
-            padding: 2rem;
-            max-width: 1000px;
+            padding: 1rem;
+            max-width: 1200px;
             margin: 0 auto;
             width: 100%;
         }
@@ -153,6 +147,12 @@
                 background: white;
             }
 
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
         .search-button {
             background: #3b82f6;
             color: white;
@@ -176,62 +176,6 @@
                 transform: none;
             }
 
-        .placa-container {
-            position: relative;
-        }
-
-        .placa-input {
-            text-transform: uppercase;
-        }
-
-        .custom-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-top: none;
-            border-radius: 0 0 10px 10px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 1000;
-            display: none;
-        }
-
-        .dropdown-item {
-            padding: 0.75rem 1rem;
-            cursor: pointer;
-            border-bottom: 1px solid #f1f5f9;
-            transition: background-color 0.2s;
-        }
-
-            .dropdown-item:hover {
-                background: #f8fafc;
-            }
-
-            .dropdown-item:last-child {
-                border-bottom: none;
-            }
-
-            .dropdown-item.selected {
-                background: #3b82f6;
-                color: white;
-            }
-
-        .vehicle-info {
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-top: 0.25rem;
-        }
-
-        .no-results {
-            padding: 1rem;
-            text-align: center;
-            color: #64748b;
-            font-style: italic;
-        }
-
         .loading-spinner {
             display: inline-block;
             width: 14px;
@@ -247,17 +191,6 @@
             to {
                 transform: rotate(360deg);
             }
-        }
-
-        .results-container {
-            margin-top: 1rem;
-        }
-
-        .results-title {
-            margin: 1rem 0 0.5rem 0;
-            color: #1e293b;
-            font-size: 1rem;
-            font-weight: 600;
         }
 
         .appointment-card {
@@ -310,11 +243,229 @@
                 transform: translateY(-1px);
             }
 
-        .message-area {
-            margin-top: 1.5rem;
-            text-align: center;
-            min-height: 40px;
+        .inspection-form {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+            border-left: 4px solid #10b981;
         }
+
+            .inspection-form.active {
+                display: block;
+            }
+
+        .inspection-title {
+            margin: 0 0 1.5rem 0;
+            color: #1e293b;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .vehicle-summary {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .summary-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.875rem;
+        }
+
+        .summary-value {
+            color: #1e293b;
+            font-weight: 500;
+        }
+
+        .checklist-section {
+            margin: 2rem 0;
+        }
+
+        .checklist-title {
+            margin: 0 0 1rem 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .checklist-item {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.2s;
+        }
+
+            .checklist-item.fail {
+                border-color: #ef4444;
+                background: rgba(239, 68, 68, 0.05);
+            }
+
+            .checklist-item.pass {
+                border-color: #10b981;
+                background: rgba(16, 185, 129, 0.05);
+            }
+
+        .item-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .item-title {
+            font-weight: 600;
+            color: #1e293b;
+            flex: 1;
+        }
+
+        .status-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .status-btn {
+            padding: 0.25rem 0.75rem;
+            border: 2px solid;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+            .status-btn.ok {
+                border-color: #10b981;
+                color: #10b981;
+                background: white;
+            }
+
+                .status-btn.ok.active {
+                    background: #10b981;
+                    color: white;
+                }
+
+            .status-btn.fail {
+                border-color: #ef4444;
+                color: #ef4444;
+                background: white;
+            }
+
+                .status-btn.fail.active {
+                    background: #ef4444;
+                    color: white;
+                }
+
+        .item-observation {
+            margin-top: 0.5rem;
+        }
+
+            .item-observation textarea {
+                font-size: 0.9rem;
+                padding: 0.5rem;
+            }
+
+        .final-section {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .final-title {
+            margin: 0 0 1rem 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .result-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .result-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            flex: 1;
+            text-align: center;
+        }
+
+            .result-btn.approved {
+                border-color: #10b981;
+                color: #10b981;
+                background: white;
+            }
+
+                .result-btn.approved.active {
+                    background: #10b981;
+                    color: white;
+                }
+
+            .result-btn.rejected {
+                border-color: #ef4444;
+                color: #ef4444;
+                background: white;
+            }
+
+                .result-btn.rejected.active {
+                    background: #ef4444;
+                    color: white;
+                }
+
+        .submit-button {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+        }
+
+            .submit-button:hover:not(:disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+            }
+
+            .submit-button:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+                transform: none;
+            }
 
         .message {
             padding: 0.75rem;
@@ -354,21 +505,21 @@
                 justify-content: center;
             }
 
-            .main-container {
-                padding: 1rem;
-            }
-
-            .content-card {
-                padding: 1.5rem;
-            }
-
             .search-grid {
                 grid-template-columns: 1fr;
                 gap: 1rem;
             }
 
-            .page-title {
-                font-size: 1.5rem;
+            .checklist-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .result-buttons {
+                flex-direction: column;
+            }
+
+            .vehicle-summary {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -379,13 +530,11 @@
             <img src="39d17164-550e-4c01-a02a-60937f850308.jpg" alt="Logo REVTEC">
             <h1>REVTEC</h1>
         </div>
-        <div class="header-subtitle">
-            
-        </div>
     </header>
 
     <ul class="nav-menu">
-        <li><a href="PanelPrincipal.html"> Panel Principal</a></li>
+        <li><a href="PanelPrincipal.html"> Página Principal</a></li>
+        <li><a href="HistorialInspecciones.html"> Mis Inspecciones</a></li>
     </ul>
 
     <main class="main-container">
@@ -399,20 +548,8 @@
                 <div class="search-grid">
                     <div class="form-group">
                         <label class="form-label"> Número de Placa</label>
-                        <div class="placa-container">
-                            <input type="text"
-                                   id="buscarPlaca"
-                                   class="form-input placa-input"
-                                   placeholder="Escriba o seleccione..."
-                                   autocomplete="off"
-                                   onkeyup="filtrarPlacas()"
-                                   onfocus="mostrarDropdown()"
-                                   onblur="ocultarDropdown()">
-
-                            <div id="placasDropdown" class="custom-dropdown">
-                                <!-- Se llenará dinámicamente -->
-                            </div>
-                        </div>
+                        <input type="text" id="buscarPlaca" class="form-input"
+                               placeholder="Ej: ABC123" style="text-transform: uppercase;">
                     </div>
 
                     <div class="form-group">
@@ -427,161 +564,118 @@
                     </div>
                 </div>
 
-                <div id="resultadosBusqueda" class="results-container"></div>
+                <div id="resultadosBusqueda"></div>
             </div>
 
-            <div id="mensaje" class="message-area"></div>
+            <!-- Formulario de Inspección -->
+            <div id="formularioInspeccion" class="inspection-form">
+                <h3 class="inspection-title"> Formulario de Inspección</h3>
+
+                <!-- Resumen del Vehículo -->
+                <div id="resumenVehiculo" class="vehicle-summary">
+                    <!-- Se llenará dinámicamente -->
+                </div>
+
+                <!-- Checklist de Inspección -->
+                <div class="checklist-section">
+                    <h4 class="checklist-title"> Lista de Verificación</h4>
+                    <div id="checklistItems" class="checklist-grid">
+                        <!-- Se llenará dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- Sección Final -->
+                <div class="final-section">
+                    <h4 class="final-title"> Resultado Final</h4>
+
+                    <div class="result-section">
+                        <label class="form-label">Resultado de la Inspección:</label>
+                        <div class="result-buttons">
+                            <button type="button" class="result-btn approved" onclick="setResult('aprobado')">
+                                ✅ APROBADO
+                            </button>
+                            <button type="button" class="result-btn rejected" onclick="setResult('rechazado')">
+                                ❌ RECHAZADO
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label"> Observaciones Técnicas:</label>
+                        <textarea id="observacionesTecnicas" class="form-textarea"
+                                  placeholder="Observaciones generales sobre la inspección..." rows="4"></textarea>
+                    </div>
+
+                    <button type="button" onclick="guardarInspeccion()" class="submit-button" id="botonGuardar">
+                         Guardar Inspección
+                    </button>
+                </div>
+            </div>
+
+            <div id="mensaje"></div>
         </div>
     </main>
 
     <script>
         const API_BASE = window.location.protocol + '//' + window.location.host + '/api';
-        let vehiculosRegistrados = [];
-        let citasProgramadas = [];
-        let selectedIndex = -1;
+        let usuario = null;
+        let citaSeleccionada = null;
+        let resultadoInspeccion = null;
+        let checklistData = {};
 
-        // Datos de ejemplo de vehículos registrados
-        const vehiculosEjemplo = [
-            { numeroPlaca: 'ABC123', marca: 'Toyota', modelo: 'Corolla', año: 2020, propietario: 'Juan Pérez' },
-            { numeroPlaca: 'XYZ789', marca: 'Honda', modelo: 'Civic', año: 2019, propietario: 'María González' },
-            { numeroPlaca: 'DEF456', marca: 'Nissan', modelo: 'Sentra', año: 2021, propietario: 'Carlos López' },
-            { numeroPlaca: 'GHI123', marca: 'Hyundai', modelo: 'Elantra', año: 2022, propietario: 'Ana Rodríguez' },
-            { numeroPlaca: 'JKL789', marca: 'Mazda', modelo: '3', año: 2020, propietario: 'Luis Martín' },
-            { numeroPlaca: 'MNO456', marca: 'Kia', modelo: 'Forte', año: 2021, propietario: 'Elena Castro' },
-            { numeroPlaca: 'PQR123', marca: 'Chevrolet', modelo: 'Onix', año: 2022, propietario: 'Roberto Silva' },
-            { numeroPlaca: 'STU789', marca: 'Ford', modelo: 'Focus', año: 2019, propietario: 'Carmen Vargas' }
+        // Lista de verificación para la inspección
+        const checklistItems = [
+            { categoria: 'Sistema de Frenos', required: true },
+            { categoria: 'Sistema de Dirección', required: true },
+            { categoria: 'Sistema de Suspensión', required: true },
+            { categoria: 'Sistema Eléctrico', required: true },
+            { categoria: 'Luces Delanteras', required: true },
+            { categoria: 'Luces Traseras', required: true },
+            { categoria: 'Indicadores de Dirección', required: true },
+            { categoria: 'Sistema de Escape', required: true },
+            { categoria: 'Neumáticos', required: true },
+            { categoria: 'Parabrisas y Ventanas', required: true },
+            { categoria: 'Espejos', required: true },
+            { categoria: 'Cinturones de Seguridad', required: true },
+            { categoria: 'Estructura del Vehículo', required: true },
+            { categoria: 'Motor', required: true },
+            { categoria: 'Transmisión', required: true }
         ];
 
-        // Citas de ejemplo para hoy
-        const citasEjemplo = [
-            { idCita: 1, numeroPlaca: 'ABC123', fecha: new Date().toISOString().split('T')[0], hora: '09:00', estacion: 'REVTEC San José Centro', observaciones: 'Primera inspección' },
-            { idCita: 2, numeroPlaca: 'XYZ789', fecha: new Date().toISOString().split('T')[0], hora: '11:30', estacion: 'REVTEC San José Centro', observaciones: null },
-            { idCita: 3, numeroPlaca: 'DEF456', fecha: new Date().toISOString().split('T')[0], hora: '14:00', estacion: 'REVTEC San José Centro', observaciones: 'Revisión de frenos' },
-            { idCita: 4, numeroPlaca: 'GHI123', fecha: new Date().toISOString().split('T')[0], hora: '15:30', estacion: 'REVTEC San José Centro', observaciones: null },
-            { idCita: 5, numeroPlaca: 'JKL789', fecha: new Date().toISOString().split('T')[0], hora: '16:45', estacion: 'REVTEC San José Centro', observaciones: 'Inspección de seguimiento' }
-        ];
+        // Verificar sesión
+        function verificarSesion() {
+            const usuarioActual = localStorage.getItem('usuarioActual');
+            if (!usuarioActual) {
+                window.location.href = 'Login.html';
+                return null;
+            }
+            const user = JSON.parse(usuarioActual);
+            if (user.tipoUsuario !== 'tecnico') {
+                alert('Acceso denegado. Solo técnicos pueden acceder a esta página.');
+                window.location.href = 'PanelPrincipal.html';
+                return null;
+            }
+            return user;
+        }
 
         // Inicializar página
         function inicializar() {
-            console.log(' Inicializando página de inspección...');
+            usuario = verificarSesion();
+            if (!usuario) return;
 
             // Configurar fecha de hoy por defecto
             const hoy = new Date().toISOString().split('T')[0];
             document.getElementById('buscarFecha').value = hoy;
 
-            // Cargar vehículos (usar datos de ejemplo por ahora)
-            vehiculosRegistrados = vehiculosEjemplo;
-            citasProgramadas = citasEjemplo;
-
-            console.log(` ${vehiculosRegistrados.length} vehículos cargados`);
-            console.log(` ${citasProgramadas.length} citas programadas para hoy`);
-        }
-
-        // Filtrar placas según texto ingresado
-        function filtrarPlacas() {
-            const input = document.getElementById('buscarPlaca');
-            const dropdown = document.getElementById('placasDropdown');
-            const query = input.value.toUpperCase();
-
-            // Si está vacío, mostrar todas las placas
-            let vehiculosFiltrados = vehiculosRegistrados;
-
-            if (query.length > 0) {
-                vehiculosFiltrados = vehiculosRegistrados.filter(vehiculo =>
-                    vehiculo.numeroPlaca.includes(query) ||
-                    vehiculo.marca.toUpperCase().includes(query) ||
-                    vehiculo.modelo.toUpperCase().includes(query)
-                );
-            }
-
-            // Generar HTML del dropdown
-            if (vehiculosFiltrados.length > 0) {
-                dropdown.innerHTML = vehiculosFiltrados.map((vehiculo, index) => `
-                        <div class="dropdown-item" data-index="${index}" onmousedown="seleccionarPlaca('${vehiculo.numeroPlaca}')">
-                            <strong>${vehiculo.numeroPlaca}</strong>
-                            <div class="vehicle-info">${vehiculo.marca} ${vehiculo.modelo} (${vehiculo.año}) - ${vehiculo.propietario}</div>
-                        </div>
-                    `).join('');
-            } else {
-                dropdown.innerHTML = '<div class="no-results"> No se encontraron vehículos</div>';
-            }
-
-            selectedIndex = -1;
-            mostrarDropdown();
-        }
-
-        // Mostrar dropdown
-        function mostrarDropdown() {
-            const dropdown = document.getElementById('placasDropdown');
-            dropdown.style.display = 'block';
-
-            // Si no hay contenido, cargar todas las placas
-            if (dropdown.children.length === 0) {
-                filtrarPlacas();
-            }
-        }
-
-        // Ocultar dropdown (con delay para permitir clics)
-        function ocultarDropdown() {
-            setTimeout(() => {
-                document.getElementById('placasDropdown').style.display = 'none';
-            }, 150);
-        }
-
-        // Seleccionar placa del dropdown
-        function seleccionarPlaca(placa) {
-            document.getElementById('buscarPlaca').value = placa;
-            document.getElementById('placasDropdown').style.display = 'none';
-
-            // Auto-buscar si hay fecha seleccionada
-            const fecha = document.getElementById('buscarFecha').value;
-            if (fecha) {
-                buscarCitas();
-            }
-        }
-
-        // Manejo de teclado en el dropdown
-        document.getElementById('buscarPlaca').addEventListener('keydown', function (e) {
-            const dropdown = document.getElementById('placasDropdown');
-            const items = dropdown.querySelectorAll('.dropdown-item:not(.no-results)');
-
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
-                updateSelectedItem(items);
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                selectedIndex = Math.max(selectedIndex - 1, -1);
-                updateSelectedItem(items);
-            } else if (e.key === 'Enter') {
-                e.preventDefault();
-                if (selectedIndex >= 0 && items[selectedIndex]) {
-                    const placa = items[selectedIndex].querySelector('strong').textContent;
-                    seleccionarPlaca(placa);
-                } else {
-                    buscarCitas();
-                }
-            } else if (e.key === 'Escape') {
-                ocultarDropdown();
-            }
-        });
-
-        function updateSelectedItem(items) {
-            items.forEach((item, index) => {
-                if (index === selectedIndex) {
-                    item.classList.add('selected');
-                } else {
-                    item.classList.remove('selected');
-                }
-            });
+            mostrarMensaje(' Sistema listo para registrar inspecciones', 'success');
         }
 
         // Buscar citas
-        function buscarCitas() {
+        async function buscarCitas() {
             const placa = document.getElementById('buscarPlaca').value.trim().toUpperCase();
             const fecha = document.getElementById('buscarFecha').value;
-            const resultados = document.getElementById('resultadosBusqueda');
             const boton = document.getElementById('botonBuscar');
+            const resultados = document.getElementById('resultadosBusqueda');
 
             if (!placa && !fecha) {
                 mostrarMensaje(' Ingrese al menos la placa o la fecha para buscar', 'warning');
@@ -592,26 +686,53 @@
             boton.innerHTML = '<span class="loading-spinner"></span>Buscando...';
             boton.disabled = true;
 
-            // Simular búsqueda
-            setTimeout(() => {
-                let citasEncontradas = citasProgramadas;
+            try {
+                // Cargar datos necesarios
+                const [citasRes, vehiculosRes, estacionesRes] = await Promise.all([
+                    fetch(`${API_BASE}/Cita`),
+                    fetch(`${API_BASE}/Vehiculo`),
+                    fetch(`${API_BASE}/Estacion`)
+                ]);
+
+                const citas = await citasRes.json();
+                const vehiculos = await vehiculosRes.json();
+                const estaciones = await estacionesRes.json();
+
+                // Filtrar citas programadas
+                let citasEncontradas = citas.filter(c => c.estadoCita === 'programada');
 
                 // Filtrar por placa si se especifica
                 if (placa) {
-                    citasEncontradas = citasEncontradas.filter(c => c.numeroPlaca === placa);
+                    const vehiculosConPlaca = vehiculos.filter(v => v.numeroPlaca === placa);
+                    citasEncontradas = citasEncontradas.filter(c =>
+                        vehiculosConPlaca.some(v => v.idVehiculo === c.idVehiculo)
+                    );
                 }
 
                 // Filtrar por fecha si se especifica
                 if (fecha) {
-                    citasEncontradas = citasEncontradas.filter(c => c.fecha === fecha);
+                    citasEncontradas = citasEncontradas.filter(c =>
+                        c.fechaCita.split('T')[0] === fecha
+                    );
                 }
 
-                mostrarResultados(citasEncontradas);
+                // Enriquecer datos
+                const citasConInfo = citasEncontradas.map(cita => {
+                    const vehiculo = vehiculos.find(v => v.idVehiculo === cita.idVehiculo);
+                    const estacion = estaciones.find(e => e.idEstacion === cita.idEstacion);
+                    return { ...cita, vehiculo, estacion };
+                });
 
+                mostrarResultados(citasConInfo);
+
+            } catch (error) {
+                console.error('Error al buscar citas:', error);
+                mostrarMensaje(' Error al buscar citas: ' + error.message, 'error');
+            } finally {
                 // Restaurar botón
                 boton.innerHTML = ' Buscar';
                 boton.disabled = false;
-            }, 500);
+            }
         }
 
         // Mostrar resultados de búsqueda
@@ -619,27 +740,30 @@
             const resultados = document.getElementById('resultadosBusqueda');
 
             if (citas.length === 0) {
-                resultados.innerHTML = '<div class="message warning"> No se encontraron citas programadas con esos criterios</div>';
+                resultados.innerHTML = '<div class="message warning">⚠ No se encontraron citas programadas con esos criterios</div>';
                 return;
             }
 
-            let html = '<h4 class="results-title"> Citas encontradas:</h4>';
+            let html = '<h4 style="margin: 1rem 0 0.5rem 0; color: #1e293b;"> Citas encontradas:</h4>';
 
             citas.forEach(cita => {
-                const vehiculo = vehiculosRegistrados.find(v => v.numeroPlaca === cita.numeroPlaca);
+                const fechaFormateada = new Date(cita.fechaCita).toLocaleDateString('es-ES');
+                const horaFormateada = typeof cita.horaCita === 'string' ?
+                    cita.horaCita.substring(0, 5) :
+                    cita.horaCita;
 
                 html += `
                         <div class="appointment-card">
                             <div class="appointment-info">
                                 <div class="appointment-vehicle">
-                                     ${cita.numeroPlaca} - ${vehiculo?.marca || ''} ${vehiculo?.modelo || ''}
+                                     ${cita.vehiculo?.numeroPlaca || '---'} - ${cita.vehiculo?.marca || ''} ${cita.vehiculo?.modelo || ''}
                                 </div>
                                 <div class="appointment-details">
-                                     ${new Date(cita.fecha).toLocaleDateString('es-ES')} |  ${cita.hora} |  ${cita.estacion}
+                                     ${fechaFormateada} |  ${horaFormateada} |  ${cita.estacion?.nombreEstacion || '---'}
                                 </div>
                                 ${cita.observaciones ? `<div class="appointment-observations"> ${cita.observaciones}</div>` : ''}
                             </div>
-                            <button onclick="iniciarInspeccion(${cita.idCita}, '${cita.numeroPlaca}')" class="inspect-button">
+                            <button onclick="iniciarInspeccion(${cita.idCita})" class="inspect-button">
                                  Inspeccionar
                             </button>
                         </div>
@@ -650,14 +774,297 @@
         }
 
         // Iniciar inspección
-        function iniciarInspeccion(idCita, placa) {
-            mostrarMensaje(` Iniciando inspección para vehículo ${placa}...`, 'success');
+        async function iniciarInspeccion(idCita) {
+            try {
+                // Verificar que no existe ya una inspección para esta cita
+                const inspeccionesRes = await fetch(`${API_BASE}/Inspeccion`);
+                const inspecciones = await inspeccionesRes.json();
 
-            // Aquí se abriría el formulario de inspección
-            // Por ahora, simular redirección
-            setTimeout(() => {
-                alert(`Inspección iniciada para vehículo ${placa}\n\nEn la versión completa, esto abriría el formulario de inspección con todos los checklist técnicos.`);
-            }, 1000);
+                const inspeccionExistente = inspecciones.find(i => i.idCita === idCita);
+                if (inspeccionExistente) {
+                    mostrarMensaje(' Ya existe una inspección registrada para esta cita', 'warning');
+                    return;
+                }
+
+                // Cargar datos de la cita
+                const [citasRes, vehiculosRes, usuariosRes] = await Promise.all([
+                    fetch(`${API_BASE}/Cita/${idCita}`),
+                    fetch(`${API_BASE}/Vehiculo`),
+                    fetch(`${API_BASE}/Usuario`)
+                ]);
+
+                const cita = await citasRes.json();
+                const vehiculos = await vehiculosRes.json();
+                const usuarios = await usuariosRes.json();
+
+                const vehiculo = vehiculos.find(v => v.idVehiculo === cita.idVehiculo);
+                const propietario = usuarios.find(u => u.idUsuario === vehiculo?.idPropietario);
+
+                citaSeleccionada = { ...cita, vehiculo, propietario };
+
+                // Mostrar formulario de inspección
+                mostrarFormularioInspeccion();
+
+            } catch (error) {
+                console.error('Error al cargar datos de la cita:', error);
+                mostrarMensaje(' Error al cargar datos de la cita: ' + error.message, 'error');
+            }
+        }
+
+        // Mostrar formulario de inspección
+        function mostrarFormularioInspeccion() {
+            if (!citaSeleccionada) return;
+
+            const formulario = document.getElementById('formularioInspeccion');
+            const resumen = document.getElementById('resumenVehiculo');
+            const checklist = document.getElementById('checklistItems');
+
+            // Llenar resumen del vehículo
+            resumen.innerHTML = `
+                    <div class="summary-item">
+                        <span class="summary-label"> Vehículo:</span>
+                        <span class="summary-value">${citaSeleccionada.vehiculo?.numeroPlaca} - ${citaSeleccionada.vehiculo?.marca} ${citaSeleccionada.vehiculo?.modelo}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label"> Propietario:</span>
+                        <span class="summary-value">${citaSeleccionada.propietario?.nombre} ${citaSeleccionada.propietario?.apellidos}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label"> Fecha Cita:</span>
+                        <span class="summary-value">${new Date(citaSeleccionada.fechaCita).toLocaleDateString('es-ES')}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label"> Hora:</span>
+                        <span class="summary-value">${citaSeleccionada.horaCita.substring(0, 5)}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label"> Técnico:</span>
+                        <span class="summary-value">${usuario.nombre} ${usuario.apellidos}</span>
+                    </div>
+                `;
+
+            // Generar checklist
+            checklist.innerHTML = checklistItems.map((item, index) => `
+                    <div class="checklist-item" id="item-${index}">
+                        <div class="item-header">
+                            <div class="item-title">${item.categoria}</div>
+                            <div class="status-buttons">
+                                <button class="status-btn ok" onclick="setItemStatus(${index}, 'OK')"> OK</button>
+                                <button class="status-btn fail" onclick="setItemStatus(${index}, 'FALLO')"> FALLO</button>
+                            </div>
+                        </div>
+                        <div class="item-observation">
+                            <textarea placeholder="Observaciones para ${item.categoria}..."
+                                      onchange="setItemObservation(${index}, this.value)"></textarea>
+                        </div>
+                    </div>
+                `).join('');
+
+            // Inicializar datos del checklist
+            checklistData = {};
+            checklistItems.forEach((item, index) => {
+                checklistData[index] = {
+                    categoria: item.categoria,
+                    resultado: null,
+                    observacion: ''
+                };
+            });
+
+            formulario.classList.add('active');
+            formulario.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Establecer estado de item del checklist
+        function setItemStatus(index, status) {
+            const item = document.getElementById(`item-${index}`);
+            const buttons = item.querySelectorAll('.status-btn');
+
+            // Remover estado activo de todos los botones
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Activar botón seleccionado
+            const selectedBtn = item.querySelector(`.status-btn.${status === 'OK' ? 'ok' : 'fail'}`);
+            selectedBtn.classList.add('active');
+
+            // Actualizar datos
+            checklistData[index].resultado = status;
+
+            // Cambiar estilo del item
+            item.classList.remove('pass', 'fail');
+            item.classList.add(status === 'OK' ? 'pass' : 'fail');
+
+            // Auto-calcular resultado si todos los items están completos
+            autoCalculateResult();
+        }
+
+        // Establecer observación de item
+        function setItemObservation(index, observation) {
+            checklistData[index].observacion = observation;
+        }
+
+        // Auto-calcular resultado basado en checklist
+        function autoCalculateResult() {
+            const completedItems = Object.values(checklistData).filter(item => item.resultado !== null);
+
+            if (completedItems.length === checklistItems.length) {
+                const failedItems = completedItems.filter(item => item.resultado === 'FALLO');
+                const suggestedResult = failedItems.length === 0 ? 'aprobado' : 'rechazado';
+
+                // Sugerir resultado pero no forzarlo
+                if (!resultadoInspeccion) {
+                    setResult(suggestedResult);
+                    mostrarMensaje(`💡 Resultado sugerido: ${suggestedResult.toUpperCase()} (${failedItems.length} fallas detectadas)`, 'warning');
+                }
+            }
+        }
+
+        // Establecer resultado final
+        function setResult(resultado) {
+            resultadoInspeccion = resultado;
+
+            const buttons = document.querySelectorAll('.result-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            const selectedBtn = document.querySelector(`.result-btn.${resultado === 'aprobado' ? 'approved' : 'rejected'}`);
+            selectedBtn.classList.add('active');
+        }
+
+        // Guardar inspección
+        async function guardarInspeccion() {
+            const boton = document.getElementById('botonGuardar');
+
+            try {
+                // Validaciones
+                if (!citaSeleccionada) {
+                    mostrarMensaje(' No hay cita seleccionada', 'error');
+                    return;
+                }
+
+                if (!resultadoInspeccion) {
+                    mostrarMensaje(' Debe seleccionar un resultado (APROBADO/RECHAZADO)', 'error');
+                    return;
+                }
+
+                const completedItems = Object.values(checklistData).filter(item => item.resultado !== null);
+                if (completedItems.length !== checklistItems.length) {
+                    mostrarMensaje(' Debe completar todos los items del checklist', 'error');
+                    return;
+                }
+
+                // Mostrar loading
+                boton.innerHTML = '<span class="loading-spinner"></span>Guardando...';
+                boton.disabled = true;
+
+                const observaciones = document.getElementById('observacionesTecnicas').value.trim();
+                const fechaInspeccion = new Date().toISOString();
+                const fechaVencimiento = resultadoInspeccion === 'aprobado' ?
+                    new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : null;
+
+                // Datos de la inspección principal
+                const inspeccionData = {
+                    idCita: citaSeleccionada.idCita,
+                    idTecnico: usuario.id,
+                    fechaInspeccion: fechaInspeccion,
+                    resultado: resultadoInspeccion,
+                    observacionesTecnicas: observaciones,
+                    fechaVencimiento: fechaVencimiento,
+                    numeroCertificado: resultadoInspeccion === 'aprobado' ?
+                        `CERT-${citaSeleccionada.vehiculo.numeroPlaca}-${Date.now()}` : null
+                };
+
+                console.log('Enviando inspección:', inspeccionData);
+
+                // Guardar inspección principal
+                const inspeccionResponse = await fetch(`${API_BASE}/Inspeccion`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(inspeccionData)
+                });
+
+                if (!inspeccionResponse.ok) {
+                    const errorText = await inspeccionResponse.text();
+                    throw new Error(`Error al guardar inspección: ${errorText}`);
+                }
+
+                const inspeccionCreada = await inspeccionResponse.json();
+                console.log('Inspección creada:', inspeccionCreada);
+
+                // Guardar detalles del checklist
+                const detallesPromises = Object.values(checklistData).map(item => {
+                    const detalleData = {
+                        idInspeccion: inspeccionCreada.idInspeccion,
+                        categoriaRevision: item.categoria,
+                        resultadoItem: item.resultado,
+                        observacionesItem: item.observacion || ''
+                    };
+
+                    return fetch(`${API_BASE}/DetalleInspeccion`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(detalleData)
+                    });
+                });
+
+                await Promise.all(detallesPromises);
+                console.log('Detalles de inspección guardados');
+
+                // Actualizar estado de la cita
+                const citaUpdateData = {
+                    fechaCita: citaSeleccionada.fechaCita,
+                    horaCita: citaSeleccionada.horaCita.substring(0, 8),
+                    estadoCita: 'completada',
+                    observaciones: citaSeleccionada.observaciones
+                };
+
+                await fetch(`${API_BASE}/Cita/${citaSeleccionada.idCita}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(citaUpdateData)
+                });
+
+                // Crear certificado si fue aprobado
+                if (resultadoInspeccion === 'aprobado') {
+                    const certificadoData = {
+                        idInspeccion: inspeccionCreada.idInspeccion,
+                        numeroCertificado: inspeccionData.numeroCertificado,
+                        fechaEmision: new Date().toISOString(),
+                        fechaVencimiento: fechaVencimiento,
+                        rutaArchivoDigital: `/certificados/${inspeccionData.numeroCertificado}.pdf`,
+                        estadoCertificado: 'valido'
+                    };
+
+                    await fetch(`${API_BASE}/Certificado`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(certificadoData)
+                    });
+
+                    console.log('Certificado creado');
+                }
+
+                // Mostrar éxito
+                mostrarMensaje(` Inspección registrada exitosamente. Resultado: ${resultadoInspeccion.toUpperCase()}`, 'success');
+
+                // Limpiar formulario
+                setTimeout(() => {
+                    document.getElementById('formularioInspeccion').classList.remove('active');
+                    document.getElementById('resultadosBusqueda').innerHTML = '';
+                    document.getElementById('buscarPlaca').value = '';
+                    citaSeleccionada = null;
+                    resultadoInspeccion = null;
+                    checklistData = {};
+
+                    mostrarMensaje(' ¡Listo para la siguiente inspección!', 'success');
+                }, 3000);
+
+            } catch (error) {
+                console.error('Error al guardar inspección:', error);
+                mostrarMensaje(' Error al guardar inspección: ' + error.message, 'error');
+            } finally {
+                // Restaurar botón
+                boton.innerHTML = ' Guardar Inspección';
+                boton.disabled = false;
+            }
         }
 
         // Mostrar mensaje
@@ -670,6 +1077,11 @@
                 mensaje.innerHTML = '';
             }, 5000);
         }
+
+        // Formatear placa en tiempo real
+        document.getElementById('buscarPlaca').addEventListener('input', function () {
+            this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        });
 
         // Inicializar al cargar la página
         document.addEventListener('DOMContentLoaded', inicializar);

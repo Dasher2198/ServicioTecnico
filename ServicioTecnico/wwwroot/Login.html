@@ -362,7 +362,7 @@
                     <label class="form-label"> Contraseña</label>
                     <div class="password-container">
                         <input type="password" id="password" class="form-input" required placeholder="Ingrese su contraseña" autocomplete="current-password">
-                        <button type="button" id="togglePassword" class="toggle-password"></button>
+                        <button type="button" id="togglePassword" class="toggle-password">👁</button>
                     </div>
                 </div>
 
@@ -378,17 +378,8 @@
                 <a href="Registro.html" class="register-link">Regístrarse aquí</a>
             </div>
 
-            <div class="test-users">
-                <h4> Usuarios de Prueba:</h4>
-                <div class="test-user-item">
-                    <span><strong style="color: #059669;">Cliente:</strong> cliente@test.cr / cliente123</span>
-                    <button onclick="fillLogin('cliente@test.cr', 'cliente123')" class="use-button">Usar</button>
-                </div>
-                <div class="test-user-item">
-                    <span><strong style="color: #7c3aed;">Técnico:</strong> tecnico@revtec.cr / tecnico123</span>
-                    <button onclick="fillLogin('tecnico@revtec.cr', 'tecnico123')" class="use-button tecnico">Usar</button>
-                </div>
-            </div>
+            
+            
         </div>
     </main>
 
@@ -407,7 +398,7 @@
             const passwordField = document.getElementById('password');
             const type = passwordField.type === 'password' ? 'text' : 'password';
             passwordField.type = type;
-            this.textContent = type === 'password' ? '' : '';
+            this.textContent = type === 'password' ? '👁️' : '🙈';
         });
 
         // Función de login principal
@@ -424,7 +415,7 @@
 
             // Validaciones básicas
             if (!email || !password) {
-                mensaje.innerHTML = '<div class="message error">❌ Por favor complete todos los campos</div>';
+                mensaje.innerHTML = '<div class="message error"> Por favor complete todos los campos</div>';
                 return;
             }
 
@@ -453,13 +444,11 @@
                         console.log(' Login exitoso con endpoint específico');
                     } else if (loginResponse.status === 401) {
                         throw new Error('Credenciales incorrectas');
-                    } else {
-                        throw new Error('Error en el servidor');
                     }
                 } catch (endpointError) {
                     console.log(' Endpoint específico falló, probando método alternativo...');
 
-                    // Método 2: Fallback - obtener todos los usuarios
+                    // Método 2: Fallback - obtener todos los usuarios y comparar
                     try {
                         const usuariosResponse = await fetch(`${API_BASE}/Usuario`);
                         if (!usuariosResponse.ok) {
@@ -467,6 +456,8 @@
                         }
 
                         const usuarios = await usuariosResponse.json();
+                        console.log(' Usuarios obtenidos:', usuarios.length);
+
                         usuario = usuarios.find(u =>
                             u.email && u.email.toLowerCase() === email.toLowerCase() &&
                             u.password === password &&
@@ -479,12 +470,13 @@
 
                         console.log(' Login exitoso con método alternativo');
                     } catch (fallbackError) {
+                        console.error(' Error en fallback:', fallbackError);
                         throw new Error('No se pudo conectar con el servidor');
                     }
                 }
 
                 if (usuario) {
-                    // Crear objeto de usuario normalizado
+                    // Crear objeto de usuario normalizado para manejar diferentes formatos de propiedades
                     const usuarioData = {
                         id: usuario.idUsuario || usuario.IdUsuario,
                         nombre: usuario.nombre || usuario.Nombre || '',
@@ -499,14 +491,8 @@
                     };
 
                     // Verificar que todos los campos críticos estén presentes
-                    const camposFaltantes = [];
-                    if (!usuarioData.id) camposFaltantes.push('id');
-                    if (!usuarioData.nombre) camposFaltantes.push('nombre');
-                    if (!usuarioData.apellidos) camposFaltantes.push('apellidos');
-                    if (!usuarioData.tipoUsuario) camposFaltantes.push('tipoUsuario');
-
-                    if (camposFaltantes.length > 0) {
-                        console.error('❌ Campos faltantes:', camposFaltantes);
+                    if (!usuarioData.id || !usuarioData.nombre || !usuarioData.apellidos || !usuarioData.tipoUsuario) {
+                        console.error(' Datos de usuario incompletos:', usuarioData);
                         mensaje.innerHTML = '<div class="message error">❌ Datos de usuario incompletos</div>';
                         return;
                     }
@@ -517,25 +503,26 @@
                     // Verificar que se guardó correctamente
                     const verificacion = localStorage.getItem('usuarioActual');
                     if (!verificacion) {
-                        mensaje.innerHTML = '<div class="message error"> Error al guardar sesión</div>';
+                        mensaje.innerHTML = '<div class="message error">🚫 Error al guardar sesión</div>';
                         return;
                     }
 
                     console.log(` Usuario guardado: ${usuarioData.nombre} ${usuarioData.apellidos} (${usuarioData.tipoUsuario})`);
 
-                    mensaje.innerHTML = `<div class="message success"> ¡Bienvenid@ ${usuarioData.nombre}! </div>`;
+                    mensaje.innerHTML = `<div class="message success">🎉 ¡Bienvenid@ ${usuarioData.nombre}!</div>`;
 
+                    // Redirigir después de un breve delay
                     setTimeout(() => {
                         window.location.href = 'PanelPrincipal.html';
                     }, 1500);
 
                 } else {
-                    mensaje.innerHTML = '<div class="message error"> Credenciales incorrectas</div>';
+                    mensaje.innerHTML = '<div class="message error">❌ Credenciales incorrectas</div>';
                 }
 
             } catch (error) {
-                console.error('💥 Error en login:', error);
-                mensaje.innerHTML = `<div class="message error"> ${error.message}</div>`;
+                console.error(' Error en login:', error);
+                mensaje.innerHTML = `<div class="message error">❌ ${error.message}</div>`;
             } finally {
                 // Restaurar botón
                 submitBtn.innerHTML = ' Iniciar Sesión';
@@ -561,7 +548,7 @@
                     const horasTranscurridas = (ahora - loginTime) / (1000 * 60 * 60);
 
                     if (horasTranscurridas < 24) {
-                        console.log('✅ Sesión activa encontrada, redirigiendo...');
+                        console.log(' Sesión activa encontrada, redirigiendo...');
                         window.location.href = 'PanelPrincipal.html';
                         return;
                     } else {

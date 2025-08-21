@@ -10,23 +10,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        // Configuración JSON corregida para evitar conflictos
+        // CONFIGURACIÓN CRÍTICA: Evitar referencias circulares
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.JsonSerializerOptions.WriteIndented = true;
 
-        // IMPORTANTE: Usar CamelCase pero sin sobreescribir nombres de propiedades existentes
+        // Configuración de naming policy
         options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 
-        // Evitar conflictos de naming
+        // Configuración adicional para estabilidad
         options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
-
-        // Configuración adicional para evitar errores
         options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
         options.JsonSerializerOptions.AllowTrailingCommas = true;
 
-        // Eliminar esta línea que puede causar conflictos
-        // options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+        // Configurar conversores de fecha
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
 // Configure Entity Framework with SQL Server
@@ -35,14 +33,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     options.UseSqlServer(connectionString);
 
-    // Mejorar configuración para desarrollo
+    // Configuración mejorada para desarrollo
     if (builder.Environment.IsDevelopment())
     {
         options.EnableSensitiveDataLogging();
         options.EnableDetailedErrors();
-        // Agregar configuración adicional para debugging
         options.LogTo(Console.WriteLine, LogLevel.Information);
     }
+
+    // Configuración para evitar problemas de tracking
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 
 // Configure CORS de manera más específica y segura
@@ -75,6 +75,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
+
 if (builder.Environment.IsDevelopment())
 {
     builder.Logging.SetMinimumLevel(LogLevel.Information);
@@ -102,7 +103,7 @@ else
     app.UseCors("DevelopmentPolicy");
 }
 
-// Middleware de manejo de errores global
+// Middleware de manejo de errores global MEJORADO
 app.Use(async (context, next) =>
 {
     try
@@ -112,7 +113,7 @@ app.Use(async (context, next) =>
     catch (Exception ex)
     {
         var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "Error no manejado en la aplicación");
+        logger.LogError(ex, " Error no manejado en la aplicación");
 
         context.Response.StatusCode = 500;
         context.Response.ContentType = "application/json";
@@ -120,11 +121,19 @@ app.Use(async (context, next) =>
         var errorResponse = new
         {
             error = "Error interno del servidor",
-            message = ex.Message,
-            timestamp = DateTime.Now
+            message = app.Environment.IsDevelopment() ? ex.Message : "Ha ocurrido un error interno",
+            details = app.Environment.IsDevelopment() ? ex.StackTrace : null,
+            timestamp = DateTime.Now,
+            path = context.Request.Path
         };
 
-        await context.Response.WriteAsync(JsonSerializer.Serialize(errorResponse));
+        var jsonResponse = JsonSerializer.Serialize(errorResponse, new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        });
+
+        await context.Response.WriteAsync(jsonResponse);
     }
 });
 
@@ -135,6 +144,7 @@ app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Mapear controladores
 app.MapControllers();
 
 // Configurar ruta por defecto
@@ -157,15 +167,18 @@ static async Task EnsureDatabaseAsync(WebApplication app)
         var context = services.GetRequiredService<AppDbContext>();
 
         Console.WriteLine(" Verificando conexión a la base de datos...");
+        logger.LogInformation("Verificando conexión a la base de datos");
 
         // Verificar si la base de datos está accesible
         var canConnect = await context.Database.CanConnectAsync();
         if (!canConnect)
         {
-            logger.LogError("No se puede conectar a la base de datos");
+            logger.LogError(" No se puede conectar a la base de datos");
             Console.WriteLine(" No se puede conectar a la base de datos");
             return;
         }
+
+        Console.WriteLine(" Conexión a la base de datos exitosa");
 
         // Asegurar que la base de datos existe
         await context.Database.EnsureCreatedAsync();
@@ -174,6 +187,7 @@ static async Task EnsureDatabaseAsync(WebApplication app)
         var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
         if (pendingMigrations.Any())
         {
+            Console.WriteLine($" Aplicando {pendingMigrations.Count()} migraciones pendientes...");
             await context.Database.MigrateAsync();
             logger.LogInformation(" Migraciones aplicadas correctamente");
         }
@@ -181,12 +195,28 @@ static async Task EnsureDatabaseAsync(WebApplication app)
         // Sembrar datos iniciales
         await DataSeeder.SeedAsync(context);
 
+        // Verificar datos sembrados
+        var stats = new
+        {
+            Usuarios = await context.Usuarios.CountAsync(),
+            Estaciones = await context.Estaciones.CountAsync(),
+            Vehiculos = await context.Vehiculos.CountAsync(),
+            Citas = await context.Citas.CountAsync()
+        };
+
+        Console.WriteLine(" Estadísticas de la base de datos:");
+        Console.WriteLine($"    Usuarios: {stats.Usuarios}");
+        Console.WriteLine($"    Estaciones: {stats.Estaciones}");
+        Console.WriteLine($"    Vehículos: {stats.Vehiculos}");
+        Console.WriteLine($"    Citas: {stats.Citas}");
+
         logger.LogInformation(" Base de datos configurada correctamente");
         logger.LogInformation(" Aplicación disponible en: {Urls}", string.Join(", ", app.Urls));
         logger.LogInformation(" Swagger disponible en: {SwaggerUrl}/swagger", app.Urls.FirstOrDefault());
 
         Console.WriteLine(" Base de datos configurada correctamente");
         Console.WriteLine($" Aplicación disponible en: {string.Join(", ", app.Urls)}");
+        Console.WriteLine($" Swagger UI: {app.Urls.FirstOrDefault()}/swagger");
     }
     catch (Exception ex)
     {
@@ -194,7 +224,7 @@ static async Task EnsureDatabaseAsync(WebApplication app)
         Console.WriteLine($" Error al configurar la base de datos: {ex.Message}");
         if (ex.InnerException != null)
         {
-            Console.WriteLine($"Detalle: {ex.InnerException.Message}");
+            Console.WriteLine($" Detalle: {ex.InnerException.Message}");
         }
 
         // Mostrar instrucciones de solución
@@ -204,5 +234,6 @@ static async Task EnsureDatabaseAsync(WebApplication app)
         Console.WriteLine("3. Iniciar LocalDB: sqllocaldb start MSSQLLocalDB");
         Console.WriteLine("4. Verificar cadena de conexión en appsettings.json");
         Console.WriteLine("5. Aplicar migraciones: dotnet ef database update");
+        Console.WriteLine("6. Reinstalar LocalDB si es necesario");
     }
 }
